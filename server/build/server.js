@@ -7,15 +7,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
+const path_1 = __importDefault(require("path"));
 //Rutas
 const index_router_1 = __importDefault(require("./routes/index.router"));
 class Server {
     constructor() {
         this.port = process.env.PORT || 3000;
         this.app = express_1.default(); // Igualamos el atributo app a todos los metodos dentro de la funcion express.
-        //this.consfig();
+        //Ejecutamos los metodos de la clase .
+        this.consfig();
         this.middlewares();
         this.routes();
+        this.publicFolder();
     }
     //Metodos
     consfig() {
@@ -34,6 +37,10 @@ class Server {
           Este Metodo se ejecuta e el constructor y sirve para direccionar las peticiones que llegan al server.
         */
         this.app.use('/api/laborapp', index_router_1.default);
+    }
+    publicFolder() {
+        const publicPath = path_1.default.join(__dirname, './front/LaborApp');
+        this.app.use(express_1.default.static(publicPath));
     }
     start() {
         /*

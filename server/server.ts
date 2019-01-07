@@ -1,7 +1,8 @@
 // NPM modulos
-import  express from  'express';
+import express from  'express';
 import morgan from  'morgan';
 import cors from  'cors';
+import path from 'path';
 
 
 //Rutas
@@ -20,10 +21,11 @@ class Server{
   constructor(){
 
     this.app = express(); // Igualamos el atributo app a todos los metodos dentro de la funcion express.
-
-    //this.consfig();
+    //Ejecutamos los metodos de la clase .
+    this.consfig();
     this.middlewares();
     this.routes();
+    this.publicFolder();
 
   }
 
@@ -50,8 +52,13 @@ class Server{
     /*
       Este Metodo se ejecuta e el constructor y sirve para direccionar las peticiones que llegan al server.
     */
-
     this.app.use('/api/laborapp', indexRouter )
+
+  }
+
+  public publicFolder(){
+    const publicPath = path.join(__dirname, './front/LaborApp')
+    this.app.use(express.static(publicPath));
 
   }
 
