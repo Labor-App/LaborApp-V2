@@ -17,8 +17,8 @@ class GenerarPdf {
             }
         };
         this.chunks = [];
-        this.docDirection = path_1.default.join(__dirname, `/docs/Demanda-${docName}.pdf`);
-        this.docName = `Demanda-${docName}.pdf`;
+        this.docDirection = path_1.default.join(__dirname, `../../front/Demanda.pdf`);
+        this.docName = `Demanda.pdf`;
         this.printer = new PdfPrinter(this.fontDescriptors);
         this.doc = this.printer.createPdfKitDocument(docDefinition);
         this.doc.on('data', (chunk) => {

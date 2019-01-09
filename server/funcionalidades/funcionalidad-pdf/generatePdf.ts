@@ -27,9 +27,9 @@ export default class GenerarPdf{
 
   constructor( docDefinition:object, docName: string ){
 
-    this.docDirection = path.join(__dirname, `/docs/Demanda-${ docName }.pdf`);
+    this.docDirection = path.join(__dirname, `../../front/Demanda.pdf`);
 
-    this.docName = `Demanda-${ docName }.pdf`
+    this.docName = `Demanda.pdf`
 
     this.printer = new PdfPrinter(this.fontDescriptors);
 

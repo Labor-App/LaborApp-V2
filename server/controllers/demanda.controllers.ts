@@ -125,7 +125,7 @@ class DemandaControllers{
 
       const persona:PersonaModel = personaResult[0];
 
-      res.status(200).download(path.join(__dirname, `../funcionalidades/funcionalidad-pdf/docs/Demanda-${ persona.nombresPersona }.pdf`));
+      res.status(200).download(path.join(__dirname, `../front/Demanda.pdf`));
 
     }
     catch(err){

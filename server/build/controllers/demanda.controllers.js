@@ -96,7 +96,7 @@ class DemandaControllers {
                 const identificacion = req.params.identificacion;
                 const personaResult = yield database_1.default.query(`SELECT * FROM Personas WHERE cedulaPersona = ${identificacion}`);
                 const persona = personaResult[0];
-                res.status(200).download(path_1.default.join(__dirname, `../funcionalidades/funcionalidad-pdf/docs/Demanda-${persona.nombresPersona}.pdf`));
+                res.status(200).download(path_1.default.join(__dirname, `../front/Demanda.pdf`));
             }
             catch (err) {
                 console.log('Error al descargar el PDF para descargar\n', err);

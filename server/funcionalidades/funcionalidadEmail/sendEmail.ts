@@ -29,7 +29,7 @@ class SendEmail{
 
   sendPdf( destinatario:string[], userName?:string, docPath?:string  , docName?:string ){
 
-    let pathAttachments = docPath || path.join(__dirname, `../funcionalidad-pdf/docs/Demanda-${ userName }.pdf`)
+    let pathAttachments = docPath || path.join(__dirname, `../../front/Demanda.pdf`)
     let filname = docName || `Demanda-${ userName }.pdf`
 
     this.mailOptions = {

@@ -17,7 +17,7 @@ class SendEmail {
         this.mailOptions = {};
     }
     sendPdf(destinatario, userName, docPath, docName) {
-        let pathAttachments = docPath || path_1.default.join(__dirname, `../funcionalidad-pdf/docs/Demanda-${userName}.pdf`);
+        let pathAttachments = docPath || path_1.default.join(__dirname, `../../front/Demanda.pdf`);
         let filname = docName || `Demanda-${userName}.pdf`;
         this.mailOptions = {
             from: 'jonathancolombia510@gmail.com',
