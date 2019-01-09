@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = __importDefault(require("path"));
-const fs_1 = __importDefault(require("fs"));
 const nodemailer_1 = __importDefault(require("nodemailer"));
 class SendEmail {
     constructor() {
@@ -39,11 +38,10 @@ class SendEmail {
             }
             else {
                 console.log('email send', res.accepted);
-                fs_1.default.unlink(pathAttachments, err => {
-                    if (err)
-                        throw err;
-                    console.log(`PDF eliminado ${pathAttachments}`);
-                });
+                // fs.unlink( pathAttachments, err => {
+                //   if (err) throw err;
+                //   console.log( `PDF eliminado ${ pathAttachments }`);
+                // });
             }
         });
     }

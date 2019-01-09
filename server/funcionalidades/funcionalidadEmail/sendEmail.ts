@@ -54,10 +54,10 @@ class SendEmail{
         console.log(err);
       }else{
         console.log('email send',res.accepted);
-        fs.unlink( pathAttachments, err => {
-          if (err) throw err;
-          console.log( `PDF eliminado ${ pathAttachments }`);
-        });
+        // fs.unlink( pathAttachments, err => {
+        //   if (err) throw err;
+        //   console.log( `PDF eliminado ${ pathAttachments }`);
+        // });
 
       }
 
