@@ -17,7 +17,7 @@ class DemandaRouter{
 
     this.router.get('/enviar/:identificacion', demandaControllers.enviapdf );
 
-    this.router.get('/descargar', demandaControllers.descargarPdf )
+    this.router.get('/descargar/:identificacion', demandaControllers.descargarPdf )
 
   }
 

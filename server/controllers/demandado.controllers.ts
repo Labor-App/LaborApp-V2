@@ -17,11 +17,11 @@ class DemandadoControllers{
     //POST = Guarda todos los demandados de tipo juridico
     public async guardarEmpresa( req: Request, res: Response ){
 
-      const body: EmpresaModel = req.body;
+      console.log(req.body)
 
       try{
 
-        const result = await database.query("INSERT INTO Empresa set ?", [body])
+        const result = await database.query("INSERT INTO Empresa set ?", [req.body])
 
         res.status(200).json({
           ok: true,

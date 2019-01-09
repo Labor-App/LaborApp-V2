@@ -99,10 +99,10 @@ class DemandaControllers {
                 res.status(200).download(path_1.default.join(__dirname, `../funcionalidades/funcionalidad-pdf/docs/Demanda-${persona.nombresPersona}.pdf`));
             }
             catch (err) {
-                console.log('Error al enviar el PDF para descargar\n', err);
+                console.log('Error al descargar el PDF para descargar\n', err);
                 res.status(500).json({
                     ok: false,
-                    err: 'Error al enviar el PDF para descargar',
+                    err: 'Error al descargar el PDF para descargar',
                     errMessge: err
                 });
             }

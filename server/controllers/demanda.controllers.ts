@@ -7,7 +7,7 @@ import database from '../database/database';
 //Models
 import { Request, Response } from 'express';
 import { MysqlError } from 'mysql';
-import { DocDefinitionModel } from '../models/docDefinition.model';
+import { DocDefinitionModel } from '../models/DocDefinition.model';
 import { EmpresaModel } from '../models/Empresa.model';
 import { PersonaModel } from '../models/Persona.model';
 
@@ -130,11 +130,11 @@ class DemandaControllers{
     }
     catch(err){
 
-      console.log('Error al enviar el PDF para descargar\n',err);
+      console.log('Error al descargar el PDF para descargar\n',err);
 
       res.status(500).json({
         ok:false,
-        err: 'Error al enviar el PDF para descargar',
+        err: 'Error al descargar el PDF para descargar',
         errMessge: err
       });
 

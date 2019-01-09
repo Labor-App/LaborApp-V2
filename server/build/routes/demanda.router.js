@@ -13,7 +13,7 @@ class DemandaRouter {
     routes() {
         this.router.get('/generar/:nit/:identificacion', demanda_controllers_1.default.generarPdf);
         this.router.get('/enviar/:identificacion', demanda_controllers_1.default.enviapdf);
-        this.router.get('/descargar', demanda_controllers_1.default.descargarPdf);
+        this.router.get('/descargar/:identificacion', demanda_controllers_1.default.descargarPdf);
     }
 }
 const demandaRouter = new DemandaRouter();

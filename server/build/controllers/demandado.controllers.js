@@ -20,9 +20,9 @@ class DemandadoControllers {
     //POST = Guarda todos los demandados de tipo juridico
     guardarEmpresa(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const body = req.body;
+            console.log(req.body);
             try {
-                const result = yield database_1.default.query("INSERT INTO Empresa set ?", [body]);
+                const result = yield database_1.default.query("INSERT INTO Empresa set ?", [req.body]);
                 res.status(200).json({
                     ok: true,
                     result

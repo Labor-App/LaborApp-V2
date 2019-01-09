@@ -17,11 +17,11 @@ class UsuarioControllers{
     //POST = Guarda todos los Usuarios
     public async guardar(req:Request, res:Response){
 
-      const body: PersonaModel = req.body;
+      console.log(req.body);
 
       try{
 
-        const result = await database.query('INSERT INTO Personas set ?', [body]);
+        const result = await database.query('INSERT INTO Personas set ?', [req.body]);
 
         res.status(200).json({
           ok: true,
@@ -88,7 +88,7 @@ class UsuarioControllers{
       }
 
     }
-    
+
   //
 }
 

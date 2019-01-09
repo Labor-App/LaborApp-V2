@@ -20,9 +20,9 @@ class UsuarioControllers {
     //POST = Guarda todos los Usuarios
     guardar(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const body = req.body;
+            console.log(req.body);
             try {
-                const result = yield database_1.default.query('INSERT INTO Personas set ?', [body]);
+                const result = yield database_1.default.query('INSERT INTO Personas set ?', [req.body]);
                 res.status(200).json({
                     ok: true,
                     result
