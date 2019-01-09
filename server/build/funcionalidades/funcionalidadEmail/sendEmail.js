@@ -8,18 +8,18 @@ const nodemailer_1 = __importDefault(require("nodemailer"));
 class SendEmail {
     constructor() {
         this.transporter = nodemailer_1.default.createTransport({
-            //   service: 'gmail',
-            //   auth: {
-            //     user: 'jonathancolombia510@gmail.com',
-            //     pass: '123456jonathan'
-            //   }
-            host: "ingnovatech.com",
-            port: 2095,
-            secure: true,
+            service: 'gmail',
             auth: {
-                user: "gerencia@ingnovatech.com",
-                pass: "password" // your password
+                user: 'ingnovatech.recyapp@gmail.com',
+                pass: 'STIVEN1911'
             }
+            // host: "ingnovatech.com",
+            // port: 2095,
+            // secure: true,
+            // auth: {
+            // user: "gerencia@ingnovatech.com", // your domain email address
+            // pass: "password" // your password
+            // }
         });
         this.mailOptions = {};
     }
@@ -27,7 +27,7 @@ class SendEmail {
         let pathAttachments = docPath || path_1.default.join(__dirname, `../../front/Demanda.pdf`);
         let filname = docName || `Demanda-${userName}.pdf`;
         this.mailOptions = {
-            from: '"LaborApp" <gerencia@ingnovatech.com>',
+            from: 'LaborApp',
             to: `${destinatario}`,
             subject: 'LaborApp - Demanda',
             text: `Hola!
