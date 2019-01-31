@@ -376,6 +376,12 @@ THE SOFTWARE.
 
 @angular/material/bottom-sheet
 
+@angular/material/toolbar
+
+@angular/material/sidenav
+
+@angular/material/list
+
 @angular/service-worker
 MIT
 
@@ -407,9 +413,3 @@ THE SOFTWARE.
 
 
 @angular/material/checkbox
-
-@angular/material/sidenav
-
-@angular/material/toolbar
-
-@angular/material/list
