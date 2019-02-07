@@ -48,13 +48,14 @@ class DemandaControllers {
                     represetanteLegal: 'represetanteLegal',
                     ciudadAccionado: 'ciudadAccionado'
                 };
+                console.log(datosDemanda);
                 //Generando el contenido del pdf con el objeto previamente creado.
                 const docDefinition = new docDefinition_1.default(datosDemanda);
                 //Generando el pdf ( contenido, nombre del accionante (para que cuando se genere el pdf, el nombre del mismo ('pdf') sea unico )).
-                const generarPdf = new generatePdf_1.default(docDefinition.getDoc, docDefinition.getAccionante);
+                yield new generatePdf_1.default(docDefinition.getDoc, docDefinition.getAccionante);
                 res.status(200).json({
                     ok: true,
-                    err: 'PDF generado con exito'
+                    message: 'PDF generado con exito'
                 });
             }
             catch (err) {
@@ -75,8 +76,9 @@ class DemandaControllers {
                 const personaResult = yield database_1.default.query(`SELECT * FROM Personas WHERE cedulaPersona = ${identificacion}`);
                 const persona = personaResult[0];
                 sendEmail_1.default.sendPdf([persona.correoPersona], persona.nombresPersona);
-                res.json({
+                res.status(200).json({
                     ok: true,
+                    message: 'Correo Enviado'
                 });
             }
             catch (err) {
