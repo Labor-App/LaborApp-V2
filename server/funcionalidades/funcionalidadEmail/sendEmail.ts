@@ -19,13 +19,14 @@ class SendEmail{
           user: 'ingnovatech.recyapp@gmail.com',
           pass: 'STIVEN1911'
         }
-      // host: "ingnovatech.com",
-      // port: 2095,
-      // secure: true,
-      // auth: {
-      // user: "gerencia@ingnovatech.com", // your domain email address
-      // pass: "password" // your password
-      // }
+        // host: "mail.ingnovatech.com",
+        //    port: 465,
+        //    secure: true, // true for 465, false for other ports
+        //    auth: {
+        //      user: 'laborapp@ingnovatech.com', // generated ethereal user
+        //      pass: '#Stiven1911' // generated ethereal password
+        //    }
+
     }
     )
     this.mailOptions = {};
@@ -45,12 +46,12 @@ class SendEmail{
       subject: 'LaborApp - Demanda',
       text: `Hola!
             Hemos generado su demanda exitosamente gracias por utilizar LaborApp`,
-      attachments:[
-        {
-          filename: filname,
-          path: pathAttachments
-        }
-      ]
+      // attachments:[
+      //   {
+      //     filename: filname,
+      //     path: pathAttachments
+      //   }
+      // ]
     };
 
     this.transporter.sendMail( this.mailOptions, (err, res) => {
