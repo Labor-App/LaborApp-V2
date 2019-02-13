@@ -14,11 +14,13 @@ class Server{
   //Atrubutos
 
   public app:express.Application;// se esta diciendo a app que será de tipos express Application
-  public port = process.env.PORT || 3000;
+
 
 
 
   constructor(){
+
+    require('./config/config');
 
     this.app = express(); // Igualamos el atributo app a todos los metodos dentro de la funcion express.
     //Ejecutamos los metodos de la clase .
@@ -69,9 +71,9 @@ class Server{
       Metodo para que el server escuche
       (este metodo no se ejecuta en el constructor, se llama en la instancia al final(afuera) de la clase ).
     */
-    this.app.listen(this.port, () => {
+    this.app.listen( process.env.PORT , () => {
 
-      console.log(`server on port ${this.port}` );
+      console.log(`server on port ${ process.env.PORT }` );
 
     })
 

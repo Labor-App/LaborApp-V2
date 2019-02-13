@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import usuarioControllers from '../controllers/usuario.controllers';
+import { Autenticacion } from '../middleware/autenticacion.middleware';
 
 class UsuarioRouter{
 
@@ -13,9 +14,11 @@ class UsuarioRouter{
 
   public routes(){
 
+    this.router.post('/login' ,usuarioControllers.login)
+
     this.router.post('/guardar', usuarioControllers.guardar);
 
-    this.router.get('/usuarios', usuarioControllers.getUsuarios);
+    this.router.get('/usuarios', Autenticacion.verificacionToken, usuarioControllers.getUsuarios);
 
   }
 

@@ -5,6 +5,6 @@ export interface PersonaModel{
   apellidosPersona: string,
   fechaNacimientoPersona: string,
   correoPersona: string,
-  codigoDaneMunicipio: number,
+  codigoDaneMunicipio: string,
 
 }

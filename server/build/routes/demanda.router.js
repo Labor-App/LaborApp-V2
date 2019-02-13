@@ -5,15 +5,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const demanda_controllers_1 = __importDefault(require("../controllers/demanda.controllers"));
+const autenticacion_middleware_1 = require("../middleware/autenticacion.middleware");
 class DemandaRouter {
     constructor() {
         this.router = express_1.Router();
         this.routes();
     }
     routes() {
-        this.router.get('/generar/:nit/:identificacion', demanda_controllers_1.default.generarPdf);
-        this.router.get('/enviar/:identificacion', demanda_controllers_1.default.enviapdf);
-        this.router.get('/descargar/:identificacion', demanda_controllers_1.default.descargarPdf);
+        this.router.get('/generar/:nit/:identificacion', autenticacion_middleware_1.Autenticacion.verificacionToken, demanda_controllers_1.default.generarPdf);
+        this.router.get('/enviar/:identificacion', autenticacion_middleware_1.Autenticacion.verificacionToken, demanda_controllers_1.default.enviapdf);
+        this.router.get('/descargar/:identificacion', autenticacion_middleware_1.Autenticacion.verificacionToken, demanda_controllers_1.default.descargarPdf);
     }
 }
 const demandaRouter = new DemandaRouter();

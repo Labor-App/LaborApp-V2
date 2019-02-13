@@ -4,9 +4,10 @@
  * en entorno de desarrollo.
  */
 //====================================================================
-///          Configuración de puerto
+///          Configuración Token
 //====================================================================
-class Confing {
-    constructor() {
-    }
-}
+process.env.PORT = process.env.PORT || 3000;
+//====================================================================
+///          Configuración Token
+//====================================================================
+process.env.JWT_SECRET = process.env.JWT_SECRET || 'Esta-es-la-semilla-de-desarrollo';

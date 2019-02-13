@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import demandaControllers from '../controllers/demanda.controllers';
+import { Autenticacion } from '../middleware/autenticacion.middleware';
 
 class DemandaRouter{
 
@@ -13,11 +14,11 @@ class DemandaRouter{
 
   public routes(){
 
-    this.router.get('/generar/:nit/:identificacion', demandaControllers.generarPdf );
+    this.router.get('/generar/:nit/:identificacion', Autenticacion.verificacionToken, demandaControllers.generarPdf );
 
-    this.router.get('/enviar/:identificacion', demandaControllers.enviapdf );
+    this.router.get('/enviar/:identificacion',Autenticacion.verificacionToken, demandaControllers.enviapdf );
 
-    this.router.get('/descargar/:identificacion', demandaControllers.descargarPdf )
+    this.router.get('/descargar/:identificacion',Autenticacion.verificacionToken, demandaControllers.descargarPdf )
 
   }
 
