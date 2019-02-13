@@ -24,9 +24,11 @@ class UsuarioControllers{
 
       const body = req.body;
 
+      console.log(body);
+
       try{
 
-        const usuarioDB: PersonaModel[] = await database.query(`SELECT * FROM Personas WHERE correoPersona = '${body.correo}' LIMIT 1`);
+        const usuarioDB: PersonaModel[] = await database.query(`SELECT * FROM Personas WHERE correoPersona = '${body.email}' LIMIT 1`);
 
         if( usuarioDB.length === 0 ){
           return res.status(400).json({
@@ -116,7 +118,7 @@ class UsuarioControllers{
         codigoDaneMunicipio: body.codigoDaneMunicipio
 
       }
-      
+
       try{
 
 
