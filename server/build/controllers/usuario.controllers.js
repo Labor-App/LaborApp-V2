@@ -18,8 +18,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-//Modulos
-const bcrypt = __importStar(require("bcrypt"));
 const jwt = __importStar(require("jsonwebtoken"));
 //Database conection
 const database_1 = __importDefault(require("../database/database"));
@@ -84,23 +82,24 @@ class UsuarioControllers {
     //POST = Guarda todos los Usuarios
     guardar(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const body = req.body;
+            if (body == null || body == undefined) {
+                return res.status(404).json({
+                    ok: false,
+                    err: {
+                        message: 'Error al enviar datos del front'
+                    }
+                });
+            }
+            const newUsuario = {
+                cedulaPersona: body.cedulaPersona,
+                correoPersona: body.correoPersona,
+                apellidosPersona: body.apellidosPersona,
+                nombresPersona: body.nombresPersona,
+                fechaNacimientoPersona: body.fechaNacimientoPersona,
+                codigoDaneMunicipio: body.codigoDaneMunicipio
+            };
             try {
-                const body = req.body;
-                if (body === null || undefined)
-                    return res.status(404).json({
-                        ok: false,
-                        err: {
-                            message: 'Error al enviar datos del front'
-                        }
-                    });
-                const newUsuario = {
-                    cedulaPersona: body.cedulaPersona,
-                    correoPersona: body.correoPersona,
-                    apellidosPersona: body.apellidosPersona,
-                    nombresPersona: body.nombresPersona,
-                    fechaNacimientoPersona: body.fechaNacimientoPersona,
-                    codigoDaneMunicipio: bcrypt.hashSync(body.codigoDaneMunicipio, 10)
-                };
                 const result = yield database_1.default.query('INSERT INTO Personas set ?', [newUsuario]);
                 res.status(200).json({
                     ok: true,
