@@ -93,19 +93,28 @@ class UsuarioControllers{
     //POST = Guarda todos los Usuarios
     public async guardar(req:Request, res:Response){
 
-      const body: PersonaModel = req.body;
-      const newUsuario: PersonaModel = {
-
-        cedulaPersona: body.cedulaPersona,
-        correoPersona: body.correoPersona,
-        apellidosPersona: bcrypt.hashSync(body.apellidosPersona, 10 ),
-        nombresPersona: body.nombresPersona,
-        fechaNacimientoPersona: body.fechaNacimientoPersona,
-        codigoDaneMunicipio: bcrypt.hashSync(body.codigoDaneMunicipio, 10 )
-
-      }
-
       try{
+
+        const body: PersonaModel = req.body;
+
+          if(body === null || undefined) return res.status(404).json({
+            ok: false,
+            err: {
+              message: 'Error al enviar datos del front'
+            }
+          })
+
+        const newUsuario: PersonaModel = {
+
+          cedulaPersona: body.cedulaPersona,
+          correoPersona: body.correoPersona,
+          apellidosPersona: body.apellidosPersona,
+          nombresPersona: body.nombresPersona,
+          fechaNacimientoPersona: body.fechaNacimientoPersona,
+          codigoDaneMunicipio: bcrypt.hashSync(body.codigoDaneMunicipio, 10 )
+
+        }
+
 
         const result = await database.query('INSERT INTO Personas set ?', [newUsuario]);
 

@@ -84,16 +84,23 @@ class UsuarioControllers {
     //POST = Guarda todos los Usuarios
     guardar(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const body = req.body;
-            const newUsuario = {
-                cedulaPersona: body.cedulaPersona,
-                correoPersona: body.correoPersona,
-                apellidosPersona: bcrypt.hashSync(body.apellidosPersona, 10),
-                nombresPersona: body.nombresPersona,
-                fechaNacimientoPersona: body.fechaNacimientoPersona,
-                codigoDaneMunicipio: bcrypt.hashSync(body.codigoDaneMunicipio, 10)
-            };
             try {
+                const body = req.body;
+                if (body === null || undefined)
+                    return res.status(404).json({
+                        ok: false,
+                        err: {
+                            message: 'Error al enviar datos del front'
+                        }
+                    });
+                const newUsuario = {
+                    cedulaPersona: body.cedulaPersona,
+                    correoPersona: body.correoPersona,
+                    apellidosPersona: body.apellidosPersona,
+                    nombresPersona: body.nombresPersona,
+                    fechaNacimientoPersona: body.fechaNacimientoPersona,
+                    codigoDaneMunicipio: bcrypt.hashSync(body.codigoDaneMunicipio, 10)
+                };
                 const result = yield database_1.default.query('INSERT INTO Personas set ?', [newUsuario]);
                 res.status(200).json({
                     ok: true,
