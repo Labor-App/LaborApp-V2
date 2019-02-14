@@ -46,12 +46,12 @@ class SendEmail{
       subject: 'LaborApp - Demanda',
       text: `Hola!
             Hemos generado su demanda exitosamente gracias por utilizar LaborApp`,
-      // attachments:[
-      //   {
-      //     filename: filname,
-      //     path: pathAttachments
-      //   }
-      // ]
+      attachments:[
+        {
+          filename: filname,
+          path: pathAttachments
+        }
+      ]
     };
 
     this.transporter.sendMail( this.mailOptions, (err, res) => {
