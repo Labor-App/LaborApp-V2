@@ -7,12 +7,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-//Conexion a la DB
-const database_1 = __importDefault(require("../database/database"));
+const Empresa_model_1 = require("../models/Empresa.model");
 class DemandadoControllers {
     /*
       METODOS PARA DEMANDADOS DE TIPO JURIDICO
@@ -20,63 +16,42 @@ class DemandadoControllers {
     //POST = Guarda todos los demandados de tipo juridico
     guardarEmpresa(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(req.body);
-            try {
-                const result = yield database_1.default.query("INSERT INTO Empresa set ?", [req.body]);
-                res.status(200).json({
-                    ok: true,
-                    result
+            const database = yield Empresa_model_1.Empresa.guardarEmpresa(req.body);
+            if (database['ok'] === false) {
+                return res.status(500).json({
+                    ok: false,
+                    database
                 });
             }
-            //Manejo de errores
-            catch (err) {
-                //Typado de sql  errores
-                const error = err;
-                //Mostrando Por consola el error
-                console.log('Error Al insertar Los datos:\n', {
+            ;
+            if (database['message'] === 'Empresa ya existente') {
+                return res.status(200).json({
                     ok: false,
-                    err: error.fatal,
-                    errCode: error.code,
-                    errSqlState: error.sqlState,
-                    errSqlMessage: error.sqlMessage
-                });
-                //Respondiendo con el error
-                res.status(500).json({
-                    ok: false,
-                    err: 'Error al insertar datos en DB',
-                    errSql: error.sqlMessage,
+                    database
                 });
             }
+            ;
+            return res.status(200).json({
+                ok: true,
+                database
+            });
         });
     }
     //GET = Retorna todos los demandados de tipo juridico
     getEmpresas(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const result = yield database_1.default.query('SELECT * FROM Empresa');
-                res.status(200).json({
-                    ok: true,
-                    result
+            const database = yield Empresa_model_1.Empresa.obtenerEmpresas();
+            if (database['ok'] === false) {
+                return res.status(500).json({
+                    ok: false,
+                    database
                 });
             }
-            catch (err) {
-                //Typado de sql  errores
-                const error = err;
-                //Mostrando Por consola el error
-                console.log('Error al consultar las empresas demandadas:\n', {
-                    ok: false,
-                    err: error.fatal,
-                    errCode: error.code,
-                    errSqlState: error.sqlState,
-                    errSqlMessage: error.sqlMessage
-                });
-                //Respondiendo con el error
-                res.status(500).json({
-                    ok: false,
-                    err: 'Error al consultar las empresas demandadas en DB',
-                    errSql: error.sqlMessage,
-                });
-            }
+            ;
+            return res.status(200).json({
+                ok: true,
+                database
+            });
         });
     }
     /*

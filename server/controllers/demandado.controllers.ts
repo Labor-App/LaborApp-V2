@@ -4,7 +4,7 @@ import database from '../database/database';
 //Models
 import { Request, Response } from 'express';
 import { MysqlError } from 'mysql';
-import { EmpresaModel } from '../models/Empresa.model';
+import { Empresa } from '../models/Empresa.model';
 
 
 
@@ -15,80 +15,48 @@ class DemandadoControllers{
   */
 
     //POST = Guarda todos los demandados de tipo juridico
-    public async guardarEmpresa( req: Request, res: Response ){
+    public async guardarEmpresa( req: Request, res: Response ) {
 
-      console.log(req.body)
+      const database: any = await Empresa.guardarEmpresa(req.body);
 
-      try{
-
-        const result = await database.query("INSERT INTO Empresa set ?", [req.body])
-
-        res.status(200).json({
-          ok: true,
-          result
-        });
-
-      }
-      //Manejo de errores
-      catch(err){
-
-        //Typado de sql  errores
-        const error: MysqlError = err;
-
-        //Mostrando Por consola el error
-        console.log('Error Al insertar Los datos:\n', {
+      if( database['ok'] === false){
+        return res.status(500).json({
           ok: false,
-          err: error.fatal,
-          errCode: error.code,
-          errSqlState: error.sqlState,
-          errSqlMessage: error.sqlMessage
-         });
+          database
+        })
+      };
 
-        //Respondiendo con el error
-        res.status(500).json({
+      if( database['message'] === 'Empresa ya existente'){
+        return res.status(200).json({
           ok: false,
-          err: 'Error al insertar datos en DB',
-          errSql: error.sqlMessage,
-        });
+          database
+        })
+      };
 
-      }
+      return res.status(200).json({
+        ok: true,
+        database
+      });
+
 
     }
 
     //GET = Retorna todos los demandados de tipo juridico
     public async getEmpresas( req: Request, res: Response ){
 
-      try{
+      const database: any = await Empresa.obtenerEmpresas();
 
-        const result:EmpresaModel[] = await database.query('SELECT * FROM Empresa');
-
-        res.status(200).json({
-          ok: true,
-          result
-        });
-
-      }catch(err){
-
-        //Typado de sql  errores
-        const error: MysqlError = err;
-
-        //Mostrando Por consola el error
-        console.log('Error al consultar las empresas demandadas:\n', {
+      if( database['ok'] === false){
+        return res.status(500).json({
           ok: false,
-          err: error.fatal,
-          errCode: error.code,
-          errSqlState: error.sqlState,
-          errSqlMessage: error.sqlMessage
-         });
+          database
+        })
+      };
 
-        //Respondiendo con el error
-        res.status(500).json({
-          ok: false,
-          err: 'Error al consultar las empresas demandadas en DB',
-          errSql: error.sqlMessage,
-        });
-
-      }
+      return res.status(200).json({
+        ok: true,
+        database
+      });
 
     }
 
