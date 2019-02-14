@@ -17,7 +17,7 @@ class Autenticacion {
                 return res.status(401).json({
                     ok: false,
                     err: {
-                        message: 'Token valido'
+                        message: 'Token invalido valido'
                     }
                 });
             }
