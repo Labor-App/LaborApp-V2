@@ -2,15 +2,11 @@
 import * as bcrypt from 'bcrypt';
 import * as jwt  from 'jsonwebtoken';
 
-//Database conection
-import database  from '../database/database';
-
-
 //Models
 import { Response, Request } from 'express';
-import { MysqlError } from 'mysql';
-import { PersonaModel } from '../models/Persona.model';
-import { Secret } from 'jsonwebtoken';
+import { Usuario } from '../models/index.models';
+
+
 
 
 class UsuarioControllers{
@@ -22,72 +18,34 @@ class UsuarioControllers{
     public async login(req: Request, res: Response){
 
 
-      const body = req.body;
-
-      console.log(body);
-
-      try{
-
-        const usuarioDB: PersonaModel[] = await database.query(`SELECT * FROM Personas WHERE correoPersona = '${body.email}' LIMIT 1`);
-
-        if( usuarioDB.length === 0 ){
-          return res.status(400).json({
-            ok: false,
-            err: {
-              message: '(Usuario) o Contraseña incorrectos'
-            }
-
-          })
-        }
-
-        // if( !bcrypt.compareSync(body.password, usuarioDB[0].password) ){
-        //   return res.status(400).json({
-        //     ok: false,
-        //     err: {
-        //       message: 'Usuario o (Contraseña) incorrectos'
-        //     }
-        //
-        //   })
-        // }
-
-        // delete usuarioDB[0].password;
+      const databaseRes: any = await Usuario.login(new Usuario(req.body.email));
 
 
-        const cadocidad = 60 * 60 * 24 * 30;
-
-        const token = jwt.sign({
-          usuario: usuarioDB[0],
-        }, process.env.JWT_SECRET, { expiresIn: cadocidad });
-
-
-        res.json({
-          ok: true,
-          usuario: usuarioDB[0],
-          token
-        })
-
-      }catch(err){
-
-        const error: MysqlError = err;
-
-        //Mostrando Por consola el error
-        console.log('Error Al logearse Los datos:\n', {
-          ok: false,
-          err: error.fatal,
-          errCode: error.code,
-          errSqlState: error.sqlState,
-          errSqlMessage: error.sqlMessage,
-          erro: err
-         });
-
-        //Respondiendo con el error
-        res.status(500).json({
-          ok: false,
-          err: 'Error al logearse datos en DB',
-          errSql: error.sqlMessage,
-        });
-
+      if (databaseRes['ok'] === false){
+        return res.status(200).json(databaseRes)
       }
+
+      // if( !bcrypt.compareSync(req.body.password, databaseRes['usuario'].password) ){
+      //   return res.status(400).json({
+      //     ok: false,
+      //     err: {
+      //       message: 'Email o Contraseña incorrectos'
+      //     }
+      //   })
+      // }
+
+      delete databaseRes['usuario'].password;
+
+      const cadocidad = 60 * 60 * 24 * 30;
+
+      const token = jwt.sign({
+        usuario: databaseRes['usuario'],
+      }, process.env.JWT_SECRET, { expiresIn: cadocidad });
+
+      databaseRes['token'] = token
+
+      return res.status(200).json(databaseRes);
+
 
     }
 
@@ -95,11 +53,10 @@ class UsuarioControllers{
     //POST = Guarda todos los Usuarios
     public async guardar(req:Request, res:Response){
 
-      const body = req.body;
 
-      if(body == null || body == undefined) {
+      if(req.body == null || req.body == undefined) {
 
-        return res.status(404).json({
+        return res.status(400).json({
           ok: false,
           err: {
             message: 'Error al enviar datos del front'
@@ -107,89 +64,30 @@ class UsuarioControllers{
         })
       }
 
+      const databaseRes: any = await Usuario.guardarUsuario(req.body)
 
-      const newUsuario: PersonaModel = {
+      if( databaseRes.err.message === 'Usuario ya existente'){
+        return res.status(200).json(databaseRes)
+      };
 
-        cedulaPersona: body.cedulaPersona,
-        correoPersona: body.correoPersona,
-        apellidosPersona: body.apellidosPersona,
-        nombresPersona: body.nombresPersona,
-        fechaNacimientoPersona: body.fechaNacimientoPersona,
-        codigoDaneMunicipio: body.codigoDaneMunicipio
+      if( databaseRes['ok'] === false){
+        return res.status(400).json(databaseRes)
+      };
 
-      }
-
-      try{
-
-
-
-        const result = await database.query('INSERT INTO Personas set ?', [newUsuario]);
-
-        res.status(200).json({
-          ok: true,
-          result
-        });
-
-      }catch(err){
-
-        const error: MysqlError = err;
-
-        //Mostrando Por consola el error
-        console.log('Error Al insertar Los datos:\n', {
-          ok: false,
-          err: error.fatal,
-          errCode: error.code,
-          errSqlState: error.sqlState,
-          errSqlMessage: error.sqlMessage
-         });
-
-        //Respondiendo con el error
-        res.status(500).json({
-          ok: false,
-          err:{
-            message:  'Error al insertar datos en DB'
-          },
-          errSql: error.sqlMessage,
-        });
-
-      }
+      return res.status(200).json(databaseRes);
 
     }
 
     //GET = Retorna todos los Usuarios
     public async getUsuarios(req:Request | any, res:Response){
 
-      try{
+      const databaseRes: any = await Usuario.obtenerEmpresas();
 
-        const result:PersonaModel[] = await database.query('SELECT * FROM Personas');
+      if( databaseRes['ok'] === false){
+        return res.status(400).json(databaseRes)
+      };
 
-        res.status(200).json({
-          ok: true,
-          result
-        });
-
-      }catch(err){
-
-        //Typado de sql  errores
-        const error: MysqlError = err;
-
-        //Mostrando Por consola el error
-        console.log('Error Al obtener los datos:\n', {
-          ok: false,
-          err: error.fatal,
-          errCode: error.code,
-          errSqlState: error.sqlState,
-          errSqlMessage: error.sqlMessage
-         });
-
-        //Respondiendo con el error
-        res.status(500).json({
-          ok: false,
-          err: 'Error Al obtener los datos',
-          errSql: error.sqlMessage,
-        });
-
-      }
+      return res.status(200).json(databaseRes);
 
     }
 

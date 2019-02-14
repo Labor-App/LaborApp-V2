@@ -1,10 +1,7 @@
-//Conexion a la DB
-import database from '../database/database';
-
-//Models
 import { Request, Response } from 'express';
-import { MysqlError } from 'mysql';
-import { Empresa } from '../models/Empresa.model';
+//Models
+import { Empresa } from '../models/index.models';
+
 
 
 
@@ -17,26 +14,17 @@ class DemandadoControllers{
     //POST = Guarda todos los demandados de tipo juridico
     public async guardarEmpresa( req: Request, res: Response ) {
 
-      const database: any = await Empresa.guardarEmpresa(req.body);
+      const databaseRes: any = await Empresa.guardarEmpresa(req.body);
 
-      if( database['ok'] === false){
-        return res.status(500).json({
-          ok: false,
-          database
-        })
+      if( databaseRes['message'].includes('ya existente')){
+        return res.status(200).json(databaseRes)
+      };
+      if( databaseRes['ok'] === false){
+        return res.status(500).json(databaseRes)
       };
 
-      if( database['message'] === 'Empresa ya existente'){
-        return res.status(200).json({
-          ok: false,
-          database
-        })
-      };
 
-      return res.status(200).json({
-        ok: true,
-        database
-      });
+      return res.status(200).json(databaseRes);
 
 
     }
@@ -44,19 +32,14 @@ class DemandadoControllers{
     //GET = Retorna todos los demandados de tipo juridico
     public async getEmpresas( req: Request, res: Response ){
 
-      const database: any = await Empresa.obtenerEmpresas();
+      const databaseRes: any = await Empresa.obtenerEmpresas();
 
-      if( database['ok'] === false){
-        return res.status(500).json({
-          ok: false,
-          database
-        })
+
+      if( databaseRes['ok'] === false){
+        return res.status(304).json(databaseRes)
       };
 
-      return res.status(200).json({
-        ok: true,
-        database
-      });
+      return res.status(200).json(databaseRes);
 
     }
 

@@ -4,7 +4,7 @@ export interface DocDefinitionModel{
   accionante:string,
   accionado:string,
   ciudadAccionante:string,
-  cedulaAccionante:number,
+  cedulaAccionante:string,
   lugarDeExpedicion:string,
   nit:number,
   represetanteLegal:string,

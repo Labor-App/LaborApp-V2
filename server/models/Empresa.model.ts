@@ -1,5 +1,5 @@
 import database from "../database/database";
-import { MysqlError, queryCallback } from "mysql";
+import { MysqlError } from "mysql";
 
 export class Empresa {
 
@@ -25,7 +25,7 @@ export class Empresa {
 
         if( err.code === 'ER_DUP_ENTRY' ){
           return {
-            ok: true,
+            ok: false,
             message: 'Empresa ya existente'
           }
         }
@@ -52,7 +52,12 @@ export class Empresa {
         };
       })
       .catch( err => {
-        console.log(err)
+        return {
+          ok: false,
+          message: 'Query fallido',
+          err
+
+        };
       })
 
   }

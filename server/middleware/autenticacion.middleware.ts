@@ -1,6 +1,5 @@
 import * as jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import { PersonaModel } from '../models/Persona.model';
 
 export class Autenticacion {
 

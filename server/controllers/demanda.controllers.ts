@@ -6,10 +6,9 @@ import database from '../database/database';
 
 //Models
 import { Request, Response } from 'express';
-import { MysqlError } from 'mysql';
 import { DocDefinitionModel } from '../models/DocDefinition.model';
-import { EmpresaModel } from '../models/Empresa.model';
-import { PersonaModel } from '../models/Persona.model';
+
+
 
 //Funcionalidades
 import sendEmail from '../funcionalidades/funcionalidadEmail/sendEmail';
@@ -17,6 +16,8 @@ import GenerarPdf from '../funcionalidades/funcionalidad-pdf/generatePdf';
 
 //Definicion del Documento PDF
 import DocDefinition from '../funcionalidades/funcionalidad-pdf/docDefinition';
+import { Empresa, Usuario } from '../models/index.models';
+
 
 
 class DemandaControllers{
@@ -33,16 +34,16 @@ class DemandaControllers{
       const identificacion:number =  req.params.identificacion;
 
       //Consultas de la DB
-      const empresaResult: EmpresaModel[] = await database.query(`SELECT * FROM Empresa WHERE NItEmpresa = ${ nit }`);
-      const personaResult: PersonaModel[] = await database.query(`SELECT * FROM Personas WHERE cedulaPersona = ${ identificacion }`);
+      const empresaResult: Empresa[] = await database.query(`SELECT * FROM Empresa WHERE NItEmpresa = ${ nit }`);
+      const personaResult: Usuario[] = await database.query(`SELECT * FROM Personas WHERE cedulaPersona = ${ identificacion }`);
 
       //Navegando entre la respuesta y almacenandol en una valiable para su posterior uso.
-      const accionante: PersonaModel = personaResult[0];
-      const accionado: EmpresaModel = empresaResult[0];
+      const accionante: Usuario = personaResult[0];
+      const accionado: Empresa = empresaResult[0];
 
 
       //Metemos los datos de la consulta en el objeto que define el contenido del pdf.
-      const datosDemanda:DocDefinitionModel = {
+      const datosDemanda = {
 
         accionante: accionante.nombresPersona,
         accionado: accionado.nombreEmpresaRS,
@@ -88,9 +89,9 @@ class DemandaControllers{
 
       const identificacion = req.params.identificacion;
 
-      const personaResult: PersonaModel[] = await database.query(`SELECT * FROM Personas WHERE cedulaPersona = ${ identificacion }`);
+      const personaResult: Usuario[] = await database.query(`SELECT * FROM Personas WHERE cedulaPersona = ${ identificacion }`);
 
-      const persona:PersonaModel = personaResult[0];
+      const persona:Usuario = personaResult[0];
 
       sendEmail.sendPdf([persona.correoPersona], persona.nombresPersona )
 
@@ -123,9 +124,9 @@ class DemandaControllers{
 
       const identificacion = req.params.identificacion;
 
-      const personaResult: PersonaModel[] = await database.query(`SELECT * FROM Personas WHERE cedulaPersona = ${ identificacion }`);
+      const personaResult: Usuario[] = await database.query(`SELECT * FROM Personas WHERE cedulaPersona = ${ identificacion }`);
 
-      const persona:PersonaModel = personaResult[0];
+      const persona:Usuario = personaResult[0];
 
       res.status(200).download(path.join(__dirname, `../front/Demanda.pdf`));
 

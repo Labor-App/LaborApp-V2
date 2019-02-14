@@ -24,7 +24,7 @@ class Empresa {
             .catch((err) => {
             if (err.code === 'ER_DUP_ENTRY') {
                 return {
-                    ok: true,
+                    ok: false,
                     message: 'Empresa ya existente'
                 };
             }
@@ -44,7 +44,11 @@ class Empresa {
             };
         })
             .catch(err => {
-            console.log(err);
+            return {
+                ok: false,
+                message: 'Query fallido',
+                err
+            };
         });
     }
 }

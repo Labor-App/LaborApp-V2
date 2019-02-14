@@ -4,9 +4,9 @@ import { DocDefinitionModel } from '../../models/docDefinition.model';
 export default class DocDefinition{
 
   public doc: object;
-  variablesPdf: DocDefinitionModel;
+  variablesPdf: any;
 
-  constructor( variablesPdf:DocDefinitionModel ){
+  constructor( variablesPdf: any ){
     this.variablesPdf = variablesPdf;
 
     this.doc = {

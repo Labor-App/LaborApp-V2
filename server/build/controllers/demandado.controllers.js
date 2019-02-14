@@ -8,7 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Empresa_model_1 = require("../models/Empresa.model");
+//Models
+const index_models_1 = require("../models/index.models");
 class DemandadoControllers {
     /*
       METODOS PARA DEMANDADOS DE TIPO JURIDICO
@@ -16,42 +17,27 @@ class DemandadoControllers {
     //POST = Guarda todos los demandados de tipo juridico
     guardarEmpresa(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const database = yield Empresa_model_1.Empresa.guardarEmpresa(req.body);
-            if (database['ok'] === false) {
-                return res.status(500).json({
-                    ok: false,
-                    database
-                });
+            const databaseRes = yield index_models_1.Empresa.guardarEmpresa(req.body);
+            if (databaseRes['message'].includes('ya existente')) {
+                return res.status(200).json(databaseRes);
             }
             ;
-            if (database['message'] === 'Empresa ya existente') {
-                return res.status(200).json({
-                    ok: false,
-                    database
-                });
+            if (databaseRes['ok'] === false) {
+                return res.status(500).json(databaseRes);
             }
             ;
-            return res.status(200).json({
-                ok: true,
-                database
-            });
+            return res.status(200).json(databaseRes);
         });
     }
     //GET = Retorna todos los demandados de tipo juridico
     getEmpresas(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const database = yield Empresa_model_1.Empresa.obtenerEmpresas();
-            if (database['ok'] === false) {
-                return res.status(500).json({
-                    ok: false,
-                    database
-                });
+            const databaseRes = yield index_models_1.Empresa.obtenerEmpresas();
+            if (databaseRes['ok'] === false) {
+                return res.status(304).json(databaseRes);
             }
             ;
-            return res.status(200).json({
-                ok: true,
-                database
-            });
+            return res.status(200).json(databaseRes);
         });
     }
     /*
