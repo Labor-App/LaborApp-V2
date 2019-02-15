@@ -1,11 +1,11 @@
 {
   "name": "LaborApp",
   "short_name": "LaborApp",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "start_url": "index.html",
+  "background_color": "#3498db",
   "display": "standalone",
-  "scope": "/",
-  "start_url": "/",
+  "orientation": "portrait",
+  "theme_color": "#3498db",
   "icons": [
     {
       "src": "assets/icons/icon-72x72.png",
