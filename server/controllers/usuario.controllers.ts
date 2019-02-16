@@ -42,13 +42,30 @@ class UsuarioControllers{
         usuario: databaseRes['usuario'],
       }, process.env.JWT_SECRET, { expiresIn: cadocidad });
 
-      databaseRes['token'] = token
+      databaseRes['token'] = token;
 
       return res.status(200).json(databaseRes);
 
 
     }
 
+    //Get =Renovacion del token
+    public async renuevaToken(req: Request | any , res: Response){
+
+      const cadocidad = 60 * 60 * 24 * 30;
+
+      const token = jwt.sign({
+        usuario: req['usuario'],
+      }, process.env.JWT_SECRET, { expiresIn: cadocidad });
+
+
+      return res.status(200).json({
+        ok: true,
+        message: 'Token Renovado',
+        usuario: req['usuario'],
+        token
+      });
+    }
 
     //POST = Guarda todos los Usuarios
     public async guardar(req:Request, res:Response){

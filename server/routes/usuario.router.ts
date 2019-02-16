@@ -14,7 +14,9 @@ class UsuarioRouter{
 
   public routes(){
 
-    this.router.post('/login' ,usuarioControllers.login)
+    this.router.post('/login' ,usuarioControllers.login);
+
+    this.router.post('/renuevaToken', Autenticacion.verificacionToken ,usuarioControllers.renuevaToken);
 
     this.router.post('/guardar', usuarioControllers.guardar);
 

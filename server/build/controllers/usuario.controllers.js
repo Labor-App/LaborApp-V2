@@ -45,6 +45,21 @@ class UsuarioControllers {
             return res.status(200).json(databaseRes);
         });
     }
+    //Get =Renovacion del token
+    renuevaToken(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const cadocidad = 60 * 60 * 24 * 30;
+            const token = jwt.sign({
+                usuario: req['usuario'],
+            }, process.env.JWT_SECRET, { expiresIn: cadocidad });
+            return res.status(200).json({
+                ok: true,
+                message: 'Token Renovado',
+                usuario: req['usuario'],
+                token
+            });
+        });
+    }
     //POST = Guarda todos los Usuarios
     guardar(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
