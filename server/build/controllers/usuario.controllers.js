@@ -72,7 +72,7 @@ class UsuarioControllers {
                 });
             }
             const databaseRes = yield index_models_1.Usuario.guardarUsuario(req.body);
-            if (databaseRes.err.message === 'Usuario ya existente') {
+            if (databaseRes['message'] === 'Usuario ya existente') {
                 return res.status(200).json(databaseRes);
             }
             ;

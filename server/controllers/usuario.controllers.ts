@@ -83,7 +83,7 @@ class UsuarioControllers{
 
       const databaseRes: any = await Usuario.guardarUsuario(req.body)
 
-      if( databaseRes.err.message === 'Usuario ya existente'){
+      if( databaseRes['message'] === 'Usuario ya existente'){
         return res.status(200).json(databaseRes)
       };
 
