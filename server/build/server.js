@@ -7,7 +7,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
-const path_1 = __importDefault(require("path"));
+const path_1 = require("path");
+var fallback = require('express-history-api-fallback');
 //Rutas
 const index_router_1 = __importDefault(require("./routes/index.router"));
 class Server {
@@ -39,8 +40,9 @@ class Server {
         this.app.use('/api/laborapp', index_router_1.default);
     }
     publicFolder() {
-        const publicPath = path_1.default.join(__dirname, './front/LaborApp');
+        const publicPath = path_1.join(__dirname, './front/LaborApp');
         this.app.use(express_1.default.static(publicPath));
+        this.app.use(fallback('./front/LaborApp/index.html', { root: __dirname }));
     }
     start() {
         /*

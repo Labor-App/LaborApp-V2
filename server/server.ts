@@ -2,7 +2,8 @@
 import express from  'express';
 import morgan from  'morgan';
 import cors from  'cors';
-import path from 'path';
+import { join } from 'path';
+var fallback = require('express-history-api-fallback')
 
 
 //Rutas
@@ -13,7 +14,7 @@ class Server{
 
   //Atrubutos
 
-  public app:express.Application;// se esta diciendo a app que será de tipos express Application
+  public app: express.Application;// se esta diciendo a app que será de tipos express Application
 
 
 
@@ -56,11 +57,14 @@ class Server{
     */
     this.app.use('/api/laborapp', indexRouter )
 
+
   }
 
   public publicFolder(){
-    const publicPath = path.join(__dirname, './front/LaborApp')
+
+    const publicPath = join(__dirname, './front/LaborApp')
     this.app.use(express.static(publicPath));
+    this.app.use(fallback('./front/LaborApp/index.html', { root: __dirname }))
 
   }
 
