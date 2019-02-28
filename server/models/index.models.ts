@@ -1,2 +1,4 @@
-export { Usuario } from "./Usuario.model";
-export { Empresa } from "../models/Empresa.model";
+export { ConsultorioJuridico } from "./ConsultorioJuridico.model";
+export { PersonaNatural } from "./PersonaNatural.module";
+export { Persona } from "./Persona.model";
+export { Empresa } from "./Empresa.model";

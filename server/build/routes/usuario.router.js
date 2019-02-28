@@ -15,7 +15,7 @@ class UsuarioRouter {
         this.router.post('/login', usuario_controllers_1.default.login);
         this.router.post('/renuevaToken', autenticacion_middleware_1.Autenticacion.verificacionToken, usuario_controllers_1.default.renuevaToken);
         this.router.post('/guardar', usuario_controllers_1.default.guardar);
-        this.router.get('/usuarios', autenticacion_middleware_1.Autenticacion.verificacionToken, usuario_controllers_1.default.getUsuarios);
+        this.router.get('/usuarios', /*Autenticacion.verificacionToken,*/ usuario_controllers_1.default.getUsuarios);
     }
 }
 const usuarioRouter = new UsuarioRouter();

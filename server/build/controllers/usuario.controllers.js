@@ -15,6 +15,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+//Modulos
+const bcrypt = __importStar(require("bcrypt"));
 const jwt = __importStar(require("jsonwebtoken"));
 const index_models_1 = require("../models/index.models");
 class UsuarioControllers {
@@ -24,19 +26,19 @@ class UsuarioControllers {
     //POST = login Usuario
     login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const databaseRes = yield index_models_1.Usuario.login(new index_models_1.Usuario(req.body.email));
+            const databaseRes = yield index_models_1.Persona.login(new index_models_1.Persona(null, null, null, null, req.body.email));
             if (databaseRes['ok'] === false) {
                 return res.status(200).json(databaseRes);
             }
-            // if( !bcrypt.compareSync(req.body.password, databaseRes['usuario'].password) ){
-            //   return res.status(400).json({
-            //     ok: false,
-            //     err: {
-            //       message: 'Email o Contraseña incorrectos'
-            //     }
-            //   })
-            // }
-            delete databaseRes['usuario'].password;
+            if (!bcrypt.compareSync(req.body.contrasenaPersona, `${databaseRes['usuario'].contrasenaPersona}`)) {
+                return res.status(400).json({
+                    ok: false,
+                    err: {
+                        message: 'Email o (Contraseña) incorrectos'
+                    }
+                });
+            }
+            delete databaseRes['usuario'].contrasenaPersona;
             const cadocidad = 60 * 60 * 24 * 30;
             const token = jwt.sign({
                 usuario: databaseRes['usuario'],
@@ -71,7 +73,9 @@ class UsuarioControllers {
                     }
                 });
             }
-            const databaseRes = yield index_models_1.Usuario.guardarUsuario(req.body);
+            const body = req.body;
+            body.contrasenaPersona = bcrypt.hashSync(body.contrasenaPersona, 10);
+            const databaseRes = yield index_models_1.Persona.guardarUsuario(req.body);
             if (databaseRes['message'] === 'Usuario ya existente') {
                 return res.status(200).json(databaseRes);
             }
@@ -86,7 +90,7 @@ class UsuarioControllers {
     //GET = Retorna todos los Usuarios
     getUsuarios(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const databaseRes = yield index_models_1.Usuario.obtenerEmpresas();
+            const databaseRes = yield index_models_1.Persona.obtenerEmpresas();
             if (databaseRes['ok'] === false) {
                 return res.status(400).json(databaseRes);
             }

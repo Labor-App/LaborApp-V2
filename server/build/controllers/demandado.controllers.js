@@ -17,7 +17,7 @@ class DemandadoControllers {
     //POST = Guarda todos los demandados de tipo juridico
     guardarEmpresa(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const databaseRes = yield index_models_1.Empresa.guardarEmpresa(req.body);
+            const databaseRes = yield index_models_1.Empresa.guardarEmpresa(req.body['empresa'], req.body['persona']);
             if (databaseRes['message'].includes('ya existente')) {
                 return res.status(200).json(databaseRes);
             }
@@ -46,11 +46,27 @@ class DemandadoControllers {
     //POST = Guarda todos los demandados de tipo natural.
     guardarNatural(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const databaseRes = yield index_models_1.PersonaNatural.guardarPersonaNatural(req.body);
+            if (databaseRes['message'].includes('ya existente')) {
+                return res.status(200).json(databaseRes);
+            }
+            ;
+            if (databaseRes['ok'] === false) {
+                return res.status(500).json(databaseRes);
+            }
+            ;
+            return res.status(200).json(databaseRes);
         });
     }
     //GET = Retorna todos los demandados de tipo natural.
     getNatural(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const databaseRes = yield index_models_1.PersonaNatural.obtenerPersonaNatural();
+            if (databaseRes['ok'] === false) {
+                return res.status(304).json(databaseRes);
+            }
+            ;
+            return res.status(200).json(databaseRes);
         });
     }
 }

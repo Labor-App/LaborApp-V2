@@ -42,7 +42,7 @@ class DemandaControllers {
                     accionante: accionante.nombresPersona,
                     accionado: accionado.nombreEmpresaRS,
                     ciudadAccionante: "accionante.codigoDaneMunicipio",
-                    cedulaAccionante: accionante.cedulaPersona,
+                    cedulaAccionante: accionante.numeroDocumentoPersona,
                     lugarDeExpedicion: 'lugarDeExpedicion',
                     nit: accionado.NItEmpresa,
                     represetanteLegal: 'represetanteLegal',

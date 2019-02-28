@@ -4,7 +4,7 @@ import * as jwt  from 'jsonwebtoken';
 
 //Models
 import { Response, Request } from 'express';
-import { Usuario } from '../models/index.models';
+import { Persona } from '../models/index.models';
 
 
 
@@ -18,23 +18,23 @@ class UsuarioControllers{
     public async login(req: Request, res: Response){
 
 
-      const databaseRes: any = await Usuario.login(new Usuario(req.body.email));
-
+      const databaseRes: any = await Persona.login(new Persona(null,null,null,null, req.body.email));
 
       if (databaseRes['ok'] === false){
         return res.status(200).json(databaseRes)
       }
 
-      // if( !bcrypt.compareSync(req.body.password, databaseRes['usuario'].password) ){
-      //   return res.status(400).json({
-      //     ok: false,
-      //     err: {
-      //       message: 'Email o Contraseña incorrectos'
-      //     }
-      //   })
-      // }
 
-      delete databaseRes['usuario'].password;
+      if( !bcrypt.compareSync(req.body.contrasenaPersona, `${databaseRes['usuario'].contrasenaPersona}`) ){
+        return res.status(400).json({
+          ok: false,
+          err: {
+            message: 'Email o (Contraseña) incorrectos'
+          }
+        })
+      }
+
+      delete databaseRes['usuario'].contrasenaPersona;
 
       const cadocidad = 60 * 60 * 24 * 30;
 
@@ -81,7 +81,10 @@ class UsuarioControllers{
         })
       }
 
-      const databaseRes: any = await Usuario.guardarUsuario(req.body)
+      const body: Persona = req.body;
+      body.contrasenaPersona = bcrypt.hashSync(body.contrasenaPersona, 10)
+
+      const databaseRes: any = await Persona.guardarUsuario(req.body)
 
       if( databaseRes['message'] === 'Usuario ya existente'){
         return res.status(200).json(databaseRes)
@@ -98,7 +101,7 @@ class UsuarioControllers{
     //GET = Retorna todos los Usuarios
     public async getUsuarios(req:Request | any, res:Response){
 
-      const databaseRes: any = await Usuario.obtenerEmpresas();
+      const databaseRes: any = await Persona.obtenerEmpresas();
 
       if( databaseRes['ok'] === false){
         return res.status(400).json(databaseRes)

@@ -35,7 +35,7 @@ class SendEmail{
   }
 
 
-  sendPdf( destinatario:string[], userName?:string, docPath?:string  , docName?:string ){
+  sendPdf( destinatario: (string | undefined | null)[] | string | undefined, userName?:string | null, docPath?:string  , docName?:string ){
 
     let pathAttachments = docPath || path.join(__dirname, `../../front/Demanda.pdf`)
     let filname = docName || `Demanda-${ userName }.pdf`

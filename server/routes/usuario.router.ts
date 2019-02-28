@@ -20,7 +20,7 @@ class UsuarioRouter{
 
     this.router.post('/guardar', usuarioControllers.guardar);
 
-    this.router.get('/usuarios', Autenticacion.verificacionToken, usuarioControllers.getUsuarios);
+    this.router.get('/usuarios', /*Autenticacion.verificacionToken,*/ usuarioControllers.getUsuarios);
 
   }
 
