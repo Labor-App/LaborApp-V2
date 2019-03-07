@@ -1,8 +1,10 @@
 import { Router } from 'express';
 
 import demandaRouter from './demanda.router';
-import usuarioRouter from './usuario.router';
-import demandadoRouter from './demandado.routes';
+import personaRouter from './persona.router';
+import empresaRouter from './empresa.router';
+import personaNaturalRouter from './personaNatural.router';
+import contratoLaboralRouter from './contratoLaboral.router';
 
 class IndexRouter{
 
@@ -15,9 +17,11 @@ class IndexRouter{
 
 
   public routes(){
-    this.router.use('/demanda', demandaRouter);
-    this.router.use('/usuario', usuarioRouter);
-    this.router.use('/demandado', demandadoRouter);
+    this.router.use( demandaRouter);
+    this.router.use( personaRouter);
+    this.router.use('/demandado', empresaRouter);
+    this.router.use('/demandado', personaNaturalRouter);
+    this.router.use('/contrato', contratoLaboralRouter);
   }
 
 

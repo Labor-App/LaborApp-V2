@@ -13,21 +13,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../database/database"));
 class ConsultorioJuridico {
-    constructor(IdconsultorioJuridico, nombreConsultorioJuridico, telefonoConsultorioJuridico, codigoCiudad, tipoDocumentoPersona, numeroDocumentoPersona, correoPersona, tipoConsultorioJuridico, emailConsultorioJuridico, direccionConsultorioJuridico) {
+    constructor(IdconsultorioJuridico, nombreConsultorioJuridico, telefonoConsultorioJuridico, codigoCiudad, tipoDocumentoPersona, numeroDocumentoPersona, tipoConsultorioJuridico, emailConsultorioJuridico, direccionConsultorioJuridico) {
         this.IdconsultorioJuridico = IdconsultorioJuridico;
         this.nombreConsultorioJuridico = nombreConsultorioJuridico;
         this.telefonoConsultorioJuridico = telefonoConsultorioJuridico;
         this.codigoCiudad = codigoCiudad;
         this.tipoDocumentoPersona = tipoDocumentoPersona;
         this.numeroDocumentoPersona = numeroDocumentoPersona;
-        this.correoPersona = correoPersona;
         this.tipoConsultorioJuridico = tipoConsultorioJuridico;
         this.emailConsultorioJuridico = emailConsultorioJuridico;
         this.direccionConsultorioJuridico = direccionConsultorioJuridico;
     }
     static existeConsultorioJuridico(persona) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield database_1.default.query(`SELECT * FROM consultorioJuridico WHERE numeroDocumentoPersona = '${persona.numeroDocumentoPersona}' AND tipoDocumentoPersona = '${persona.tipoDocumentoPersona}' AND correoPersona = '${persona.correoPersona}'`)
+            return yield database_1.default.query(`SELECT * FROM consultorioJuridico WHERE numeroDocumentoPersona = '${persona.numeroDocumentoPersona}' AND tipoDocumentoPersona = '${persona.tipoDocumentoPersona}'`)
                 .then((result) => {
                 if (result.length === 0) {
                     return false;

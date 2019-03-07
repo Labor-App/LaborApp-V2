@@ -10,9 +10,8 @@ export class ConsultorioJuridico {
     public nombreConsultorioJuridico: string,
     public telefonoConsultorioJuridico: number,
     public codigoCiudad: number,
-    public tipoDocumentoPersona: string,
-    public numeroDocumentoPersona: number,
-    public correoPersona: string,
+    public tipoDocumentoPersona: Persona['tipoDocumentoPersona'],
+    public numeroDocumentoPersona: Persona['numeroDocumentoPersona'],
     public tipoConsultorioJuridico?: string,
     public emailConsultorioJuridico?: string,
     public direccionConsultorioJuridico?: string,
@@ -21,7 +20,7 @@ export class ConsultorioJuridico {
 
   public static async existeConsultorioJuridico(persona: Persona): Promise<boolean> {
 
-    return await database.query(`SELECT * FROM consultorioJuridico WHERE numeroDocumentoPersona = '${persona.numeroDocumentoPersona}' AND tipoDocumentoPersona = '${persona.tipoDocumentoPersona}' AND correoPersona = '${persona.correoPersona}'`
+    return await database.query(`SELECT * FROM consultorioJuridico WHERE numeroDocumentoPersona = '${persona.numeroDocumentoPersona}' AND tipoDocumentoPersona = '${persona.tipoDocumentoPersona}'`
     )
       .then((result: any[]) => {
 

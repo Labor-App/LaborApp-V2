@@ -93,7 +93,7 @@ class DemandaControllers{
 
       const persona: Persona = personaResult[0];
 
-      sendEmail.sendPdf([persona.correoPersona], persona.nombresPersona )
+      sendEmail.sendPdf([], persona.nombresPersona )
 
       res.status(200).json({
         ok:true,

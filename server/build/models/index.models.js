@@ -1,9 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var DemandaEmpresa_model_1 = require("./DemandaEmpresa.model");
+exports.DemandaEmpresa = DemandaEmpresa_model_1.DemandaEmpresa;
+var DemandaPersonaNatural_model_1 = require("./DemandaPersonaNatural.model");
+exports.DemandaPersonaNatural = DemandaPersonaNatural_model_1.DemandaPersonaNatural;
+var ContratoLaboral_model_1 = require("./ContratoLaboral.model");
+exports.ContratoLaboral = ContratoLaboral_model_1.ContratoLaboral;
 var ConsultorioJuridico_model_1 = require("./ConsultorioJuridico.model");
 exports.ConsultorioJuridico = ConsultorioJuridico_model_1.ConsultorioJuridico;
-var PersonaNatural_module_1 = require("./PersonaNatural.module");
-exports.PersonaNatural = PersonaNatural_module_1.PersonaNatural;
+var PersonaNatural_model_1 = require("./PersonaNatural.model");
+exports.PersonaNatural = PersonaNatural_model_1.PersonaNatural;
 var Persona_model_1 = require("./Persona.model");
 exports.Persona = Persona_model_1.Persona;
 var Empresa_model_1 = require("./Empresa.model");

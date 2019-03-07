@@ -75,7 +75,7 @@ class DemandaControllers {
                 const identificacion = req.params.identificacion;
                 const personaResult = yield database_1.default.query(`SELECT * FROM Personas WHERE cedulaPersona = ${identificacion}`);
                 const persona = personaResult[0];
-                sendEmail_1.default.sendPdf([persona.correoPersona], persona.nombresPersona);
+                sendEmail_1.default.sendPdf([], persona.nombresPersona);
                 res.status(200).json({
                     ok: true,
                     message: 'Correo Enviado'

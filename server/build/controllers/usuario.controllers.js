@@ -19,14 +19,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt = __importStar(require("bcrypt"));
 const jwt = __importStar(require("jsonwebtoken"));
 const index_models_1 = require("../models/index.models");
-class UsuarioControllers {
+class PersonaControllers {
     /*
       METODOS PARA UN USUARIO
     */
     //POST = login Usuario
     login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const databaseRes = yield index_models_1.Persona.login(new index_models_1.Persona(null, null, null, null, req.body.email));
+            const databaseRes = yield index_models_1.Persona.login(req.body.email);
             if (databaseRes['ok'] === false) {
                 return res.status(200).json(databaseRes);
             }
@@ -63,7 +63,7 @@ class UsuarioControllers {
         });
     }
     //POST = Guarda todos los Usuarios
-    guardar(req, res) {
+    guardarPersona(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             if (req.body == null || req.body == undefined) {
                 return res.status(400).json({
@@ -75,7 +75,7 @@ class UsuarioControllers {
             }
             const body = req.body;
             body.contrasenaPersona = bcrypt.hashSync(body.contrasenaPersona, 10);
-            const databaseRes = yield index_models_1.Persona.guardarUsuario(req.body);
+            const databaseRes = yield index_models_1.Persona.guardarPersona(req.body);
             if (databaseRes['message'] === 'Usuario ya existente') {
                 return res.status(200).json(databaseRes);
             }
@@ -88,9 +88,9 @@ class UsuarioControllers {
         });
     }
     //GET = Retorna todos los Usuarios
-    getUsuarios(req, res) {
+    obtenerPersona(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const databaseRes = yield index_models_1.Persona.obtenerEmpresas();
+            const databaseRes = yield index_models_1.Persona.obtenerPersona();
             if (databaseRes['ok'] === false) {
                 return res.status(400).json(databaseRes);
             }
@@ -99,5 +99,5 @@ class UsuarioControllers {
         });
     }
 }
-const usuarioControllers = new UsuarioControllers();
-exports.default = usuarioControllers;
+const personaControllers = new PersonaControllers();
+exports.default = personaControllers;

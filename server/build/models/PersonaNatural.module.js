@@ -12,35 +12,42 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../database/database"));
+const index_models_1 = require("./index.models");
 class PersonaNatural {
-    constructor(IdPersonaNatural, tipoDocumentoPersona, numeroDocumentoPersona, correoPersona) {
+    constructor(IdPersonaNatural, tipoDocumentoPersona, numeroDocumentoPersona) {
         this.IdPersonaNatural = IdPersonaNatural;
         this.tipoDocumentoPersona = tipoDocumentoPersona;
         this.numeroDocumentoPersona = numeroDocumentoPersona;
-        this.correoPersona = correoPersona;
     }
-    static existePersonaNatural(persona) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield database_1.default.query(`SELECT * FROM PersonaNatural WHERE numeroDocumentoPersona = '${persona.numeroDocumentoPersona}' AND tipoDocumentoPersona = '${persona.tipoDocumentoPersona}' AND correoPersona = '${persona.correoPersona}'`)
-                .then((result) => {
-                if (result.length === 0) {
-                    return false;
-                }
-                return true;
-            });
-        });
+    static documentoUnico(documento, tipoDeDocumento) {
+        switch (tipoDeDocumento.toLowerCase()) {
+            case 'cedulaciudadania':
+                return Number('001' + `${documento}`);
+            default:
+                return Number('001' + `${documento}`);
+        }
     }
-    static guardarPersonaNatural(personaNatural) {
+    static guardarPersonaNatural(personaNatural, persona) {
         return __awaiter(this, void 0, void 0, function* () {
-            return database_1.default.query(`INSERT INTO PersonaNatural set ?`, [personaNatural])
+            if (persona != undefined) {
+                yield index_models_1.Persona.guardarPersona(persona, '');
+            }
+            personaNatural.IdPersonaNatural = this.documentoUnico(personaNatural.numeroDocumentoPersona, personaNatural.tipoDocumentoPersona);
+            return database_1.default.query(`
+      INSERT INTO PersonaNatural
+      set IdPersonaNatural = ?,
+      tipoDocumentoPersona = ?,
+      numeroDocumentoPersona = ?`, [personaNatural.IdPersonaNatural,
+                personaNatural.tipoDocumentoPersona,
+                personaNatural.numeroDocumentoPersona])
                 .then(result => {
                 return {
                     ok: true,
                     message: 'Persona Natural guardado exitosamente'
                 };
             })
-                .catch((err) => {
-                if (err.code === 'ER_DUP_ENTRY') {
+                .catch((error) => {
+                if (error.code === 'ER_DUP_ENTRY') {
                     return {
                         ok: false,
                         err: {
@@ -48,11 +55,31 @@ class PersonaNatural {
                         }
                     };
                 }
-                console.log(err);
                 return {
                     ok: false,
                     err: {
                         message: 'Ocurrio un error al guardar el Persona Natural'
+                    },
+                    error
+                };
+            });
+        });
+    }
+    static actualizarPersonaNatural(newPersonaNatural) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield database_1.default.query(`UPDATE PersonaNatural set ? WHERE numeroDocumentoPersona = ${newPersonaNatural.numeroDocumentoPersona} AND tipoDocumentoPersona = ${newPersonaNatural.tipoDocumentoPersona}`)
+                .then(result => {
+                return {
+                    ok: true,
+                    message: 'PersonaNatural Modificado exitosamente'
+                };
+            })
+                .catch((err) => {
+                console.log(err);
+                return {
+                    ok: false,
+                    err: {
+                        message: 'Ocurrio un error al modificar el usuario'
                     }
                 };
             });
