@@ -1,15 +1,10 @@
 import { Response, Request } from 'express';
 import { ContratoLaboral } from '../models/index.models';
 
-export class ContratoLaboralContro {
+export class ContratoLaboralController {
 
-  //=====================================================================
-  // Controller Para Guardar una ContratoLaboral (METODO = POST)
-  //=====================================================================
-  /*
-  * Este Controller se encarga de guardar ContratoLaboral
-  */
-  public static async guardarPersona(req: Request, res: Response) {
+
+  public static async guardarContratoLaboral(req: Request, res: Response) {
 
     let body = req.body;
 
@@ -23,24 +18,21 @@ export class ContratoLaboralContro {
       })
     }
 
-    const databaseRes: any = await ContratoLaboral.guardarContraatoLaboral(
+    const databaseRes: any = await ContratoLaboral.guardarContratoLaboral(
       new ContratoLaboral(
         undefined,
-        body['tipoContrato'],
+        body['tipoContrato'].toLowerCase(),
         body['fechaInicioContrato'],
         body['fechaFinalContrato'],
         body['ultimoSalario'],
         body['descripcionFunciones'],
-        body['tipoDocumentoPersona'],
+        body['tipoDocumentoPersona'].toLowerCase(),
         body['numeroDocumentoPersona'],
         body['IdPersonaNatural'],
         body['NItEmpresa']
       )
     )
 
-    if (databaseRes['message'] === 'Usuario ya existente') {
-      return res.status(200).json(databaseRes)
-    };
 
     if (databaseRes['ok'] === false) {
       return res.status(400).json(databaseRes)
@@ -51,15 +43,9 @@ export class ContratoLaboralContro {
   }
 
 
-  //=====================================================================
-  // Controller Para Obtener Todas las Personas (METODO = GET)
-  //=====================================================================
-  /*
-  * Este Controller se encarga de enviar todas las personas en la DB
-  */
-  public static async obtenerPersona(req: Request | any, res: Response) {
+  public static async obtenerContratoLaboral(req: Request | any, res: Response) {
 
-    const databaseRes: any = await ContratoLaboral
+    const databaseRes: any = await ContratoLaboral.obtenerContratoLaboral();
 
     if (databaseRes['ok'] === false) {
       return res.status(400).json(databaseRes)
@@ -70,13 +56,7 @@ export class ContratoLaboralContro {
   }
 
 
-  //=====================================================================
-  // Controller Para Obtener una Persona (METODO = GET)
-  //=====================================================================
-  /*
-  * Este Controller se encarga de retornar una sola persona
-  */
-  public static async obtenerUnaPersona(req: Request, res: Response) {
+  public static async obtenerUnContratoLaboral(req: Request, res: Response) {
 
     let identificacion = req.params.id;
     let tipoIdentificacion = req.params.tipoId;
@@ -91,13 +71,8 @@ export class ContratoLaboralContro {
   }
 
 
-  //=====================================================================
-  // Controller Para Actualizar una Persona (METODO = PUT)
-  //=====================================================================
-  /*
-  * Este Controller se encarga de actualizar una sola persona mediante el id
-  */
-  public static async actualizarPersona(req: Request, res: Response) {
+
+  public static async actualizarContratoLaboral(req: Request, res: Response) {
 
     let body = req.body;
 
@@ -111,18 +86,12 @@ export class ContratoLaboralContro {
   }
 
 
-  //=====================================================================
-  // Controller Para Borrar una Persona (METODO = DELETE)
-  //=====================================================================
-  /*
-  * Este Controller se encarga de Borrar una sola persona
-  */
-  public static async borrarPersona(req: Request, res: Response) {
 
-    let identificacion = req.params.id;
-    let tipoIdentificacion = req.params.tipoId;
+  public static async borrarContratoLaboral(req: Request, res: Response) {
 
-    const databaseRes: any = await ContratoLaboral
+    let id = req.params.id;
+
+    const databaseRes: any = await ContratoLaboral.borrarContratoLaboral(id)
 
     if (databaseRes['ok'] === false) {
       return res.status(400).json(databaseRes)

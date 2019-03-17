@@ -6,37 +6,82 @@ export class ConflictosContactaAbogado {
 
   constructor(
     public idConflictoContactaAbogado: number | undefined,
+    public conflictoARL: number | null,
+    public conflictoPensiones: number | null,
+    public conflictoHorasExtras: number | null,
+    public conflictoDominicalesFestivos: number | null,
     public idDemandaPersonaNatural: DemandaPersonaNatural['IdPersonaNatural'],
     public idDemandaEmpresa: DemandaEmpresa['idDemandaEmpresa'],
-    public conflictoARL?: boolean | null,
-    public conflictoPensiones?: boolean | null,
-    public conflictoPrima?: boolean | null,
-    public conflictoHorasExtras?: boolean | null,
-    public conflictoDominicalesFestivos?: boolean | null,
-  ){  }
+  ) { }
 
   public static async guardarConflictosContactaAbogado(conflictosContactaAbogado: ConflictosContactaAbogado) {
 
-    return database.query("INSERT INTO conflictoDespidoSJC set ?", [conflictosContactaAbogado])
-      .then( result => {
+    return database.query("INSERT INTO conflictosContactaAbogado set ?", [conflictosContactaAbogado])
+      .then(async result => {
+
+        let conflictosContactaAbogadoRes = await this.obtenerConflictosContactaAbogado();
+
+        conflictosContactaAbogado['idConflictoContactaAbogado'] = conflictosContactaAbogadoRes.result[conflictosContactaAbogadoRes.result.length - 1]['idConflictoContactaAbogado']
+
         return {
           ok: true,
-          message: 'ConflictosContactaAbogado guardada exitosamente'
+          message: 'ConflictosContactaAbogado guardada exitosamente',
+          conflictosContactaAbogado
         }
       })
-      .catch( (err: MysqlError) => {
+      .catch((error: MysqlError) => {
 
-        if( err.code === 'ER_DUP_ENTRY' ){
+        if (error.code === 'ER_DUP_ENTRY') {
           return {
             ok: false,
-            message: 'ConflictosContactaAbogado ya existente'
+            err: {
+              message: 'ConflictosContactaAbogado ya existente',
+            }
+            
+          }
+        }
+MediaStreamError
+        return {
+          ok: false,
+          err: {
+            message: 'Ocurrio un error al guardar la ConflictosContactaAbogado',
+          },
+          error
+        }
+
+      })
+
+  }
+
+
+  public static async obtenerConflictosContactaAbogado(id?: number) {
+
+    let query = `SELECT * FROM conflictosContactaAbogado`
+
+
+    if (id != undefined) {
+      query = `SELECT * FROM conflictosContactaAbogado WHERE idConflictoContactaAbogado = $ {id}`
+    }
+
+
+    return database.query(query)
+      .then((result: ConflictosContactaAbogado[]) => {
+
+        if (result.length === 0) {
+          return {
+            ok: false,
+            err: {
+              message: 'Query exitoso, Pero no hay coincidencias en las tabla ConflictoDespidoSJC'
+            },
+            result
           }
         }
 
         return {
-          ok: false,
-          message: 'Ocurrio un error al guardar la ConflictosContactaAbogado',
-          err
+          ok: true,
+          message: 'Query exitoso',
+          result
+
         }
 
       })

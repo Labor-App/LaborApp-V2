@@ -9,14 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_models_1 = require("../models/index.models");
-class ContratoLaboralContro {
-    //=====================================================================
-    // Controller Para Guardar una ContratoLaboral (METODO = POST)
-    //=====================================================================
-    /*
-    * Este Controller se encarga de guardar ContratoLaboral
-    */
-    static guardarPersona(req, res) {
+class ContratoLaboralController {
+    static guardarContratoLaboral(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             let body = req.body;
             if (req.body == null || req.body == undefined) {
@@ -27,11 +21,7 @@ class ContratoLaboralContro {
                     }
                 });
             }
-            const databaseRes = yield index_models_1.ContratoLaboral.guardarContraatoLaboral(new index_models_1.ContratoLaboral(undefined, body['tipoContrato'], body['fechaInicioContrato'], body['fechaFinalContrato'], body['ultimoSalario'], body['descripcionFunciones'], body['tipoDocumentoPersona'], body['numeroDocumentoPersona'], body['IdPersonaNatural'], body['NItEmpresa']));
-            if (databaseRes['message'] === 'Usuario ya existente') {
-                return res.status(200).json(databaseRes);
-            }
-            ;
+            const databaseRes = yield index_models_1.ContratoLaboral.guardarContratoLaboral(new index_models_1.ContratoLaboral(undefined, body['tipoContrato'].toLowerCase(), body['fechaInicioContrato'], body['fechaFinalContrato'], body['ultimoSalario'], body['descripcionFunciones'], body['tipoDocumentoPersona'].toLowerCase(), body['numeroDocumentoPersona'], body['IdPersonaNatural'], body['NItEmpresa']));
             if (databaseRes['ok'] === false) {
                 return res.status(400).json(databaseRes);
             }
@@ -39,15 +29,9 @@ class ContratoLaboralContro {
             return res.status(200).json(databaseRes);
         });
     }
-    //=====================================================================
-    // Controller Para Obtener Todas las Personas (METODO = GET)
-    //=====================================================================
-    /*
-    * Este Controller se encarga de enviar todas las personas en la DB
-    */
-    static obtenerPersona(req, res) {
+    static obtenerContratoLaboral(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const databaseRes = yield index_models_1.ContratoLaboral;
+            const databaseRes = yield index_models_1.ContratoLaboral.obtenerContratoLaboral();
             if (databaseRes['ok'] === false) {
                 return res.status(400).json(databaseRes);
             }
@@ -55,13 +39,7 @@ class ContratoLaboralContro {
             return res.status(200).json(databaseRes);
         });
     }
-    //=====================================================================
-    // Controller Para Obtener una Persona (METODO = GET)
-    //=====================================================================
-    /*
-    * Este Controller se encarga de retornar una sola persona
-    */
-    static obtenerUnaPersona(req, res) {
+    static obtenerUnContratoLaboral(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             let identificacion = req.params.id;
             let tipoIdentificacion = req.params.tipoId;
@@ -73,13 +51,7 @@ class ContratoLaboralContro {
             return res.status(200).json(databaseRes);
         });
     }
-    //=====================================================================
-    // Controller Para Actualizar una Persona (METODO = PUT)
-    //=====================================================================
-    /*
-    * Este Controller se encarga de actualizar una sola persona mediante el id
-    */
-    static actualizarPersona(req, res) {
+    static actualizarContratoLaboral(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             let body = req.body;
             const databaseRes = yield index_models_1.ContratoLaboral;
@@ -90,17 +62,10 @@ class ContratoLaboralContro {
             return res.status(200).json(databaseRes);
         });
     }
-    //=====================================================================
-    // Controller Para Borrar una Persona (METODO = DELETE)
-    //=====================================================================
-    /*
-    * Este Controller se encarga de Borrar una sola persona
-    */
-    static borrarPersona(req, res) {
+    static borrarContratoLaboral(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            let identificacion = req.params.id;
-            let tipoIdentificacion = req.params.tipoId;
-            const databaseRes = yield index_models_1.ContratoLaboral;
+            let id = req.params.id;
+            const databaseRes = yield index_models_1.ContratoLaboral.borrarContratoLaboral(id);
             if (databaseRes['ok'] === false) {
                 return res.status(400).json(databaseRes);
             }
@@ -109,4 +74,4 @@ class ContratoLaboralContro {
         });
     }
 }
-exports.ContratoLaboralContro = ContratoLaboralContro;
+exports.ContratoLaboralController = ContratoLaboralController;

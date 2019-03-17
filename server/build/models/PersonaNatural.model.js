@@ -121,7 +121,7 @@ class PersonaNatural {
                     return {
                         ok: false,
                         err: {
-                            message: 'Query exitoso, Pero no hay coincidencias en las tablas PersonasNatural y Correos',
+                            message: 'Query exitoso, Pero no hay coincidencias en las tablas PersonasNatural ',
                         },
                         result
                     };
@@ -144,10 +144,8 @@ class PersonaNatural {
     static obtenerUnaPersonaNatural(idPersonaNatural) {
         return database_1.default.query(`
       SELECT *
-      FROM PersonaNatural, correoPersonas
-      WHERE PersonaNatural.numeroDocumentoPersona = correoPersonas.numeroDocumentoPersona
-      AND PersonaNatural.tipoDocumentoPersona = correoPersonas.tipoDocumentoPersona
-      AND IdPersonaNatural = ${idPersonaNatural}`)
+      FROM PersonaNatural
+      WHERE IdPersonaNatural = ${idPersonaNatural} LIMIT 1`)
             .then((result) => {
             if (result.length === 0) {
                 return {

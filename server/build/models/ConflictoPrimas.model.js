@@ -12,26 +12,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../database/database"));
-class ConflictosContactaAbogado {
-    constructor(idConflictoContactaAbogado, conflictoARL, conflictoPensiones, conflictoHorasExtras, conflictoDominicalesFestivos, idDemandaPersonaNatural, idDemandaEmpresa) {
-        this.idConflictoContactaAbogado = idConflictoContactaAbogado;
-        this.conflictoARL = conflictoARL;
-        this.conflictoPensiones = conflictoPensiones;
-        this.conflictoHorasExtras = conflictoHorasExtras;
-        this.conflictoDominicalesFestivos = conflictoDominicalesFestivos;
+class ConflictoPrimas {
+    constructor(idConflictoPrima, fechaInicioContrato, fechaFinalContrato, fechaUltimaPrimaPagada, fechaFinalNoPagoCesantias, montoDinero_Prima, idDemandaPersonaNatural, idDemandaEmpresa) {
+        this.idConflictoPrima = idConflictoPrima;
+        this.fechaInicioContrato = fechaInicioContrato;
+        this.fechaFinalContrato = fechaFinalContrato;
+        this.fechaUltimaPrimaPagada = fechaUltimaPrimaPagada;
+        this.fechaFinalNoPagoCesantias = fechaFinalNoPagoCesantias;
+        this.montoDinero_Prima = montoDinero_Prima;
         this.idDemandaPersonaNatural = idDemandaPersonaNatural;
         this.idDemandaEmpresa = idDemandaEmpresa;
     }
-    static guardarConflictosContactaAbogado(conflictosContactaAbogado) {
+    static guardarConflictoPrimas(conflictoPrimas) {
         return __awaiter(this, void 0, void 0, function* () {
-            return database_1.default.query("INSERT INTO conflictosContactaAbogado set ?", [conflictosContactaAbogado])
+            return database_1.default.query(`INSERT INTO conflictoPrimas set ?`, conflictoPrimas)
                 .then((result) => __awaiter(this, void 0, void 0, function* () {
-                let conflictosContactaAbogadoRes = yield this.obtenerConflictosContactaAbogado();
-                conflictosContactaAbogado['idConflictoContactaAbogado'] = conflictosContactaAbogadoRes.result[conflictosContactaAbogadoRes.result.length - 1]['idConflictoContactaAbogado'];
+                let conflictoPrimasRes = yield this.obtenerConflictoPrimas();
+                conflictoPrimas['idConflictoPrima'] = conflictoPrimasRes.result[conflictoPrimasRes.result.length - 1]['idConflictoPrima'];
                 return {
                     ok: true,
-                    message: 'ConflictosContactaAbogado guardada exitosamente',
-                    conflictosContactaAbogado
+                    message: 'conflictoPrimas guardada exitosamente',
+                    conflictoPrimas
                 };
             }))
                 .catch((error) => {
@@ -39,26 +40,25 @@ class ConflictosContactaAbogado {
                     return {
                         ok: false,
                         err: {
-                            message: 'ConflictosContactaAbogado ya existente',
+                            message: 'conflictoPrimas ya existente'
                         }
                     };
                 }
-                MediaStreamError;
                 return {
                     ok: false,
                     err: {
-                        message: 'Ocurrio un error al guardar la ConflictosContactaAbogado',
+                        message: 'Ocurrio un error al guardar la conflictoPrimas',
                     },
                     error
                 };
             });
         });
     }
-    static obtenerConflictosContactaAbogado(id) {
+    static obtenerConflictoPrimas(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            let query = `SELECT * FROM conflictosContactaAbogado`;
+            let query = `SELECT * From conflictoPrimas`;
             if (id != undefined) {
-                query = `SELECT * FROM conflictosContactaAbogado WHERE idConflictoContactaAbogado = $ {id}`;
+                query = `SELECT * From conflictoPrimas WHERE idConflictoPrima = ${id}`;
             }
             return database_1.default.query(query)
                 .then((result) => {
@@ -66,7 +66,7 @@ class ConflictosContactaAbogado {
                     return {
                         ok: false,
                         err: {
-                            message: 'Query exitoso, Pero no hay coincidencias en las tabla ConflictoDespidoSJC'
+                            message: 'Query exitoso, Pero no hay coincidencias en las tabla conflictoPrimas'
                         },
                         result
                     };
@@ -76,8 +76,17 @@ class ConflictosContactaAbogado {
                     message: 'Query exitoso',
                     result
                 };
+            })
+                .catch((error) => {
+                return {
+                    ok: false,
+                    err: {
+                        message: 'Ocurrio un error al guardar la conflictoPrimas'
+                    },
+                    error
+                };
             });
         });
     }
 }
-exports.ConflictosContactaAbogado = ConflictosContactaAbogado;
+exports.ConflictoPrimas = ConflictoPrimas;

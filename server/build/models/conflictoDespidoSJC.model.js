@@ -13,34 +13,67 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../database/database"));
 class ConflictoDespidoSJC {
-    constructor(idConflictoDespidoSJC, idDemandaPersonaNatural, idDemandaEmpresa, fechaInicioContrato, fechaDespido, montoDinero_DSJC) {
+    constructor(idConflictoDespidoSJC, idDemandaPersonaNatural, idDemandaEmpresa, fechaInicioContrato, tipoContrato, fechaDespido, montoDinero_DSJC) {
         this.idConflictoDespidoSJC = idConflictoDespidoSJC;
         this.idDemandaPersonaNatural = idDemandaPersonaNatural;
         this.idDemandaEmpresa = idDemandaEmpresa;
         this.fechaInicioContrato = fechaInicioContrato;
+        this.tipoContrato = tipoContrato;
         this.fechaDespido = fechaDespido;
         this.montoDinero_DSJC = montoDinero_DSJC;
     }
     static guardarConflictoDespidoSJC(conflictoDespidoSJC) {
         return __awaiter(this, void 0, void 0, function* () {
             return database_1.default.query("INSERT INTO conflictoDespidoSJC set ?", [conflictoDespidoSJC])
-                .then(result => {
+                .then((result) => __awaiter(this, void 0, void 0, function* () {
+                let conflictoDespidoSJCRes = yield this.obtenerConflictoDespidoSJC();
+                conflictoDespidoSJC['idConflictoDespidoSJC'] = conflictoDespidoSJCRes.result[conflictoDespidoSJCRes.result.length - 1]['idConflictoDespidoSJC'];
                 return {
                     ok: true,
-                    message: 'ConflictoDespidoSJC guardada exitosamente'
+                    message: 'ConflictoDespidoSJC guardada exitosamente',
+                    conflictoDespidoSJC
                 };
-            })
-                .catch((err) => {
-                if (err.code === 'ER_DUP_ENTRY') {
+            }))
+                .catch((error) => {
+                if (error.code === 'ER_DUP_ENTRY') {
                     return {
                         ok: false,
-                        message: 'ConflictoDespidoSJC ya existente'
+                        err: {
+                            message: 'ConflictoDespidoSJC ya existente'
+                        },
                     };
                 }
                 return {
                     ok: false,
-                    message: 'Ocurrio un error al guardar la ConflictoDespidoSJC',
-                    err
+                    err: {
+                        message: 'Ocurrio un error al guardar la ConflictoDespidoSJC',
+                    },
+                    error
+                };
+            });
+        });
+    }
+    static obtenerConflictoDespidoSJC(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let query = `SELECT * FROM conflictoDespidoSJC`;
+            if (id != undefined) {
+                query = `SELECT * FROM conflictoDespidoSJC WHERE idConflictoDespidoSJC = $ {id}`;
+            }
+            return database_1.default.query(query)
+                .then((result) => {
+                if (result.length === 0) {
+                    return {
+                        ok: false,
+                        err: {
+                            message: 'Query exitoso, Pero no hay coincidencias en las tabla ConflictoDespidoSJC'
+                        },
+                        result
+                    };
+                }
+                return {
+                    ok: true,
+                    message: 'Query exitoso',
+                    result
                 };
             });
         });

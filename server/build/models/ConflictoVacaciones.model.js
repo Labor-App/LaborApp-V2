@@ -13,24 +13,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../database/database"));
 class ConflictoVacaciones {
-    constructor(idConflictoVacaciones, fechaInicioContrato, fechaFinalContrato, fechaUltimasVacaciones, montoDinero_Vacaciones, idDemandaPersonaNatural, idDemandaEmpresa) {
+    constructor(idConflictoVacaciones, fechaInicioContrato, fechaFinalContrato, fechaUltimasVacaciones, fechaFinalNoPagoVacaciones, montoDinero_Vacaciones, idDemandaPersonaNatural, idDemandaEmpresa) {
         this.idConflictoVacaciones = idConflictoVacaciones;
         this.fechaInicioContrato = fechaInicioContrato;
         this.fechaFinalContrato = fechaFinalContrato;
         this.fechaUltimasVacaciones = fechaUltimasVacaciones;
+        this.fechaFinalNoPagoVacaciones = fechaFinalNoPagoVacaciones;
         this.montoDinero_Vacaciones = montoDinero_Vacaciones;
         this.idDemandaPersonaNatural = idDemandaPersonaNatural;
         this.idDemandaEmpresa = idDemandaEmpresa;
     }
-    static guardarConflictoPagoSalario(conflictoVacaciones) {
+    static guardarConflictoVacaciones(conflictoVacaciones) {
         return __awaiter(this, void 0, void 0, function* () {
             return database_1.default.query("INSERT INTO conflictoVacaciones set ?", [conflictoVacaciones])
-                .then(result => {
+                .then((result) => __awaiter(this, void 0, void 0, function* () {
+                let conflictoVacacionesRes = yield this.obtenerConflictoVacaciones();
+                conflictoVacaciones['idConflictoVacaciones'] = conflictoVacacionesRes.result[conflictoVacacionesRes.result.length - 1]['idConflictoVacaciones'];
                 return {
                     ok: true,
-                    message: 'ConflictoVacaciones guardada exitosamente'
+                    message: 'ConflictoVacaciones guardada exitosamente',
+                    conflictoVacaciones
                 };
-            })
+            }))
                 .catch((err) => {
                 if (err.code === 'ER_DUP_ENTRY') {
                     return {
@@ -42,6 +46,31 @@ class ConflictoVacaciones {
                     ok: false,
                     message: 'Ocurrio un error al guardar la ConflictoVacaciones',
                     err
+                };
+            });
+        });
+    }
+    static obtenerConflictoVacaciones(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let query = `SELECT * FROM conflictoVacaciones`;
+            if (id != undefined) {
+                query = `SELECT * FROM conflictoVacaciones WHERE idConflictoVacaciones = ${id}`;
+            }
+            return database_1.default.query(query)
+                .then((result) => {
+                if (result.length === 0) {
+                    return {
+                        ok: true,
+                        err: {
+                            message: 'Query exitoso, Pero no hay coincidencias en las tabla ConflictoVacaciones'
+                        },
+                        result
+                    };
+                }
+                return {
+                    ok: true,
+                    message: 'Query exitoso',
+                    result
                 };
             });
         });

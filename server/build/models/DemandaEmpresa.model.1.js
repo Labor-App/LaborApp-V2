@@ -61,7 +61,7 @@ class DemandaEmpresa {
                 };
             }
             else {
-                if (contratoLaboralRes.result['NItEmpresa'] === null || contratoLaboralRes.result['NItEmpresa'] !== demandaEmpresa.NItEmpresa) {
+                if (contratoLaboralRes.result['NItEmpresa'] === null || contratoLaboralRes.result['NItEmpresa'] !== demandaEmpresa) {
                     return {
                         ok: false,
                         err: {

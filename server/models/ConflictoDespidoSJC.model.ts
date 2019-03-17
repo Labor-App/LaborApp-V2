@@ -5,37 +5,83 @@ import { MysqlError } from 'mysql';
 export class ConflictoDespidoSJC {
 
   constructor(
-    public idConflictoDespidoSJC:number | undefined ,
+    public idConflictoDespidoSJC: number | undefined,
     public idDemandaPersonaNatural: DemandaPersonaNatural['idDemandaPersonaNatural'] | null,
     public idDemandaEmpresa: DemandaEmpresa['idDemandaEmpresa'] | null,
     public fechaInicioContrato: ContratoLaboral['fechaInicioContrato'],
+    public tipoContrato: ContratoLaboral['tipoContrato'],
     public fechaDespido: Date | null,
     public montoDinero_DSJC: number | null
-  ){  }
+  ) { }
 
 
   public static async guardarConflictoDespidoSJC(conflictoDespidoSJC: ConflictoDespidoSJC) {
 
     return database.query("INSERT INTO conflictoDespidoSJC set ?", [conflictoDespidoSJC])
-      .then( result => {
+      .then(async result => {
+
+        let conflictoDespidoSJCRes = await this.obtenerConflictoDespidoSJC();
+
+        conflictoDespidoSJC['idConflictoDespidoSJC'] = conflictoDespidoSJCRes.result[conflictoDespidoSJCRes.result.length - 1]['idConflictoDespidoSJC']
+
         return {
           ok: true,
-          message: 'ConflictoDespidoSJC guardada exitosamente'
+          message: 'ConflictoDespidoSJC guardada exitosamente',
+          conflictoDespidoSJC
         }
       })
-      .catch( (err: MysqlError) => {
+      .catch((error: MysqlError) => {
 
-        if( err.code === 'ER_DUP_ENTRY' ){
+        if (error.code === 'ER_DUP_ENTRY') {
           return {
             ok: false,
-            message: 'ConflictoDespidoSJC ya existente'
+            err: {
+              message: 'ConflictoDespidoSJC ya existente'
+            },
           }
         }
 
         return {
           ok: false,
-          message: 'Ocurrio un error al guardar la ConflictoDespidoSJC',
-          err
+          err: {
+            message: 'Ocurrio un error al guardar la ConflictoDespidoSJC',
+          },
+          error
+        }
+
+      })
+
+  }
+
+
+  public static async obtenerConflictoDespidoSJC(id?: number) {
+
+    let query = `SELECT * FROM conflictoDespidoSJC`
+
+
+    if (id != undefined) {
+      query = `SELECT * FROM conflictoDespidoSJC WHERE idConflictoDespidoSJC = $ {id}`
+    }
+
+
+    return database.query(query)
+      .then((result: ConflictoDespidoSJC[]) => {
+
+        if (result.length === 0) {
+          return {
+            ok: false,
+            err: {
+              message: 'Query exitoso, Pero no hay coincidencias en las tabla ConflictoDespidoSJC'
+            },
+            result
+          }
+        }
+
+        return {
+          ok: true,
+          message: 'Query exitoso',
+          result
+
         }
 
       })

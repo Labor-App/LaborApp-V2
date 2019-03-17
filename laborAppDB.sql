@@ -122,6 +122,8 @@ fechaPropuestaRadicacionDerechoPetiEmpresa DATE NULL,
 fecharRealRadicacionDerechoPetiEmpresa DATE NULL,
 informeDesicionFinalDemandaEmpresa TEXT(40000)  NULL, /*La persona puede informar sobre el resultado final en su demanda*/
 respuestaFinalDemandaEmpresa bit NULL, /*y finalmente informa con un vedadero o falso sobre la respuesta final al caso*/
+montoTotalDemandaPersJuri float NULL,/* agregado sobre diseño incial, 13,mar,2019*/
+superaMinimaCuantiaPersJuri  bit NULL,/* agregado sobre diseño incial, 13,mar,2019*/
 PRIMARY KEY(idDemandaEmpresa),
 FOREIGN KEY(tipoDocumentoPersona,numeroDocumentoPersona ) REFERENCES Personas(tipoDocumentoPersona,numeroDocumentoPersona),
 FOREIGN KEY(NItEmpresa) REFERENCES Empresa(NItEmpresa),
@@ -143,6 +145,8 @@ fechaPropuestaRadicacionDerechoPetiPersonaN DATE NULL,
 fecharRealRadicacionDerechoPetiPersonaN DATE NULL,
 informeDesicionFinalDemandaPersonaN TEXT(40000)  NULL, /*La persona puede informar sobre el resultado final en su demanda*/
 respuestaFinalDemandaersonaN bit NULL, /*y finalmente informa con un vedadero o falso sobre la respuesta final al caso*/
+montoTotalDemandaPersNat float NULL,  /* agregado sobre diseño incial, 13,mar,2019*/
+superaMinimaCuantiaPersNat  bit NULL, /* agregado sobre diseño incial, 13,mar,2019*/
 PRIMARY KEY(idDemandaPersonaNatural),
 FOREIGN KEY (IdPersonaNatural) REFERENCES PersonaNatural(IdPersonaNatural),
 FOREIGN KEY(tipoDocumentoPersona,numeroDocumentoPersona) REFERENCES Personas(tipoDocumentoPersona,numeroDocumentoPersona),
@@ -155,12 +159,13 @@ idConflictoDespidoSJC INT (60) NOT NULL AUTO_INCREMENT,
 idDemandaPersonaNatural INT (60)  NULL, /*llave foranea desde demanda persona Natutal*/
 idDemandaEmpresa INT (60)  NULL,  /*llave foranea desde demanda a empresa */
 fechaInicioContrato DATE NOT NULL, /* llave foranea desde contrato */
+tipoContrato VARCHAR(100) NOT NULL,/* agregado sobre diseño incial, 13,mar,2019*/
 fechaDespido DATE  NULL,
 montoDinero_DSJC INT (60) NULL,
 PRIMARY KEY (idConflictoDespidoSJC),
 FOREIGN KEY (idDemandaPersonaNatural) REFERENCES  demandaPersonaNatural(idDemandaPersonaNatural),
 FOREIGN KEY (idDemandaEmpresa) REFERENCES demandaEmpresa(idDemandaEmpresa ),
-FOREIGN KEY (fechaInicioContrato) REFERENCES contratoLaboral(fechaInicioContrato)
+FOREIGN KEY (fechaInicioContrato,tipoContrato) REFERENCES contratoLaboral(fechaInicioContrato,tipoContrato)
 );
 
 
@@ -168,6 +173,7 @@ CREATE TABLE conflictoPagoSalario(
 idConflictoPagoSalario INT(60) NOT NULL AUTO_INCREMENT,
 fechaInicioContrato DATE NOT NULL, /* llave foranea desde contrato */
 fechaInicioNoPago DATE NOT NULL,/*Fecha desde la que no se le paga a la persona*/
+fechaFinalNoPagoSalario DATE NULL,
 fechaFinalContrato DATE NULL,/* llave foranea desde contrato */
 montoDinero_PagoSalario INT (60) NULL,
 idDemandaPersonaNatural INT (60)  NULL, /*llave foranea desde demanda persona Natutal*/
@@ -183,6 +189,7 @@ idConflictoVacaciones INT (60) NOT NULL AUTO_INCREMENT,
 fechaInicioContrato DATE NOT NULL, /* llave foranea desde contrato */
 fechaFinalContrato DATE NULL, /* llave foranea desde contrato */
 fechaUltimasVacaciones DATE NOT NULL,
+fechaFinalNoPagoVacaciones DATE NULL,
 montoDinero_Vacaciones INT (60) NULL,
 idDemandaPersonaNatural INT (60)  NULL, /*llave foranea desde demanda persona Natutal*/
 idDemandaEmpresa INT (60)  NULL,  /*llave foranea desde demanda a empresa */
@@ -198,6 +205,7 @@ idConflictoCesantias INT (60) NOT NULL AUTO_INCREMENT,
 fechaInicioContrato DATE NOT NULL, /* llave foranea desde contrato */
 fechaFinalContrato DATE NULL, /* llave foranea desde contrato */
 fechaUltimasCesantiasPagadas DATE NULL,
+fechaFinalNoPagoCesantias DATE NULL,
 montoDinero_Cesantias INT (60) NULL,
 montoDinero_InteresesCesantias INT (60) NULL,
 idDemandaPersonaNatural INT (60)  NULL, /*llave foranea desde demanda persona Natutal*/
@@ -208,11 +216,26 @@ FOREIGN KEY (idDemandaEmpresa) REFERENCES demandaEmpresa(idDemandaEmpresa ),
 FOREIGN KEY (fechaInicioContrato,fechaFinalContrato) REFERENCES contratoLaboral(fechaInicioContrato,fechaFinalContrato)
 );
 
+
+CREATE TABLE conflictoPrimas( 
+idConflictoPrima INT (60) NOT NULL AUTO_INCREMENT,
+fechaInicioContrato DATE NOT NULL, /* llave foranea desde contrato */ 
+fechaFinalContrato DATE NULL, /* llave foranea desde contrato */
+fechaUltimaPrimaPagada DATE NULL,
+fechaFinalNoPagoCesantias DATE NULL,
+montoDinero_Prima INT (60) NULL,
+idDemandaPersonaNatural INT (60)  NULL, /*llave foranea desde demanda persona Natutal*/
+idDemandaEmpresa INT (60)  NULL,  /*llave foranea desde demanda a empresa */
+PRIMARY KEY (idConflictoPrima),
+FOREIGN KEY (idDemandaPersonaNatural) REFERENCES  demandaPersonaNatural(idDemandaPersonaNatural),
+FOREIGN KEY (idDemandaEmpresa) REFERENCES demandaEmpresa(idDemandaEmpresa ),
+FOREIGN KEY (fechaInicioContrato,fechaFinalContrato) REFERENCES contratoLaboral(fechaInicioContrato,fechaFinalContrato)
+);
+
 CREATE TABLE conflictosContactaAbogado(
 idConflictoContactaAbogado INT (60) NOT NULL AUTO_INCREMENT,
 conflictoARL BIT NULL,
 conflictoPensiones BIT NULL,
-conflictoPrima BIT NULL,
 conflictoHorasExtras BIT  NULL,
 conflictoDominicalesFestivos BIT NULL,
 idDemandaPersonaNatural INT (60)  NULL, /*llave foranea desde demanda persona Natutal*/

@@ -136,7 +136,7 @@ export class PersonaNatural {
           return {
             ok: false,
             err: {
-              message: 'Query exitoso, Pero no hay coincidencias en las tablas PersonasNatural y Correos',
+              message: 'Query exitoso, Pero no hay coincidencias en las tablas PersonasNatural ',
             },
             result
 
@@ -161,14 +161,12 @@ export class PersonaNatural {
 
   }
 
-  public static obtenerUnaPersonaNatural(idPersonaNatural: PersonaNatural['IdPersonaNatural']): Object {
+  public static obtenerUnaPersonaNatural(idPersonaNatural: PersonaNatural['IdPersonaNatural']) {
 
     return database.query(`
       SELECT *
-      FROM PersonaNatural, correoPersonas
-      WHERE PersonaNatural.numeroDocumentoPersona = correoPersonas.numeroDocumentoPersona
-      AND PersonaNatural.tipoDocumentoPersona = correoPersonas.tipoDocumentoPersona
-      AND IdPersonaNatural = ${ idPersonaNatural }`)
+      FROM PersonaNatural
+      WHERE IdPersonaNatural = ${ idPersonaNatural } LIMIT 1`)
       .then( (result: PersonaNatural[]) => {
 
         if( result.length === 0 ){

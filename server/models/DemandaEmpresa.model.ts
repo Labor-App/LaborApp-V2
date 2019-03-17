@@ -17,35 +17,150 @@ export class DemandaEmpresa {
     public fechaPropuestaRadicacionDerechoPetiEmpresa: Date | null,
     public fecharRealRadicacionDerechoPetiEmpresa: Date | null,
     public informeDesicionFinalDemandaEmpresa: string | null,
-    public respuestaFinalDemandaEmpresa: boolean | null
-  ){  }
+    public respuestaFinalDemandaEmpresa: number | null,
+    public montoTotalDemandaPersJuri: number | null,
+    public superaMinimaCuantiaPersJuri: number | null
+  ) { }
 
 
-  public static guardarDemandaPersonaNatural(demandaEmpresa: DemandaEmpresa){
+  public static async guardarDemandaEmpresa(demandaEmpresa: DemandaEmpresa) {
 
-    database.query(`INSERT INTO demandaPersonaNatural set ?`, [demandaEmpresa])
-    .then( result => {
+
+    let personaRes = await Persona.obtenerUnaPersona(demandaEmpresa.numeroDocumentoPersona, demandaEmpresa.tipoDocumentoPersona);
+
+    if (!personaRes.ok) {
       return {
-        ok: true,
-        message: 'Demanda Empresa guardada exitosamente'
-      }
-    })
-    .catch( (err: MysqlError) => {
-
-      if( err.code === 'ER_DUP_ENTRY' ){
-
-        return {
-          ok: false,
-          message: 'Demanda Empresa ya existente'
+        ok: false,
+        err: {
+          message: 'Esta demanda no coincide con ninguna Persona en db, primero ingrese los datos de la persona'
         }
       }
+    }
+
+    let empresaRes = await Empresa.obtenerUnaEmpresa(demandaEmpresa.NItEmpresa);
+
+    if (!empresaRes.ok) {
+      return {
+        ok: false,
+        err: {
+          message: 'Esta demanda no coincide con ninguna Empresa en db, primero ingrese los datos de la Empresa'
+        }
+      }
+    }
+
+    let contratoLaboralRes = await ContratoLaboral.obtenerContratoLaboral(demandaEmpresa.idContrato);
+
+    if (!contratoLaboralRes.ok) {
 
       return {
         ok: false,
-        message: 'Ocurrio un error al guardar la Demanda Empresa',
-        err
+        err: {
+          message: 'Esta demanda no coincide con ningun contrato en db, primero ingrese los datos del contrato'
+        }
+      }
+    } else {
+
+      if (contratoLaboralRes.result['NItEmpresa'] === null || contratoLaboralRes.result['NItEmpresa'] !== demandaEmpresa.NItEmpresa) {
+        return {
+          ok: false,
+          err: {
+            message: 'La informacion del contrato, referente a la empresa no coincide con la (nit)'
+          }
+        }
+
       }
 
-    })
+      return database.query(`INSERT INTO demandaEmpresa set ?`, [demandaEmpresa])
+        .then(async result => {
+
+          let demandaEmpresaRes = await this.obtenerDemandaEmpresa();
+
+          if (demandaEmpresaRes.ok) {
+            demandaEmpresa['idDemandaEmpresa'] = demandaEmpresaRes.result[demandaEmpresaRes.result.length - 1].idDemandaEmpresa;
+          }
+
+          return {
+            ok: true,
+            message: 'Demanda Empresa guardada exitosamente',
+            demandaEmpresa
+          }
+        })
+        .catch((err: MysqlError) => {
+
+          if (err.code === 'ER_DUP_ENTRY') {
+
+            return {
+              ok: false,
+              message: 'Demanda Empresa ya existente'
+            }
+          }
+
+          return {
+            ok: false,
+            message: 'Ocurrio un error al guardar la Demanda Empresa',
+            err
+          }
+
+        })
+    }
   }
+
+  public static async obtenerDemandaEmpresa() {
+
+    return database.query(`
+    SELECT *
+    FROM demandaEmpresa`)
+      .then((result: DemandaEmpresa[]) => {
+
+        if (result.length === 0) {
+          return {
+            ok: false,
+            err: {
+              message: 'Query exitoso, Pero no hay coincidencias en las tabla Demanda Empresa'
+            },
+            result
+
+          }
+        }
+
+        return {
+          ok: true,
+          message: 'Query exitoso',
+          result
+
+        }
+
+      })
+
+  }
+
+  public static async borrarDemandaEmpresa(id: number) {
+
+    return database.query(`
+    DELETE
+    FROM demandaEmpresa
+    WHERE idDemandaEmpresa = ${ id}`)
+      .then((result) => {
+
+
+        if (result['affectedRows'] === 0) {
+          return {
+            ok: false,
+            err: {
+              message: 'Demanda de Empresa no encontrada'
+            }
+
+          }
+        }
+
+        return {
+          ok: true,
+          message: 'Demanda de Empresa Eliminada'
+
+        }
+
+      })
+
+  }
+
 }

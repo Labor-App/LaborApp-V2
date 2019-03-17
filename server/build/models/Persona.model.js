@@ -247,11 +247,9 @@ class Persona {
         return __awaiter(this, void 0, void 0, function* () {
             return database_1.default.query(`
       SELECT *
-      FROM Personas, correoPersonas
+      FROM Personas
       WHERE Personas.numeroDocumentoPersona = ${identificacion}
-      AND Personas.tipoDocumentoPersona = '${tipoDocumentoPersona}'
-      AND Personas.numeroDocumentoPersona = correoPersonas.numeroDocumentoPersona
-      AND Personas.tipoDocumentoPersona = correoPersonas.tipoDocumentoPersona`)
+      AND Personas.tipoDocumentoPersona = '${tipoDocumentoPersona}'`)
                 .then((result) => {
                 if (result.length === 0) {
                     return {
@@ -286,7 +284,7 @@ class Persona {
       WHERE Personas.numeroDocumentoPersona = ${identificacion}
       AND Personas.tipoDocumentoPersona = '${tipoDocumentoPersona}'`)
                 .then((result) => __awaiter(this, void 0, void 0, function* () {
-                if (result.length === 0) {
+                if (result['affectedRows'] === 0) {
                     return {
                         ok: false,
                         err: {

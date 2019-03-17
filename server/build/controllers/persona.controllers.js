@@ -29,6 +29,15 @@ class PersonaControllers {
     */
     static login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(req.body);
+            if ((req.body.email || req.body.contrasenaPersona) === undefined) {
+                return res.status(400).json({
+                    ok: false,
+                    err: {
+                        message: 'Error al enviar datos del front'
+                    }
+                });
+            }
             const databaseRes = yield index_models_1.Persona.login(req.body.email);
             if (databaseRes['ok'] === false) {
                 return res.status(200).json(databaseRes);
@@ -90,7 +99,7 @@ class PersonaControllers {
                 });
             }
             body.contrasenaPersona = bcrypt.hashSync(body.contrasenaPersona, 10);
-            const databaseRes = yield index_models_1.Persona.guardarPersona(new index_models_1.Persona(body['tipoDocumentoPersona'], body['numeroDocumentoPersona'], body['nombresPersona'], body['apellidosPersona'], body['fechaNacimientoPersona'], body['direccionPersona'], body['generoPersona'], body['lugarExpedicionCedulaPersona'], body['contrasenaPersona'], body['codigoCiudad']), body['correoPersona']);
+            const databaseRes = yield index_models_1.Persona.guardarPersona(new index_models_1.Persona(body['tipoDocumentoPersona'].toLowerCase(), body['numeroDocumentoPersona'], body['nombresPersona'].toLowerCase(), body['apellidosPersona'].toLowerCase(), body['fechaNacimientoPersona'], body['direccionPersona'].toLowerCase(), body['generoPersona'].toLowerCase(), body['lugarExpedicionCedulaPersona'], body['contrasenaPersona'], body['codigoCiudad']), body['correoPersona']);
             if (databaseRes['message'] === 'Usuario ya existente') {
                 return res.status(200).json(databaseRes);
             }

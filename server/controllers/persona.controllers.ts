@@ -18,6 +18,17 @@ export class PersonaControllers {
   */
   public static async login(req: Request, res: Response) {
 
+    console.log(req.body)
+
+    if ((req.body.email || req.body.contrasenaPersona) === undefined){
+      return res.status(400).json({
+        ok: false,
+        err: {
+          message: 'Error al enviar datos del front'
+        }
+      })
+    }
+
 
     const databaseRes: any = await Persona.login(req.body.email);
 
@@ -102,13 +113,13 @@ export class PersonaControllers {
 
     const databaseRes: any = await Persona.guardarPersona(
       new Persona(
-        body['tipoDocumentoPersona'],
+        body['tipoDocumentoPersona'].toLowerCase(),
         body['numeroDocumentoPersona'],
-        body['nombresPersona'],
-        body['apellidosPersona'],
+        body['nombresPersona'].toLowerCase(),
+        body['apellidosPersona'].toLowerCase(),
         body['fechaNacimientoPersona'],
-        body['direccionPersona'],
-        body['generoPersona'],
+        body['direccionPersona'].toLowerCase(),
+        body['generoPersona'].toLowerCase(),
         body['lugarExpedicionCedulaPersona'],
         body['contrasenaPersona'],
         body['codigoCiudad']

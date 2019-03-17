@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { ContratoLaboralController } from '../controllers/contratoLaboral.controllers';
 
 
 class ContratoLaboralRouter{
@@ -12,15 +13,15 @@ class ContratoLaboralRouter{
 
   public routes(){
 
-    // this.router.post('/contrato', ContratoLaboralController)
-    //
-    // this.router.get('/contrato', ContratoLaboralController)
-    //
-    // this.router.get('/contrato/:id', ContratoLaboralController)
-    //
-    // this.router.put('/contrato/:id', ContratoLaboralController)
-    //
-    // this.router.delete('/contrato/:id', ContratoLaboralController)
+    this.router.post('/contrato', ContratoLaboralController.guardarContratoLaboral )
+    
+    this.router.get('/contrato', ContratoLaboralController.obtenerContratoLaboral )
+    
+    this.router.get('/contrato/:id', ContratoLaboralController.obtenerUnContratoLaboral)
+    
+    this.router.put('/contrato/:id', ContratoLaboralController.actualizarContratoLaboral)
+    
+    this.router.delete('/contrato/:id', ContratoLaboralController.borrarContratoLaboral)
 
 
   }
