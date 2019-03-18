@@ -8,12 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const ConflictoDespidoSJC_model_1 = require("../models/ConflictoDespidoSJC.model");
-const ConflictoPagoSalario_model_1 = require("../models/ConflictoPagoSalario.model");
-const ConflictoVacaciones_model_1 = require("../models/ConflictoVacaciones.model");
-const ConflictoCesantias_model_1 = require("../models/ConflictoCesantias.model");
-const ConflictoPrimas_model_1 = require("../models/ConflictoPrimas.model");
-const ConflictosContactaAbogado_model_1 = require("../models/ConflictosContactaAbogado.model");
+// import { ConflictoDespidoSJC } from '../models/ConflictoDespidoSJC.model';
+// import { ConflictoPagoSalario } from '../models/ConflictoPagoSalario.model';
+// import { ConflictoVacaciones } from '../models/ConflictoVacaciones.model';
+// import { ConflictoCesantias } from '../models/ConflictoCesantias.model';
+// import { ConflictoPrimas } from '../models/ConflictoPrimas.model';
+// import { ConflictosContactaAbogado } from '../models/ConflictosContactaAbogado.model';
+const index_models_1 = require("../models/index.models");
+const conflictoDespidoSJC_model_1 = require("../models/conflictoDespidoSJC.model");
 let revisarConflicto = (respuestaModelo, name, array) => {
     if (!respuestaModelo['ok']) {
         throw { [name]: respuestaModelo };
@@ -33,11 +35,11 @@ class ConflictoController {
                     try {
                         switch (clave) {
                             case 'conflictoDespidoSJC':
-                                let conflictoDespidoSJCRes = yield ConflictoDespidoSJC_model_1.ConflictoDespidoSJC.guardarConflictoDespidoSJC(new ConflictoDespidoSJC_model_1.ConflictoDespidoSJC(undefined, body['idDemandaPersonaNatural'], body['idDemandaEmpresa'], body['fechaInicioContrato'], body['tipoContrato'], body['fechaDespido'], body['montoDinero_DSJC']));
+                                let conflictoDespidoSJCRes = yield conflictoDespidoSJC_model_1.ConflictoDespidoSJC.guardarConflictoDespidoSJC(new conflictoDespidoSJC_model_1.ConflictoDespidoSJC(undefined, body['idDemandaPersonaNatural'], body['idDemandaEmpresa'], body['fechaInicioContrato'], body['tipoContrato'], body['fechaDespido'], body['montoDinero_DSJC']));
                                 revisarConflicto(conflictoDespidoSJCRes, 'conflictoDespidoSJCRes', conflictos);
                                 break;
                             case 'conflictoPagoSalario':
-                                let conflictoPagoSalarioRes = yield ConflictoPagoSalario_model_1.ConflictoPagoSalario.guardarConflictoPagoSalario(new ConflictoPagoSalario_model_1.ConflictoPagoSalario(undefined, body['fechaInicioContrato'], body['fechaInicioNoPago'], body['fechaFinalNoPagoSalario'], body['fechaFinalContrato'], body['montoDinero_PagoSalario'], body['idDemandaPersonaNatural'], body['idDemandaEmpresa']));
+                                let conflictoPagoSalarioRes = yield index_models_1.ConflictoPagoSalario.guardarConflictoPagoSalario(new index_models_1.ConflictoPagoSalario(undefined, body['fechaInicioContrato'], body['fechaInicioNoPago'], body['fechaFinalNoPagoSalario'], body['fechaFinalContrato'], body['montoDinero_PagoSalario'], body['idDemandaPersonaNatural'], body['idDemandaEmpresa']));
                                 revisarConflicto(conflictoPagoSalarioRes, 'conflictoPagoSalarioRes', conflictos);
                                 break;
                             case 'conflictoVacaciones':
@@ -51,20 +53,20 @@ class ConflictoController {
                                     };
                                 }
                                 else {
-                                    conflictoVacacionesRes = yield ConflictoVacaciones_model_1.ConflictoVacaciones.guardarConflictoVacaciones(new ConflictoVacaciones_model_1.ConflictoVacaciones(undefined, body['fechaInicioContrato'], body['fechaFinalContrato'], body['fechaUltimasVacaciones'], body['fechaFinalNoPagoVacaciones'], body['montoDinero_Vacaciones'], body['idDemandaPersonaNatural'], body['idDemandaEmpresa']));
+                                    conflictoVacacionesRes = yield index_models_1.ConflictoVacaciones.guardarConflictoVacaciones(new index_models_1.ConflictoVacaciones(undefined, body['fechaInicioContrato'], body['fechaFinalContrato'], body['fechaUltimasVacaciones'], body['fechaFinalNoPagoVacaciones'], body['montoDinero_Vacaciones'], body['idDemandaPersonaNatural'], body['idDemandaEmpresa']));
                                 }
                                 revisarConflicto(conflictoVacacionesRes, 'conflictoVacacionesRes', conflictos);
                                 break;
                             case 'conflictoCesantias':
-                                let conflictoCesantiasRes = yield ConflictoCesantias_model_1.ConflictoCesantias.guardarConflictoCesantias(new ConflictoCesantias_model_1.ConflictoCesantias(undefined, body['fechaInicioContrato'], body['fechaFinalContrato'], body['fechaUltimasCesantiasPagadas'], body['fechaFinalNoPagoCesantias'], body['montoDinero_Cesantias'], body['montoDinero_InteresesCesantias'], body['idDemandaPersonaNatural'], body['idDemandaEmpresa']));
+                                let conflictoCesantiasRes = yield index_models_1.ConflictoCesantias.guardarConflictoCesantias(new index_models_1.ConflictoCesantias(undefined, body['fechaInicioContrato'], body['fechaFinalContrato'], body['fechaUltimasCesantiasPagadas'], body['fechaFinalNoPagoCesantias'], body['montoDinero_Cesantias'], body['montoDinero_InteresesCesantias'], body['idDemandaPersonaNatural'], body['idDemandaEmpresa']));
                                 revisarConflicto(conflictoCesantiasRes, 'conflictoCesantiasRes', conflictos);
                                 break;
                             case 'conflictoPrimas':
-                                let conflictoPrimasRes = yield ConflictoPrimas_model_1.ConflictoPrimas.guardarConflictoPrimas(new ConflictoPrimas_model_1.ConflictoPrimas(undefined, body['fechaInicioContrato'], body['fechaFinalContrato'], body['fechaUltimaPrimaPagada'], body['fechaFinalNoPagoCesantias'], body['montoDinero_Prima'], body['idDemandaPersonaNatural'], body['idDemandaEmpresa']));
+                                let conflictoPrimasRes = yield index_models_1.ConflictoPrimas.guardarConflictoPrimas(new index_models_1.ConflictoPrimas(undefined, body['fechaInicioContrato'], body['fechaFinalContrato'], body['fechaUltimaPrimaPagada'], body['fechaFinalNoPagoCesantias'], body['montoDinero_Prima'], body['idDemandaPersonaNatural'], body['idDemandaEmpresa']));
                                 revisarConflicto(conflictoPrimasRes, 'conflictoPrimasRes', conflictos);
                                 break;
                             case 'conflictosContactaAbogado':
-                                let conflictosContactaAbogadoRes = yield ConflictosContactaAbogado_model_1.ConflictosContactaAbogado.guardarConflictosContactaAbogado(new ConflictosContactaAbogado_model_1.ConflictosContactaAbogado(undefined, body['conflictoARL'], body['conflictoPensiones'], body['conflictoHorasExtras'], body['conflictoDominicalesFestivos'], body['idDemandaPersonaNatural'], body['idDemandaEmpresa']));
+                                let conflictosContactaAbogadoRes = yield index_models_1.ConflictosContactaAbogado.guardarConflictosContactaAbogado(new index_models_1.ConflictosContactaAbogado(undefined, body['conflictoARL'], body['conflictoPensiones'], body['conflictoHorasExtras'], body['conflictoDominicalesFestivos'], body['idDemandaPersonaNatural'], body['idDemandaEmpresa']));
                                 revisarConflicto(conflictosContactaAbogadoRes, 'conflictosContactaAbogadoRes', conflictos);
                                 break;
                         }
@@ -101,27 +103,27 @@ class ConflictoController {
             try {
                 switch (tipo) {
                     case 'conflictoDespidoSJC':
-                        let conflictoDespidoSJCRes = yield ConflictoDespidoSJC_model_1.ConflictoDespidoSJC.obtenerConflictoDespidoSJC();
+                        let conflictoDespidoSJCRes = yield conflictoDespidoSJC_model_1.ConflictoDespidoSJC.obtenerConflictoDespidoSJC();
                         revisarConflicto(conflictoDespidoSJCRes, 'conflictoDespidoSJCRes', conflictos);
                         break;
                     case 'conflictoPagoSalario':
-                        let conflictoPagoSalarioRes = yield ConflictoPagoSalario_model_1.ConflictoPagoSalario.obtenerConflictoPagoSalario();
+                        let conflictoPagoSalarioRes = yield index_models_1.ConflictoPagoSalario.obtenerConflictoPagoSalario();
                         revisarConflicto(conflictoPagoSalarioRes, 'conflictoPagoSalarioRes', conflictos);
                         break;
                     case 'conflictoVacaciones':
-                        let conflictoVacacionesRes = yield ConflictoVacaciones_model_1.ConflictoVacaciones.obtenerConflictoVacaciones();
+                        let conflictoVacacionesRes = yield index_models_1.ConflictoVacaciones.obtenerConflictoVacaciones();
                         revisarConflicto(conflictoVacacionesRes, 'conflictoVacacionesRes', conflictos);
                         break;
                     case 'conflictoCesantias':
-                        let conflictoCesantiasRes = yield ConflictoCesantias_model_1.ConflictoCesantias.obtenerConflictoCesantias();
+                        let conflictoCesantiasRes = yield index_models_1.ConflictoCesantias.obtenerConflictoCesantias();
                         revisarConflicto(conflictoCesantiasRes, 'conflictoCesantiasRes', conflictos);
                         break;
                     case 'conflictoPrimas':
-                        let conflictoPrimasRes = yield ConflictoPrimas_model_1.ConflictoPrimas.obtenerConflictoPrimas();
+                        let conflictoPrimasRes = yield index_models_1.ConflictoPrimas.obtenerConflictoPrimas();
                         revisarConflicto(conflictoPrimasRes, 'conflictoPrimasRes', conflictos);
                         break;
                     case 'conflictosContactaAbogado':
-                        let conflictosContactaAbogadoRes = yield ConflictosContactaAbogado_model_1.ConflictosContactaAbogado.obtenerConflictosContactaAbogado();
+                        let conflictosContactaAbogadoRes = yield index_models_1.ConflictosContactaAbogado.obtenerConflictosContactaAbogado();
                         revisarConflicto(conflictosContactaAbogadoRes, 'conflictosContactaAbogadoRes', conflictos);
                         break;
                 }

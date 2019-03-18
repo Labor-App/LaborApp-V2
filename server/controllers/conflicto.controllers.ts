@@ -1,10 +1,12 @@
 import { Request, Response } from 'express';
-import { ConflictoDespidoSJC } from '../models/ConflictoDespidoSJC.model';
-import { ConflictoPagoSalario } from '../models/ConflictoPagoSalario.model';
-import { ConflictoVacaciones } from '../models/ConflictoVacaciones.model';
-import { ConflictoCesantias } from '../models/ConflictoCesantias.model';
-import { ConflictoPrimas } from '../models/ConflictoPrimas.model';
-import { ConflictosContactaAbogado } from '../models/ConflictosContactaAbogado.model';
+// import { ConflictoDespidoSJC } from '../models/ConflictoDespidoSJC.model';
+// import { ConflictoPagoSalario } from '../models/ConflictoPagoSalario.model';
+// import { ConflictoVacaciones } from '../models/ConflictoVacaciones.model';
+// import { ConflictoCesantias } from '../models/ConflictoCesantias.model';
+// import { ConflictoPrimas } from '../models/ConflictoPrimas.model';
+// import { ConflictosContactaAbogado } from '../models/ConflictosContactaAbogado.model';
+import {  ConflictoPagoSalario, ConflictoVacaciones, /*ConflictoDespidoSJC,*/ConflictoCesantias, ConflictoPrimas, ConflictosContactaAbogado } from '../models/index.models'
+import {ConflictoDespidoSJC} from '../models/conflictoDespidoSJC.model';
 
 
 let revisarConflicto = (respuestaModelo: any, name: string, array: any[]) => {
