@@ -25,11 +25,11 @@ export class Empresa {
   * misma empresa, pero esta vez tenga informacion del representante lega la info
   * de la empresa se actualiza.
   */
-  public static async guardarEmpresa(empresa: Empresa, persona?: Persona): Promise<object> {
+  public static async guardarEmpresa(empresa: Empresa, persona: Persona): Promise<object> {
 
 
-    if(persona != undefined){
-
+    if(persona.numeroDocumentoPersona != undefined){
+      console.log(persona)
       persona.codigoCiudad = empresa.codigoCiudad;
       empresa.tipoDocumentoPersona = persona.tipoDocumentoPersona;
       empresa.numeroDocumentoPersona = persona.numeroDocumentoPersona;
