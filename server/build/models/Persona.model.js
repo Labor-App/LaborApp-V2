@@ -113,7 +113,7 @@ class Persona {
                     };
                 }
             }
-            newPersona.tipoDocumentoPersona = newPersona.tipoDocumentoPersona.toLowerCase();
+            //newPersona.tipoDocumentoPersona = newPersona.tipoDocumentoPersona.toLowerCase();
             return database_1.default.query('INSERT INTO Personas set ?', [newPersona])
                 .then((result) => __awaiter(this, void 0, void 0, function* () {
                 if (correoPersona != undefined) {

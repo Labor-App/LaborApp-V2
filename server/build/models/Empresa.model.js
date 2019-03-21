@@ -36,7 +36,8 @@ class Empresa {
     */
     static guardarEmpresa(empresa, persona) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (persona != undefined) {
+            if (persona.numeroDocumentoPersona != undefined) {
+                console.log(persona);
                 persona.codigoCiudad = empresa.codigoCiudad;
                 empresa.tipoDocumentoPersona = persona.tipoDocumentoPersona;
                 empresa.numeroDocumentoPersona = persona.numeroDocumentoPersona;
@@ -45,6 +46,7 @@ class Empresa {
                     console.log(personaRes);
                 }
             }
+            console.log(persona);
             return database_1.default.query("INSERT INTO Empresa set ?", [empresa])
                 .then(result => {
                 return {
