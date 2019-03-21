@@ -37,7 +37,7 @@ class Empresa {
     static guardarEmpresa(empresa, persona) {
         return __awaiter(this, void 0, void 0, function* () {
             if (persona.numeroDocumentoPersona != undefined) {
-                console.log(persona);
+                //console.log(persona)
                 persona.codigoCiudad = empresa.codigoCiudad;
                 empresa.tipoDocumentoPersona = persona.tipoDocumentoPersona;
                 empresa.numeroDocumentoPersona = persona.numeroDocumentoPersona;

@@ -29,7 +29,7 @@ export class Empresa {
 
 
     if(persona.numeroDocumentoPersona != undefined){
-      console.log(persona)
+      //console.log(persona)
       persona.codigoCiudad = empresa.codigoCiudad;
       empresa.tipoDocumentoPersona = persona.tipoDocumentoPersona;
       empresa.numeroDocumentoPersona = persona.numeroDocumentoPersona;

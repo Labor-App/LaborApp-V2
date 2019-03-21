@@ -117,7 +117,7 @@ export class Persona {
 
     }
 
-    //newPersona.tipoDocumentoPersona = newPersona.tipoDocumentoPersona.toLowerCase();
+    newPersona.tipoDocumentoPersona = newPersona.tipoDocumentoPersona.toLowerCase();
 
     return database.query('INSERT INTO Personas set ?', [newPersona])
       .then(async result => {
