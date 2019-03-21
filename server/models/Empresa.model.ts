@@ -38,7 +38,7 @@ export class Empresa {
         console.log(personaRes);
       }
     }
-
+console.log(persona)
     return database.query("INSERT INTO Empresa set ?", [empresa])
       .then( result => {
         return {
