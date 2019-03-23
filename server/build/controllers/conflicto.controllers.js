@@ -8,12 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// import { ConflictoDespidoSJC } from '../models/ConflictoDespidoSJC.model';
-// import { ConflictoPagoSalario } from '../models/ConflictoPagoSalario.model';
-// import { ConflictoVacaciones } from '../models/ConflictoVacaciones.model';
-// import { ConflictoCesantias } from '../models/ConflictoCesantias.model';
-// import { ConflictoPrimas } from '../models/ConflictoPrimas.model';
-// import { ConflictosContactaAbogado } from '../models/ConflictosContactaAbogado.model';
 const index_models_1 = require("../models/index.models");
 const conflictoDespidoSJC_model_1 = require("../models/conflictoDespidoSJC.model");
 let revisarConflicto = (respuestaModelo, name, array) => {

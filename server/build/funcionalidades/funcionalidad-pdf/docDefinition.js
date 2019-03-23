@@ -49,11 +49,48 @@ class DocDefinition {
                         { text: `${variablesPdf.represetanteLegal} `, fontSize: 15, bold: true },
                         `o quien haga sus veces, entidad con domicilio en la ciudad de `,
                         { text: `${variablesPdf.ciudadAccionado}`, fontSize: 15, bold: true },
-                        `, para que mediante el tramite propio del proceso ordinario laboral de mínima cuantía y mediante sentencia se profieran las respectivas condenas que más adelante entrare a solicitar, para lo cual me fundamento en los hechos y normas que a continuación relaciono.`
+                        `, para que mediante el tramite propio del proceso ordinario laboral de mínima cuantía y mediante sentencia se profieran las respectivas condenas que más adelante entrare a solicitar, para lo cual me fundamento en los hechos y normas que a continuación relaciono.`,
                     ], alignment: 'justify'
                 },
+                { text: `\n\nTipo de proceso`, alignment: 'center', bold: true },
                 {
-                    text: `\n\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id estlaborum.`,
+                    text: `\n\nEn razón de la cuantía siendo esta inferior a veinte (20) SMLMV, corresponde la presente acción a la descrita como ordinaria laboral de única instancia.`,
+                    alignment: 'justify'
+                },
+                { text: `\n\n\nHechos`, alignment: 'center', bold: true },
+                {
+                    text: `\n1. ${'FECHA DE INGRESO A LA EMPRESA'}`, alignment: 'left', bold: true
+                },
+                {
+                    text: `\n2. ${'FECHA DE INGRESO A LA EMPRESA'}`, alignment: 'left', bold: true
+                },
+                {
+                    text: `\n3. ${'FECHA DE INGRESO A LA EMPRESA'}`, alignment: 'left', bold: true
+                },
+                {
+                    text: `\n4. ${'FECHA DE INGRESO A LA EMPRESA'}`, alignment: 'left', bold: true
+                },
+                {
+                    text: `\n5. ${'FECHA DE INGRESO A LA EMPRESA'}`, alignment: 'left', bold: true
+                },
+                {
+                    text: `\n6. ${'FECHA DE INGRESO A LA EMPRESA'}`, alignment: 'left', bold: true
+                },
+                {
+                    text: `\n7. ${'FECHA DE INGRESO A LA EMPRESA'}`, alignment: 'left', bold: true
+                },
+                {
+                    text: `\n8. ${'FECHA DE INGRESO A LA EMPRESA'}`, alignment: 'left', bold: true
+                },
+                {
+                    text: `\n9. ${'FECHA DE INGRESO A LA EMPRESA'}`, alignment: 'left', bold: true
+                },
+                {
+                    text: `\n10. ${'FECHA DE INGRESO A LA EMPRESA'}`, alignment: 'left', bold: true
+                },
+                { text: `\n\n\nPeticiones`, alignment: 'center', bold: true },
+                {
+                    text: `\nSolicito al señor juez que una vez probados los hechos arriba enunciados se declare:    `,
                     alignment: 'justify'
                 },
                 {
@@ -83,85 +120,3 @@ class DocDefinition {
     }
 }
 exports.default = DocDefinition;
-// export default{
-//     pageMargins: [ 40, 60, 40, 60 ],
-//     pageOrientation: 'portrait',
-//     pageSize: 'A4',
-//     content: [
-//
-//       {
-//         //Titulo
-//         text:'DEMANDA\n\n\n',bold:true,alignment: 'center',fontSize: 20
-//       },
-//
-//       {
-//         text:[
-//         `Señor
-//         Juez civil de pequeñas Causas - laboral `,
-//         {text: `CIUDAD`, fontSize: 15, bold: true},
-//         '(Reparto)\nE. S. D',
-//         '\n\n',
-//         'Referencia 	    :	Demanda',
-//         '\n'
-//         'Demandante 	:	',
-//         {text: `ACCIONANTE`, fontSize: 15, bold: true},
-//         `.`,
-//         '\n',
-//         'Demandado 	 :	',
-//         {text: `ACCIONADO`, fontSize: 15, bold: true},
-//         `.`
-//         ]
-//       },
-//
-//       {
-//         //Parrafo
-//         text: [
-//           {text: '\n'},
-//
-//           {text: `ACCIONANTE`, fontSize: 15, bold: true},
-//
-//           `, colombiano, mayor de edad y domiciliado en `,
-//           {text: `CIUDAD`, fontSize: 15, bold: true},
-//           `, con cedula de ciudadanía número  `,
-//           {text: `CEDULA`, fontSize: 15, bold: true},
-//           ` de `,
-//           {text: `LUGAR DE EXPEDICIÓN`, fontSize: 15, bold: true},
-//           ` obrando en mi nombre, presento ante su honorable despacho demanda contra`,
-//           {text: `ACCIONADO`, fontSize: 15, bold: true},
-//           `. Identificada con él NIT `,
-//           {text: `NÚMERO DE NIT`, fontSize: 15, bold: true},
-//           `, representada legalmente por `,
-//           {text: `REPRESENTANTE LEGAL `, fontSize: 15, bold: true},
-//           `o quien haga sus veces, entidad con domicilio en la ciudad de `,
-//           {text: `CIUDAD`, fontSize: 15, bold: true},
-//           `, para que mediante el tramite propio del proceso ordinario laboral de mínima cuantía y mediante sentencia se profieran las respectivas condenas que más adelante entrare a solicitar, para lo cual me fundamento en los hechos y normas que a continuación relaciono.`
-//
-//         ], alignment: 'justify'
-//       },
-//       {
-//         text:`\n\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id estlaborum.`,
-//         alignment: 'justify'
-//       },
-//       {
-//         columns:[
-//
-//           {
-//             text:[
-//               {text:`\n\n\n\n\n\n\n\n\n\n\n\n\n_____________________________\n`},
-//               {text:`dddsdsdsdsdsdsd`}
-//
-//             ], alignment: 'center'
-//           },
-//           {
-//             text:[
-//               {text:`\n\n\n\n\n\n\n\n\n\n\n\n\n_____________________________\n`},
-//               {text:`dddsdsdsdsdsdsd`}
-//
-//             ], alignment: 'center'
-//           }
-//         ]
-//       },
-//
-//
-//     ]
-// }

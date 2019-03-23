@@ -1,5 +1,6 @@
-import path from 'path';
-import fs from 'fs';
+import { join } from 'path';
+import { writeFileSync, existsSync } from 'fs';
+import DocDefinition from './docDefinition';
 
 const PdfPrinter = require('pdfmake/src/printer');
 
@@ -12,10 +13,10 @@ export default class GenerarPdf{
 
   public fontDescriptors?: object = {
     Roboto: {
-      normal: path.join(__dirname, './fuentes/Roboto-Regular.ttf'),
-      bold: path.join(__dirname, './fuentes/Roboto-Medium.ttf'),
-      italics: path.join(__dirname, './fuentes/Roboto-Italic.ttf'),
-      bolditalics: path.join(__dirname, './fuentes/Roboto-MediumItalic.ttf')
+      normal: join(__dirname, './fuentes/Roboto-Regular.ttf'),
+      bold: join(__dirname, './fuentes/Roboto-Medium.ttf'),
+      italics: join(__dirname, './fuentes/Roboto-Italic.ttf'),
+      bolditalics: join(__dirname, './fuentes/Roboto-MediumItalic.ttf')
     }
   };
 
@@ -27,7 +28,7 @@ export default class GenerarPdf{
 
   constructor( docDefinition:object, docName: string ){
 
-    this.docDirection = path.join(__dirname, `../../front/Demanda.pdf`);
+    this.docDirection = join(__dirname, `../../front/Demanda.pdf`);
 
     this.docName = `Demanda.pdf`
 
@@ -41,11 +42,10 @@ export default class GenerarPdf{
 
     this.doc.on('end', () => {
       const result = Buffer.concat(this.chunks);
-      fs.writeFileSync(this.docDirection, result);
+      writeFileSync(this.docDirection, result);
     });
 
     this.doc.end();
-
 
 
   }
@@ -56,7 +56,7 @@ export default class GenerarPdf{
 
     let exists:boolean;
 
-    exists = fs.existsSync(this.docDirection);
+    exists = existsSync(this.docDirection);
 
 
     return exists;
@@ -74,3 +74,25 @@ export default class GenerarPdf{
 
 
 }
+
+
+const datosDemanda = {
+
+  accionante: 'hoal',
+  accionado: 'Hola',
+  ciudadAccionante: "accionante.codigoDaneMunicipio",
+  cedulaAccionante: 'accionante.numeroDocumentoPersona',
+  lugarDeExpedicion: 'lugarDeExpedicion',
+  nit: 'accionado.NItEmpresa',
+  represetanteLegal: 'represetanteLegal',
+  ciudadAccionado: 'ciudadAccionado'
+
+}
+console.log(datosDemanda)
+
+//Generando el contenido del pdf con el objeto previamente creado.
+const docDefinition = new DocDefinition(datosDemanda);
+
+
+//Generando el pdf ( contenido, nombre del accionante (para que cuando se genere el pdf, el nombre del mismo ('pdf') sea unico )).
+new GenerarPdf(docDefinition.getDoc, docDefinition.getAccionante);
