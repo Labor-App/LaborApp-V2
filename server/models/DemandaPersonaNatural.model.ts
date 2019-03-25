@@ -61,7 +61,7 @@ export class DemandaPersonaNatural {
       }
     } else {
 
-      if (contratoLaboralRes.result['IdPersonaNatural'] === null || contratoLaboralRes.result[0]['IdPersonaNatural'] != demandaPersonaNatural.IdPersonaNatural) {
+      if (contratoLaboralRes.result[0]['IdPersonaNatural'] === null || contratoLaboralRes.result[0]['IdPersonaNatural'] != demandaPersonaNatural.IdPersonaNatural) {
         return {
           ok: false,
           err: {
@@ -104,11 +104,14 @@ export class DemandaPersonaNatural {
       })
   }
 
-  public static async obtenerDemandaPersonaNatural() {
+  public static async obtenerDemandaPersonaNatural(id?: number) {
+    let query = `SELECT * FROM demandaPersonaNatural`
 
-    return database.query(`
-    SELECT *
-    FROM demandaPersonaNatural`)
+    if(id != (undefined || null)){
+      query = `SELECT * FROM demandaPersonaNatural WHERE idDemandaPersonaNatural = ${id}`
+    }
+
+    return database.query(query)
       .then((result: DemandaPersonaNatural[]) => {
 
         if (result.length === 0) {

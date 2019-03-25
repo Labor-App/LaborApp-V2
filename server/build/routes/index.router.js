@@ -18,7 +18,7 @@ class IndexRouter {
         this.routes();
     }
     routes() {
-        this.router.use(demanda_router_1.default);
+        this.router.use('/pdf', demanda_router_1.default);
         this.router.use(persona_router_1.default);
         this.router.use('/demandado', empresa_router_1.default);
         this.router.use('/demandado', personaNatural_router_1.default);

@@ -20,7 +20,7 @@ class IndexRouter{
 
 
   public routes(){
-    this.router.use( demandaRouter);
+    this.router.use( '/pdf',demandaRouter);
     this.router.use( personaRouter);
     this.router.use( '/demandado', empresaRouter);
     this.router.use( '/demandado', personaNaturalRouter);

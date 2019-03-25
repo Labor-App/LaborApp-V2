@@ -61,7 +61,7 @@ class DemandaEmpresa {
                 };
             }
             else {
-                if (contratoLaboralRes.result['NItEmpresa'] === null || contratoLaboralRes.result['NItEmpresa'] !== demandaEmpresa.NItEmpresa) {
+                if (contratoLaboralRes.result[0]['NItEmpresa'] === (null || undefined) || contratoLaboralRes.result[0]['NItEmpresa'] != demandaEmpresa.NItEmpresa) {
                     return {
                         ok: false,
                         err: {
@@ -97,11 +97,13 @@ class DemandaEmpresa {
             }
         });
     }
-    static obtenerDemandaEmpresa() {
+    static obtenerDemandaEmpresa(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return database_1.default.query(`
-    SELECT *
-    FROM demandaEmpresa`)
+            let query = `SELECT * FROM demandaEmpresa`;
+            if (id != (undefined || null)) {
+                query = `SELECT * FROM demandaEmpresa WHERE idDemandaEmpresa = ${id}`;
+            }
+            return database_1.default.query(query)
                 .then((result) => {
                 if (result.length === 0) {
                     return {

@@ -61,7 +61,7 @@ class DemandaPersonaNatural {
                 };
             }
             else {
-                if (contratoLaboralRes.result['IdPersonaNatural'] === null || contratoLaboralRes.result[0]['IdPersonaNatural'] != demandaPersonaNatural.IdPersonaNatural) {
+                if (contratoLaboralRes.result[0]['IdPersonaNatural'] === null || contratoLaboralRes.result[0]['IdPersonaNatural'] != demandaPersonaNatural.IdPersonaNatural) {
                     return {
                         ok: false,
                         err: {
@@ -95,11 +95,13 @@ class DemandaPersonaNatural {
             });
         });
     }
-    static obtenerDemandaPersonaNatural() {
+    static obtenerDemandaPersonaNatural(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return database_1.default.query(`
-    SELECT *
-    FROM demandaPersonaNatural`)
+            let query = `SELECT * FROM demandaPersonaNatural`;
+            if (id != (undefined || null)) {
+                query = `SELECT * FROM demandaPersonaNatural WHERE idDemandaPersonaNatural = ${id}`;
+            }
+            return database_1.default.query(query)
                 .then((result) => {
                 if (result.length === 0) {
                     return {

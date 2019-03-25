@@ -78,8 +78,8 @@ export default class GenerarPdf{
 
 const datosDemanda = {
 
-  accionante: 'hoal',
-  accionado: 'Hola',
+  accionante: 'Jonathan Arias',
+  accionado: 'Empresa',
   ciudadAccionante: "accionante.codigoDaneMunicipio",
   cedulaAccionante: 'accionante.numeroDocumentoPersona',
   lugarDeExpedicion: 'lugarDeExpedicion',

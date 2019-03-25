@@ -60,7 +60,8 @@ export class DemandaEmpresa {
       }
     } else {
 
-      if (contratoLaboralRes.result['NItEmpresa'] === null || contratoLaboralRes.result['NItEmpresa'] !== demandaEmpresa.NItEmpresa) {
+
+      if (contratoLaboralRes.result[0]['NItEmpresa'] === (null|| undefined) || contratoLaboralRes.result[0]['NItEmpresa'] != demandaEmpresa.NItEmpresa) {
         return {
           ok: false,
           err: {
@@ -105,11 +106,15 @@ export class DemandaEmpresa {
     }
   }
 
-  public static async obtenerDemandaEmpresa() {
+  public static async obtenerDemandaEmpresa(id?: number) {
 
-    return database.query(`
-    SELECT *
-    FROM demandaEmpresa`)
+    let query = `SELECT * FROM demandaEmpresa`
+
+    if(id != (undefined || null)){
+      query = `SELECT * FROM demandaEmpresa WHERE idDemandaEmpresa = ${ id }`
+    }
+
+    return database.query(query)
       .then((result: DemandaEmpresa[]) => {
 
         if (result.length === 0) {

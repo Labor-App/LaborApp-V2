@@ -16,7 +16,7 @@ import GenerarPdf from '../funcionalidades/funcionalidad-pdf/generatePdf';
 
 //Definicion del Documento PDF
 import DocDefinition from '../funcionalidades/funcionalidad-pdf/docDefinition';
-import { Empresa, Persona } from '../models/index.models';
+import { Empresa, Persona, DemandaEmpresa, DemandaPersonaNatural } from '../models/index.models';
 
 
 
@@ -27,59 +27,105 @@ class DemandaControllers{
 
   //GET = GENREA LA DEMANDA.
   public async generarPdf( req: Request, res: Response){
+    let idDemanda: number = req.params.id;
+    let tipo: string = req.params.tipo;
+    let databaseResDemanda;
+    let query = `SELECT * FROM conflictoDespidoSJC,conflictoPagoSalario,conflictoVacaciones,conflictoCesantias,conflictoPrimas,conflictosContactaAbogado 
+      WHERE conflictoDespidoSJC.idDemandaEmpresa = ${ idDemanda }
+      AND conflictoPagoSalario.idDemandaEmpresa = ${ idDemanda }
+      AND conflictoVacaciones.idDemandaEmpresa = ${ idDemanda }
+      AND conflictoCesantias.idDemandaEmpresa = ${ idDemanda }
+      AND conflictoPrimas.idDemandaEmpresa = ${ idDemanda }` 
 
     try{
-      //Optenemos los patametros para la condulta
-      const nit:number = req.params.nit;
-      const identificacion:number =  req.params.identificacion;
-
-      //Consultas de la DB
-      const empresaResult: Empresa[] = await database.query(`SELECT * FROM Empresa WHERE NItEmpresa = ${ nit }`);
-      const personaResult: Persona[] = await database.query(`SELECT * FROM Personas WHERE cedulaPersona = ${ identificacion }`);
-
-      //Navegando entre la respuesta y almacenandol en una valiable para su posterior uso.
-      const accionante: Persona = personaResult[0];
-      const accionado: Empresa = empresaResult[0];
-
-
-      //Metemos los datos de la consulta en el objeto que define el contenido del pdf.
-      const datosDemanda = {
-
-        accionante: accionante.nombresPersona,
-        accionado: accionado.nombreEmpresaRS,
-        ciudadAccionante: "accionante.codigoDaneMunicipio",
-        cedulaAccionante: accionante.numeroDocumentoPersona,
-        lugarDeExpedicion: 'lugarDeExpedicion',
-        nit: accionado.NItEmpresa,
-        represetanteLegal: 'represetanteLegal',
-        ciudadAccionado: 'ciudadAccionado'
+      if (tipo === 'empresa'){
+        databaseResDemanda = await DemandaEmpresa.obtenerDemandaEmpresa(idDemanda);
+        if(databaseResDemanda.result.length !== 0){
+          let databaseResConflictos = database.query(query)
+          console.log(databaseResConflictos)
+        }else{
+          throw ('')
+        }
 
       }
-      console.log(datosDemanda)
+      if (tipo === 'natural'){
+        databaseResDemanda = await DemandaPersonaNatural.obtenerDemandaPersonaNatural(idDemanda)
+        database.query(query + `idDemandaEmpresa = ${ idDemanda }` )
+      }
 
-      //Generando el contenido del pdf con el objeto previamente creado.
-      const docDefinition = new DocDefinition(datosDemanda);
-
-
-      //Generando el pdf ( contenido, nombre del accionante (para que cuando se genere el pdf, el nombre del mismo ('pdf') sea unico )).
-      await new GenerarPdf(docDefinition.getDoc, docDefinition.getAccionante);
-
-
-      res.status(200).json({
-        ok: true,
-        message: 'PDF generado con exito'
-      });
-
-    }catch(err){
-      console.log('Error al generar el pdf\n',err);
-
-      res.status(500).json({
-        ok:false,
-        err: 'Error al generar el PDF',
-        errMessge: err
-      });
-
+    }catch(e){
+      return res.status(400).json({
+        ok: false,
+        err: {
+          message: `ocurrio un error al asignar la respuesta de la db o esta no esta viene undefined`
+        }
+      })
     }
+
+    
+    if(databaseResDemanda === undefined){
+      return res.status(400).json({
+        ok: false,
+        err: {
+          message: `ocurrio un error al asignar la respuesta de la db o esta no esta viene undefined`
+        }
+      })
+    }
+
+
+    
+
+    return res.json({databaseResDemanda});
+    // try{
+    //   //Optenemos los patametros para la condulta
+
+    //   //Consultas de la DB
+    //   const empresaResult: Empresa[] = await database.query(`SELECT * FROM Empresa WHERE NItEmpresa = ${ nit }`);
+    //   const personaResult: Persona[] = await database.query(`SELECT * FROM Personas WHERE cedulaPersona = ${ identificacion }`);
+
+    //   //Navegando entre la respuesta y almacenandol en una valiable para su posterior uso.
+    //   const accionante: Persona = personaResult[0];
+    //   const accionado: Empresa = empresaResult[0];
+
+
+    //   //Metemos los datos de la consulta en el objeto que define el contenido del pdf.
+    //   const datosDemanda = {
+
+    //     accionante: accionante.nombresPersona,
+    //     accionado: accionado.nombreEmpresaRS,
+    //     ciudadAccionante: "accionante.codigoDaneMunicipio",
+    //     cedulaAccionante: accionante.numeroDocumentoPersona,
+    //     lugarDeExpedicion: 'lugarDeExpedicion',
+    //     nit: accionado.NItEmpresa,
+    //     represetanteLegal: 'represetanteLegal',
+    //     ciudadAccionado: 'ciudadAccionado'
+
+    //   }
+    //   console.log(datosDemanda)
+
+    //   //Generando el contenido del pdf con el objeto previamente creado.
+    //   const docDefinition = new DocDefinition(datosDemanda);
+
+
+    //   //Generando el pdf ( contenido, nombre del accionante (para que cuando se genere el pdf, el nombre del mismo ('pdf') sea unico )).
+    //   await new GenerarPdf(docDefinition.getDoc, docDefinition.getAccionante);
+
+
+    //   res.status(200).json({
+    //     ok: true,
+    //     message: 'PDF generado con exito'
+    //   });
+
+    // }catch(err){
+    //   console.log('Error al generar el pdf\n',err);
+
+    //   res.status(500).json({
+    //     ok:false,
+    //     err: 'Error al generar el PDF',
+    //     errMessge: err
+    //   });
+
+    // }
   }
 
   //GET = ENVIA LA DEMANDA.

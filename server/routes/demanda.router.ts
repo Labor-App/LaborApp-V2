@@ -14,7 +14,7 @@ class DemandaRouter{
 
   public routes(){
 
-    this.router.get('/generar/:nit/:identificacion', Autenticacion.verificacionToken, demandaControllers.generarPdf );
+    this.router.get('/generar/:tipo/:id', demandaControllers.generarPdf );
 
     this.router.get('/enviar/:identificacion',Autenticacion.verificacionToken, demandaControllers.enviapdf );
 

@@ -17,9 +17,7 @@ const path_1 = __importDefault(require("path"));
 const database_1 = __importDefault(require("../database/database"));
 //Funcionalidades
 const sendEmail_1 = __importDefault(require("../funcionalidades/funcionalidadEmail/sendEmail"));
-const generatePdf_1 = __importDefault(require("../funcionalidades/funcionalidad-pdf/generatePdf"));
-//Definicion del Documento PDF
-const docDefinition_1 = __importDefault(require("../funcionalidades/funcionalidad-pdf/docDefinition"));
+const index_models_1 = require("../models/index.models");
 class DemandaControllers {
     /*
       METODOS PARA MANIPULAR LA DEMANDA => (PDF)
@@ -27,45 +25,84 @@ class DemandaControllers {
     //GET = GENREA LA DEMANDA.
     generarPdf(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            let idDemanda = req.params.id;
+            let tipo = req.params.tipo;
+            let databaseResDemanda;
+            let query = `SELECT * FROM conflictoDespidoSJC,conflictoPagoSalario,conflictoVacaciones,conflictoCesantias,conflictoPrimas,conflictosContactaAbogado 
+      WHERE conflictoDespidoSJC.idDemandaEmpresa = ${idDemanda}
+      AND conflictoPagoSalario.idDemandaEmpresa = ${idDemanda}
+      AND conflictoVacaciones.idDemandaEmpresa = ${idDemanda}
+      AND conflictoCesantias.idDemandaEmpresa = ${idDemanda}
+      AND conflictoPrimas.idDemandaEmpresa = ${idDemanda}`;
             try {
-                //Optenemos los patametros para la condulta
-                const nit = req.params.nit;
-                const identificacion = req.params.identificacion;
-                //Consultas de la DB
-                const empresaResult = yield database_1.default.query(`SELECT * FROM Empresa WHERE NItEmpresa = ${nit}`);
-                const personaResult = yield database_1.default.query(`SELECT * FROM Personas WHERE cedulaPersona = ${identificacion}`);
-                //Navegando entre la respuesta y almacenandol en una valiable para su posterior uso.
-                const accionante = personaResult[0];
-                const accionado = empresaResult[0];
-                //Metemos los datos de la consulta en el objeto que define el contenido del pdf.
-                const datosDemanda = {
-                    accionante: accionante.nombresPersona,
-                    accionado: accionado.nombreEmpresaRS,
-                    ciudadAccionante: "accionante.codigoDaneMunicipio",
-                    cedulaAccionante: accionante.numeroDocumentoPersona,
-                    lugarDeExpedicion: 'lugarDeExpedicion',
-                    nit: accionado.NItEmpresa,
-                    represetanteLegal: 'represetanteLegal',
-                    ciudadAccionado: 'ciudadAccionado'
-                };
-                console.log(datosDemanda);
-                //Generando el contenido del pdf con el objeto previamente creado.
-                const docDefinition = new docDefinition_1.default(datosDemanda);
-                //Generando el pdf ( contenido, nombre del accionante (para que cuando se genere el pdf, el nombre del mismo ('pdf') sea unico )).
-                yield new generatePdf_1.default(docDefinition.getDoc, docDefinition.getAccionante);
-                res.status(200).json({
-                    ok: true,
-                    message: 'PDF generado con exito'
-                });
+                if (tipo === 'empresa') {
+                    databaseResDemanda = yield index_models_1.DemandaEmpresa.obtenerDemandaEmpresa(idDemanda);
+                    if (databaseResDemanda.result.length !== 0) {
+                        let databaseResConflictos = database_1.default.query(query);
+                        console.log(databaseResConflictos);
+                    }
+                    else {
+                        throw ('');
+                    }
+                }
+                if (tipo === 'natural') {
+                    databaseResDemanda = yield index_models_1.DemandaPersonaNatural.obtenerDemandaPersonaNatural(idDemanda);
+                    database_1.default.query(query + `idDemandaEmpresa = ${idDemanda}`);
+                }
             }
-            catch (err) {
-                console.log('Error al generar el pdf\n', err);
-                res.status(500).json({
+            catch (e) {
+                return res.status(400).json({
                     ok: false,
-                    err: 'Error al generar el PDF',
-                    errMessge: err
+                    err: {
+                        message: `ocurrio un error al asignar la respuesta de la db o esta no esta viene undefined`
+                    }
                 });
             }
+            if (databaseResDemanda === undefined) {
+                return res.status(400).json({
+                    ok: false,
+                    err: {
+                        message: `ocurrio un error al asignar la respuesta de la db o esta no esta viene undefined`
+                    }
+                });
+            }
+            return res.json({ databaseResDemanda });
+            // try{
+            //   //Optenemos los patametros para la condulta
+            //   //Consultas de la DB
+            //   const empresaResult: Empresa[] = await database.query(`SELECT * FROM Empresa WHERE NItEmpresa = ${ nit }`);
+            //   const personaResult: Persona[] = await database.query(`SELECT * FROM Personas WHERE cedulaPersona = ${ identificacion }`);
+            //   //Navegando entre la respuesta y almacenandol en una valiable para su posterior uso.
+            //   const accionante: Persona = personaResult[0];
+            //   const accionado: Empresa = empresaResult[0];
+            //   //Metemos los datos de la consulta en el objeto que define el contenido del pdf.
+            //   const datosDemanda = {
+            //     accionante: accionante.nombresPersona,
+            //     accionado: accionado.nombreEmpresaRS,
+            //     ciudadAccionante: "accionante.codigoDaneMunicipio",
+            //     cedulaAccionante: accionante.numeroDocumentoPersona,
+            //     lugarDeExpedicion: 'lugarDeExpedicion',
+            //     nit: accionado.NItEmpresa,
+            //     represetanteLegal: 'represetanteLegal',
+            //     ciudadAccionado: 'ciudadAccionado'
+            //   }
+            //   console.log(datosDemanda)
+            //   //Generando el contenido del pdf con el objeto previamente creado.
+            //   const docDefinition = new DocDefinition(datosDemanda);
+            //   //Generando el pdf ( contenido, nombre del accionante (para que cuando se genere el pdf, el nombre del mismo ('pdf') sea unico )).
+            //   await new GenerarPdf(docDefinition.getDoc, docDefinition.getAccionante);
+            //   res.status(200).json({
+            //     ok: true,
+            //     message: 'PDF generado con exito'
+            //   });
+            // }catch(err){
+            //   console.log('Error al generar el pdf\n',err);
+            //   res.status(500).json({
+            //     ok:false,
+            //     err: 'Error al generar el PDF',
+            //     errMessge: err
+            //   });
+            // }
         });
     }
     //GET = ENVIA LA DEMANDA.
