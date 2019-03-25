@@ -24,13 +24,15 @@ export class ConflictoController {
 
 		let body: any = req.body;
 
-		console.log(body)
+		console.log(body.conflictoDespidoSJC, typeof body.conflictoDespidoSJC)
 
 		let conflictos: object[] = [];
 
 		for (let clave in body) {
+			console.log(clave,body[clave])
 
-			if (body[clave] == ('true' || true)) {
+			if (body[clave] === true) {
+
 
 				try {
 

@@ -23,9 +23,11 @@ class ConflictoController {
     static guardarConflicto(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             let body = req.body;
+            console.log(body.conflictoDespidoSJC, typeof body.conflictoDespidoSJC);
             let conflictos = [];
             for (let clave in body) {
-                if (body[clave] == ('true' || true)) {
+                console.log(clave, body[clave]);
+                if (body[clave] === true) {
                     try {
                         switch (clave) {
                             case 'conflictoDespidoSJC':
