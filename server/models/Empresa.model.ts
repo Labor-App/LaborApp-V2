@@ -140,7 +140,8 @@ console.log(persona)
             ok: false,
             err: {
               message: 'Query exitoso, Pero no hay coincidencias en las tablas Personas y Empresas',
-            }
+            },
+            result: null
           };
         }
 
@@ -155,6 +156,7 @@ console.log(persona)
         return {
           ok: false,
           message: 'Query fallido',
+          result: null,
           err
 
         };

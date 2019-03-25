@@ -56,7 +56,7 @@ class ConflictoController {
                                 revisarConflicto(conflictoCesantiasRes, 'conflictoCesantiasRes', conflictos);
                                 break;
                             case 'conflictoPrimas':
-                                let conflictoPrimasRes = yield index_models_1.ConflictoPrimas.guardarConflictoPrimas(new index_models_1.ConflictoPrimas(undefined, body['fechaInicioContrato'], body['fechaFinalContrato'], body['fechaUltimaPrimaPagada'], body['fechaFinalNoPagoCesantias'], body['montoDinero_Prima'], body['idDemandaPersonaNatural'], body['idDemandaEmpresa']));
+                                let conflictoPrimasRes = yield index_models_1.ConflictoPrimas.guardarConflictoPrimas(new index_models_1.ConflictoPrimas(undefined, body['fechaInicioContrato'], body['fechaFinalContrato'], body['fechaUltimaPrimaPagada'], body['fechaFinalNoPagoPrima'], body['montoDinero_Prima'], body['idDemandaPersonaNatural'], body['idDemandaEmpresa']));
                                 revisarConflicto(conflictoPrimasRes, 'conflictoPrimasRes', conflictos);
                                 break;
                             case 'conflictosContactaAbogado':

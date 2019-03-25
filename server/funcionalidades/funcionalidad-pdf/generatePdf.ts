@@ -74,25 +74,3 @@ export default class GenerarPdf{
 
 
 }
-
-
-const datosDemanda = {
-
-  accionante: 'Jonathan Arias',
-  accionado: 'Empresa',
-  ciudadAccionante: "accionante.codigoDaneMunicipio",
-  cedulaAccionante: 'accionante.numeroDocumentoPersona',
-  lugarDeExpedicion: 'lugarDeExpedicion',
-  nit: 'accionado.NItEmpresa',
-  represetanteLegal: 'represetanteLegal',
-  ciudadAccionado: 'ciudadAccionado'
-
-}
-console.log(datosDemanda)
-
-//Generando el contenido del pdf con el objeto previamente creado.
-const docDefinition = new DocDefinition(datosDemanda);
-
-
-//Generando el pdf ( contenido, nombre del accionante (para que cuando se genere el pdf, el nombre del mismo ('pdf') sea unico )).
-new GenerarPdf(docDefinition.getDoc, docDefinition.getAccionante);

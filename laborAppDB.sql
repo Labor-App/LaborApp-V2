@@ -222,7 +222,7 @@ idConflictoPrima INT (60) NOT NULL AUTO_INCREMENT,
 fechaInicioContrato DATE NOT NULL, /* llave foranea desde contrato */ 
 fechaFinalContrato DATE NULL, /* llave foranea desde contrato */
 fechaUltimaPrimaPagada DATE NULL,
-fechaFinalNoPagoCesantias DATE NULL,
+fechaFinalNoPagoPrima DATE NULL,
 montoDinero_Prima INT (60) NULL,
 idDemandaPersonaNatural INT (60)  NULL, /*llave foranea desde demanda persona Natutal*/
 idDemandaEmpresa INT (60)  NULL,  /*llave foranea desde demanda a empresa */

@@ -24,6 +24,8 @@ export class ConflictoController {
 
 		let body: any = req.body;
 
+		console.log(body)
+
 		let conflictos: object[] = [];
 
 		for (let clave in body) {
@@ -129,7 +131,7 @@ export class ConflictoController {
 									body['fechaInicioContrato'],
 									body['fechaFinalContrato'],
 									body['fechaUltimaPrimaPagada'],
-									body['fechaFinalNoPagoCesantias'],
+									body['fechaFinalNoPagoPrima'],
 									body['montoDinero_Prima'],
 									body['idDemandaPersonaNatural'],
 									body['idDemandaEmpresa']

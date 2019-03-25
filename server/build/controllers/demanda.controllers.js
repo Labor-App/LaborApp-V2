@@ -17,6 +17,9 @@ const path_1 = __importDefault(require("path"));
 const database_1 = __importDefault(require("../database/database"));
 //Funcionalidades
 const sendEmail_1 = __importDefault(require("../funcionalidades/funcionalidadEmail/sendEmail"));
+const generatePdf_1 = __importDefault(require("../funcionalidades/funcionalidad-pdf/generatePdf"));
+//Definicion del Documento PDF
+const docDefinition_1 = __importDefault(require("../funcionalidades/funcionalidad-pdf/docDefinition"));
 const index_models_1 = require("../models/index.models");
 class DemandaControllers {
     /*
@@ -28,33 +31,133 @@ class DemandaControllers {
             let idDemanda = req.params.id;
             let tipo = req.params.tipo;
             let databaseResDemanda;
-            let query = `SELECT * FROM conflictoDespidoSJC,conflictoPagoSalario,conflictoVacaciones,conflictoCesantias,conflictoPrimas,conflictosContactaAbogado 
-      WHERE conflictoDespidoSJC.idDemandaEmpresa = ${idDemanda}
-      AND conflictoPagoSalario.idDemandaEmpresa = ${idDemanda}
-      AND conflictoVacaciones.idDemandaEmpresa = ${idDemanda}
-      AND conflictoCesantias.idDemandaEmpresa = ${idDemanda}
-      AND conflictoPrimas.idDemandaEmpresa = ${idDemanda}`;
+            let query = (tipo, id, tabla) => {
+                let tipoPersona = 'PersonaNatural';
+                let identificacionTipoPersona = 'IdPersonaNatural';
+                if (tabla === 'demandaEmpresa') {
+                    tipoPersona = 'Empresa';
+                    identificacionTipoPersona = 'NItEmpresa';
+                }
+                return `SELECT * 
+      FROM conflictoDespidoSJC,
+        conflictoPagoSalario,
+        conflictoVacaciones,
+        conflictoCesantias,
+        conflictoPrimas,
+        ${tabla}
+      WHERE conflictoDespidoSJC.${tipo} = ${id}
+      AND conflictoPagoSalario.${tipo} = ${id}
+      AND conflictoVacaciones.${tipo} = ${id}
+      AND conflictoCesantias.${tipo} = ${id}
+      AND conflictoPrimas.${tipo} = ${id}
+
+      AND conflictoDespidoSJC.${tipo} = conflictoPagoSalario.${tipo}
+      AND conflictoDespidoSJC.${tipo} = conflictoVacaciones.${tipo}
+      AND conflictoDespidoSJC.${tipo} = conflictoCesantias.${tipo}
+      AND conflictoDespidoSJC.${tipo} = conflictoPrimas.${tipo}
+      AND conflictoPagoSalario.${tipo} = conflictoVacaciones.${tipo}
+      AND conflictoPagoSalario.${tipo} = conflictoCesantias.${tipo}
+      AND conflictoPagoSalario.${tipo} = conflictoPrimas.${tipo}
+      AND conflictoVacaciones.${tipo} = conflictoCesantias.${tipo}
+      AND conflictoVacaciones.${tipo} = conflictoPrimas.${tipo}
+      AND conflictoCesantias.${tipo} = conflictoPrimas.${tipo}
+      AND ${tabla}.${tipo} = conflictoPrimas.${tipo}
+      AND ${tabla}.${tipo} = conflictoCesantias.${tipo}
+      AND ${tabla}.${tipo} = conflictoVacaciones.${tipo}
+      AND ${tabla}.${tipo} = conflictoPagoSalario.${tipo}
+      AND ${tabla}.${tipo} = conflictoDespidoSJC.${tipo}`;
+            };
+            let pdf = (datosDemanda) => __awaiter(this, void 0, void 0, function* () {
+                try {
+                    const docDefinition = new docDefinition_1.default(datosDemanda);
+                    yield new generatePdf_1.default(docDefinition.getDoc, docDefinition.getAccionante);
+                }
+                catch (e) {
+                    console.log(e, 'err');
+                }
+            });
             try {
                 if (tipo === 'empresa') {
                     databaseResDemanda = yield index_models_1.DemandaEmpresa.obtenerDemandaEmpresa(idDemanda);
                     if (databaseResDemanda.result.length !== 0) {
-                        let databaseResConflictos = database_1.default.query(query);
-                        console.log(databaseResConflictos);
+                        databaseResDemanda = databaseResDemanda.result[0];
+                        let databaseResConflictos = yield database_1.default.query(query('idDemandaEmpresa', idDemanda, 'demandaEmpresa'));
+                        let databaseResEmpresa = yield index_models_1.Empresa.obtenerUnaEmpresa(databaseResDemanda.NItEmpresa);
+                        let databaseResPersona = yield index_models_1.Persona.obtenerUnaPersona(databaseResDemanda.numeroDocumentoPersona, databaseResDemanda.tipoDocumentoPersona);
+                        let databaseResRepresentanteLegal;
+                        if (databaseResEmpresa.result !== null) {
+                            console.log(databaseResEmpresa.result[0].numeroDocumentoPersona, 'representante legal');
+                            if (databaseResEmpresa.result[0].numeroDocumentoPersona !== null) {
+                                databaseResRepresentanteLegal = yield index_models_1.Persona.obtenerUnaPersona(databaseResEmpresa.result[0].numeroDocumentoPersona, databaseResEmpresa.result[0].tipoDocumentoPersona);
+                            }
+                        }
+                        if ((databaseResEmpresa.result || databaseResPersona.result) != null) {
+                            if (databaseResRepresentanteLegal === undefined) {
+                                databaseResRepresentanteLegal = 'no aplica';
+                            }
+                            yield pdf({
+                                accionante: databaseResPersona.result[0].nombresPersona,
+                                accionado: databaseResEmpresa.result[0].nombreEmpresaRS,
+                                cedulaAccionado: databaseResRepresentanteLegal,
+                                ciudadAccionante: databaseResPersona.result[0].codigoCiudad,
+                                ciudadAccionado: databaseResEmpresa.result[0].codigoCiudad,
+                                correoAccionante: '',
+                                correoAccionado: databaseResEmpresa.result[0].emailEmpresa,
+                                direccionDeNotificacionAccionante: databaseResPersona.result[0].direccionPersona,
+                                direccionDeNotificacionAccionado: databaseResEmpresa.result[0].direccionEmpresa,
+                                lugarDeExpedicionAccionante: databaseResPersona.result[0].lugarExpedicionCedulaPersona,
+                                lugarDeExpedicionAccionado: databaseResRepresentanteLegal,
+                                nit: databaseResEmpresa.result[0].NItEmpresa,
+                                represetanteLegal: databaseResRepresentanteLegal,
+                                fechaDeIngresoALaEmpresa: undefined,
+                                primaDeServicios: undefined,
+                                indemnizacionPorNoPago: undefined,
+                                valorDeLasPretenciones: undefined,
+                                salarioPactado: undefined,
+                                funcionesQueRealizaba: undefined,
+                                conflictos: undefined,
+                                incumplimientoDelEmpleador: undefined,
+                                fechaDeLaPrimeraSolicitudAlEmpleador: undefined,
+                                situacionActualFrenteALaRenunciaDelEmpleador: undefined,
+                                causa: undefined,
+                                salariosVencidos: undefined,
+                                cesantias: undefined,
+                                diasDeTrabajo: undefined,
+                                interesesDeCesantias: undefined,
+                            });
+                        }
+                        return res.json({
+                            databaseResConflictos
+                        });
                     }
                     else {
-                        throw ('');
+                        throw ('DemandaEmpresa no existe');
                     }
                 }
                 if (tipo === 'natural') {
                     databaseResDemanda = yield index_models_1.DemandaPersonaNatural.obtenerDemandaPersonaNatural(idDemanda);
                     database_1.default.query(query + `idDemandaEmpresa = ${idDemanda}`);
+                    if (databaseResDemanda.result.length !== 0) {
+                        let databaseResPdf = yield database_1.default.query(query('idDemandaPersonaNatural', idDemanda, 'demandaPersonaNatural'));
+                        // pdf({
+                        //   accionante: databaseResPdf.nombresPersona,
+                        //   accionado: databaseResPdf.nombreEmpresaRS,
+                        //   cedulaAccionante: databaseResPdf.numeroDocumentoPersona,
+                        //   ce
+                        // })
+                        return res.json({ databaseResPdf });
+                    }
+                    else {
+                        throw ('DemandaPersonaNatural no existe');
+                    }
                 }
             }
             catch (e) {
+                console.log(e, 'errooro');
                 return res.status(400).json({
                     ok: false,
                     err: {
-                        message: `ocurrio un error al asignar la respuesta de la db o esta no esta viene undefined`
+                        message: e ? e : `ocurrio un error al asignar la respuesta de la db o esta no esta viene undefined`
                     }
                 });
             }
@@ -133,8 +236,8 @@ class DemandaControllers {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const identificacion = req.params.identificacion;
-                const personaResult = yield database_1.default.query(`SELECT * FROM Personas WHERE cedulaPersona = ${identificacion}`);
-                const persona = personaResult[0];
+                // const personaResult: Persona[] = await database.query(`SELECT * FROM Personas WHERE cedulaPersona = ${identificacion}`);
+                // const persona: Persona = personaResult[0];
                 res.status(200).download(path_1.default.join(__dirname, `../front/Demanda.pdf`));
             }
             catch (err) {

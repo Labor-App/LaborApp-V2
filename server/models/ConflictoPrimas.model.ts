@@ -11,7 +11,7 @@ export class ConflictoPrimas {
     public fechaInicioContrato: ContratoLaboral['fechaInicioContrato'],
     public fechaFinalContrato: ContratoLaboral['fechaFinalContrato'],
     public fechaUltimaPrimaPagada: Date | null,
-    public fechaFinalNoPagoCesantias: Date | null,
+    public fechaFinalNoPagoPrima: Date | null,
     public montoDinero_Prima: number | null,
     public idDemandaPersonaNatural: DemandaPersonaNatural['idDemandaPersonaNatural'] | null,
     public idDemandaEmpresa: DemandaEmpresa['idDemandaEmpresa'],

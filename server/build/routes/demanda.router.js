@@ -14,7 +14,7 @@ class DemandaRouter {
     routes() {
         this.router.get('/generar/:tipo/:id', demanda_controllers_1.default.generarPdf);
         this.router.get('/enviar/:identificacion', autenticacion_middleware_1.Autenticacion.verificacionToken, demanda_controllers_1.default.enviapdf);
-        this.router.get('/descargar/:identificacion', autenticacion_middleware_1.Autenticacion.verificacionToken, demanda_controllers_1.default.descargarPdf);
+        this.router.get('/descargar/:identificacion', demanda_controllers_1.default.descargarPdf);
     }
 }
 const demandaRouter = new DemandaRouter();

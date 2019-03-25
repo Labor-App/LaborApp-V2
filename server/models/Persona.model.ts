@@ -300,7 +300,8 @@ export class Persona {
             ok: false,
             err: {
               message: 'No encontrado',
-            }
+            },
+            result: null
           }
         }
 
@@ -317,7 +318,8 @@ export class Persona {
           err: {
             message: 'Query fallido',
           },
-          error
+          error,
+          result: null
 
         };
       })

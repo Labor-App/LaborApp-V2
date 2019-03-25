@@ -130,7 +130,8 @@ class Empresa {
                         ok: false,
                         err: {
                             message: 'Query exitoso, Pero no hay coincidencias en las tablas Personas y Empresas',
-                        }
+                        },
+                        result: null
                     };
                 }
                 return {
@@ -143,6 +144,7 @@ class Empresa {
                 return {
                     ok: false,
                     message: 'Query fallido',
+                    result: null,
                     err
                 };
             });

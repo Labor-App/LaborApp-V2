@@ -256,7 +256,8 @@ class Persona {
                         ok: false,
                         err: {
                             message: 'No encontrado',
-                        }
+                        },
+                        result: null
                     };
                 }
                 return {
@@ -271,7 +272,8 @@ class Persona {
                     err: {
                         message: 'Query fallido',
                     },
-                    error
+                    error,
+                    result: null
                 };
             });
         });

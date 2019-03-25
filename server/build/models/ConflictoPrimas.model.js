@@ -13,12 +13,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../database/database"));
 class ConflictoPrimas {
-    constructor(idConflictoPrima, fechaInicioContrato, fechaFinalContrato, fechaUltimaPrimaPagada, fechaFinalNoPagoCesantias, montoDinero_Prima, idDemandaPersonaNatural, idDemandaEmpresa) {
+    constructor(idConflictoPrima, fechaInicioContrato, fechaFinalContrato, fechaUltimaPrimaPagada, fechaFinalNoPagoPrima, montoDinero_Prima, idDemandaPersonaNatural, idDemandaEmpresa) {
         this.idConflictoPrima = idConflictoPrima;
         this.fechaInicioContrato = fechaInicioContrato;
         this.fechaFinalContrato = fechaFinalContrato;
         this.fechaUltimaPrimaPagada = fechaUltimaPrimaPagada;
-        this.fechaFinalNoPagoCesantias = fechaFinalNoPagoCesantias;
+        this.fechaFinalNoPagoPrima = fechaFinalNoPagoPrima;
         this.montoDinero_Prima = montoDinero_Prima;
         this.idDemandaPersonaNatural = idDemandaPersonaNatural;
         this.idDemandaEmpresa = idDemandaEmpresa;
