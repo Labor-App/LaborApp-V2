@@ -98,7 +98,7 @@ export class CorreoPersona {
 
     let query = `SELECT * FROM correoPersonas`
     if ((id && tipo) != undefined) {
-      query = `SELECT * FROM correoPersonas WHERE numeroDocumentoPersona = ${id} AND tipoDocumentoPersona = ${tipo}`
+      query = `SELECT * FROM correoPersonas WHERE numeroDocumentoPersona = ${id} AND tipoDocumentoPersona = '${tipo}'`
     }
 
     return database.query(query)

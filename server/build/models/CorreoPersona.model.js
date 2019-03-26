@@ -87,7 +87,7 @@ class CorreoPersona {
         return __awaiter(this, void 0, void 0, function* () {
             let query = `SELECT * FROM correoPersonas`;
             if ((id && tipo) != undefined) {
-                query = `SELECT * FROM correoPersonas WHERE numeroDocumentoPersona = ${id} AND tipoDocumentoPersona = ${tipo}`;
+                query = `SELECT * FROM correoPersonas WHERE numeroDocumentoPersona = ${id} AND tipoDocumentoPersona = '${tipo}'`;
             }
             return database_1.default.query(query)
                 .then((result) => {
