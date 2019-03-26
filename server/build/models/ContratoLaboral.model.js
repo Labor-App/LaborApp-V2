@@ -97,13 +97,14 @@ class ContratoLaboral {
         return __awaiter(this, void 0, void 0, function* () {
             if (id !== undefined) {
                 return database_1.default.query(`SELECT * FROM contratoLaboral WHERE idContrato = ${id}`)
-                    .then(result => {
+                    .then((result) => {
                     if (result.length === 0) {
                         return {
                             ok: false,
                             err: {
                                 message: 'Query exitoso, Pero no hay coincidencias en las tablas Contrato Laboral'
                             },
+                            result
                         };
                     }
                     return {

@@ -54,12 +54,12 @@ export class ConflictoCesantias {
 
   }
 
-  public static obtenerConflictoCesantias(id?: number) {
+  public static obtenerConflictoCesantias(id?: number, tipo?: string) {
 
     let query = `SELECT * FROM conflictoCesantias`
 
-    if (id != undefined) {
-      query = `SELECT * FROM conflictoCesantias WHERE idConflictoCesantias = ${id}`
+    if (id != undefined && tipo != undefined) {
+      query = `SELECT * FROM conflictoCesantias WHERE ${tipo} = ${id}`
     }
 
     return database.query(query)

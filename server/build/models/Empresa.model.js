@@ -131,21 +131,13 @@ class Empresa {
                         err: {
                             message: 'Query exitoso, Pero no hay coincidencias en las tablas Personas y Empresas',
                         },
-                        result: null
+                        result
                     };
                 }
                 return {
                     ok: true,
                     message: 'Query exitoso',
                     result
-                };
-            })
-                .catch(err => {
-                return {
-                    ok: false,
-                    message: 'Query fallido',
-                    result: null,
-                    err
                 };
             });
         });

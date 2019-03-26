@@ -50,11 +50,11 @@ class ConflictoVacaciones {
             });
         });
     }
-    static obtenerConflictoVacaciones(id) {
+    static obtenerConflictoVacaciones(id, tipo) {
         return __awaiter(this, void 0, void 0, function* () {
             let query = `SELECT * FROM conflictoVacaciones`;
             if (id != undefined) {
-                query = `SELECT * FROM conflictoVacaciones WHERE idConflictoVacaciones = ${id}`;
+                query = `SELECT * FROM conflictoVacaciones WHERE ${tipo} = ${id}`;
             }
             return database_1.default.query(query)
                 .then((result) => {

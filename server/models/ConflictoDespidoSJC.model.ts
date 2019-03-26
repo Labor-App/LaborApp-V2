@@ -54,13 +54,13 @@ export class ConflictoDespidoSJC {
   }
 
 
-  public static async obtenerConflictoDespidoSJC(id?: number) {
+  public static async obtenerConflictoDespidoSJC(id?: number, tipo?: string) {
 
     let query = `SELECT * FROM conflictoDespidoSJC`
 
 
-    if (id != undefined) {
-      query = `SELECT * FROM conflictoDespidoSJC WHERE idConflictoDespidoSJC = $ {id}`
+    if (id != undefined && tipo != undefined) {
+      query = `SELECT * FROM conflictoDespidoSJC WHERE ${tipo} = ${id}`
     }
 
 

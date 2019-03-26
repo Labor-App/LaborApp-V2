@@ -69,14 +69,23 @@ export class MontosConflictos {
     static MontoCesantias (inicioNoPagoCesantias: Date, finalNoPagoCesantias: Date, salario: number) {
         let periodoNoPagoCesantias = this.diferenciaFechas(finalNoPagoCesantias,inicioNoPagoCesantias,'dias');
         let MontoCesantias = ((periodoNoPagoCesantias*salario)/360);
-        return Math.round(MontoCesantias + (MontoCesantias*0.12));
+        
+        return {
+             cesantias: MontoCesantias,  
+             interesesCesantias: (MontoCesantias*0.12),
+             dias: periodoNoPagoCesantias
+            };
     }
 
 ////******Conflicto No 5 No Pago de Vacaciones **********/////
     static MontoVacaciones (inicioNoPagoVacas: Date, finalNoPagoVacas: Date, salario: number, tipoContrato: string){
         if(tipoContrato=='ti' || tipoContrato=='tf'){
             let PeriodoNoPagoVacas = this.diferenciaFechas(finalNoPagoVacas,inicioNoPagoVacas,'dias');
-            return Math.round((salario*PeriodoNoPagoVacas)/720);
+            return {
+                dias: PeriodoNoPagoVacas,
+                monto: Math.round((salario*PeriodoNoPagoVacas)/720)
+            }
+            
         } else {
             return 0
         }
@@ -111,10 +120,6 @@ static calculaMinimaCuantia(montoDSJC: number,
     
 
     }
-
-
-
-
 
     //////////////////*****métodos de ayuda****//////////////
 
@@ -163,15 +168,18 @@ static calculaMinimaCuantia(montoDSJC: number,
             
         }
 
-  
+}
 
-
-
-};
 
 
 
 export default MontosConflictos;
+
+
+
+
+
+
 
 
 

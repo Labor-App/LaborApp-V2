@@ -51,12 +51,12 @@ export class ConflictoVacaciones {
   }
 
 
-  public static async obtenerConflictoVacaciones(id?: number) {
+  public static async obtenerConflictoVacaciones(id?: number, tipo?: string) {
 
     let query = `SELECT * FROM conflictoVacaciones`
 
     if (id != undefined) {
-      query = `SELECT * FROM conflictoVacaciones WHERE idConflictoVacaciones = ${id}`
+      query = `SELECT * FROM conflictoVacaciones WHERE ${tipo} = ${id}`
     }
 
     return database.query(query)

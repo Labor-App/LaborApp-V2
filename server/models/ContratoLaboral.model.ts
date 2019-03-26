@@ -105,7 +105,7 @@ export class ContratoLaboral {
 
     if(id !==  undefined){
       return database.query(`SELECT * FROM contratoLaboral WHERE idContrato = ${ id }`)
-      .then( result => {
+      .then( (result: ContratoLaboral[]) => {
         
         if ( result.length === 0){
           return {
@@ -113,6 +113,7 @@ export class ContratoLaboral {
             err: {
               message: 'Query exitoso, Pero no hay coincidencias en las tablas Contrato Laboral'
             },
+            result
           }
         }
 

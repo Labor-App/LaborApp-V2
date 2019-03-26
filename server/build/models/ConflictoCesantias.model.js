@@ -55,10 +55,10 @@ class ConflictoCesantias {
             });
         });
     }
-    static obtenerConflictoCesantias(id) {
+    static obtenerConflictoCesantias(id, tipo) {
         let query = `SELECT * FROM conflictoCesantias`;
-        if (id != undefined) {
-            query = `SELECT * FROM conflictoCesantias WHERE idConflictoCesantias = ${id}`;
+        if (id != undefined && tipo != undefined) {
+            query = `SELECT * FROM conflictoCesantias WHERE ${tipo} = ${id}`;
         }
         return database_1.default.query(query)
             .then((result) => {

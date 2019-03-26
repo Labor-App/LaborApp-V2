@@ -6,62 +6,62 @@ export class CorreoPersona {
 
   constructor(
 
-    public correoPersona: string ,
-    public tipoDocumentoPersona: Persona['tipoDocumentoPersona'] ,
+    public correoPersona: string,
+    public tipoDocumentoPersona: Persona['tipoDocumentoPersona'],
     public numeroDocumentoPersona: Persona['numeroDocumentoPersona']
 
-  ){ }
+  ) { }
 
 
-  public static async correoPersonaExiste(email: string){
+  public static async correoPersonaExiste(email: string) {
 
     let query = `SELECT *
                 FROM correoPersonas
-                WHERE correoPersona = '${ email }'`
+                WHERE correoPersona = '${ email}'`
 
 
     return database.query(query)
-      .then( (result: CorreoPersona[]) => {
-        if(result.length === 0 ) return false;
+      .then((result: CorreoPersona[]) => {
+        if (result.length === 0) return false;
         return result[0];
       })
 
   }
 
 
-  public static async guardarCorreoPersona(correoPersona: CorreoPersona){
+  public static async guardarCorreoPersona(correoPersona: CorreoPersona) {
 
     correoPersona.correoPersona = correoPersona.correoPersona.toLowerCase();
     correoPersona.tipoDocumentoPersona = correoPersona.tipoDocumentoPersona.toLowerCase();
 
     return await database.query(`INSERT INTO correoPersonas set ?`, [correoPersona])
-    .then(result => {
+      .then(result => {
 
-      return {
-        ok: true,
-        message: 'CorreoPersona guardado exitosamente'
-      }
+        return {
+          ok: true,
+          message: 'CorreoPersona guardado exitosamente'
+        }
 
-    })
-    .catch((err: MysqlError) => {
+      })
+      .catch((err: MysqlError) => {
 
-      if (err.code === 'ER_DUP_ENTRY') {
+        if (err.code === 'ER_DUP_ENTRY') {
+          return {
+            ok: false,
+            err: {
+              message: 'CorreoPersona ya existente'
+            }
+          }
+        }
         return {
           ok: false,
           err: {
-            message: 'CorreoPersona ya existente'
+            message: 'Ocurrio un error al guardar el CorreoPersona'
           }
-        }
-      }
-      return {
-        ok: false,
-        err: {
-          message: 'Ocurrio un error al guardar el CorreoPersona'
+
         }
 
-      }
-
-    })
+      })
 
   }
 
@@ -70,34 +70,51 @@ export class CorreoPersona {
 
     return database.query(`
       UPDATE correoPersonas set ?
-      WHERE numeroDocumentoPersona = ${ correoPersona.numeroDocumentoPersona }
-      AND tipoDocumentoPersona = '${ correoPersona.tipoDocumentoPersona }'`, [correoPersona])
-    .then( result => {
+      WHERE numeroDocumentoPersona = ${ correoPersona.numeroDocumentoPersona}
+      AND tipoDocumentoPersona = '${ correoPersona.tipoDocumentoPersona}'`, [correoPersona])
+      .then(result => {
 
-      return {
-        ok: true,
-        message: 'Correo Modificado exitosamente'
-      }
-
-    })
-    .catch( (err: MysqlError) => {
-
-      console.log(err)
-      return {
-        ok: false,
-        err: {
-          message: 'Ocurrio un error al modificar el Correo'
+        return {
+          ok: true,
+          message: 'Correo Modificado exitosamente'
         }
 
-      }
+      })
+      .catch((err: MysqlError) => {
 
-    })
+        console.log(err)
+        return {
+          ok: false,
+          err: {
+            message: 'Ocurrio un error al modificar el Correo'
+          }
+
+        }
+
+      })
   }
 
-  public static async obtenerCorreoPersona(){
+  public static async obtenerCorreoPersona(id?: number, tipo?: string) {
 
-    return database.query('SELECT * FROM correoPersonas')
-      .then( result => {
+    let query = `SELECT * FROM correoPersonas`
+    if ((id && tipo) != undefined) {
+      query = `SELECT * FROM correoPersonas WHERE numeroDocumentoPersona = ${id} AND tipoDocumentoPersona = ${tipo}`
+    }
+
+    return database.query(query)
+      .then((result: CorreoPersona[]) => {
+
+        if (result.length === 0) {
+          return {
+            ok: false,
+            err: {
+              message: `no hay registros con esos datos`
+            },
+            result
+
+          };
+        }
+
         return {
           ok: true,
           message: 'Query exitoso',
@@ -105,30 +122,21 @@ export class CorreoPersona {
 
         };
       })
-      .catch( (error: MysqlError)=> {
-        return {
-          ok: false,
-          err:{
-            message: 'Query fallido',
-          },
-          error
 
-        };
-      })
   }
 
 
 
-  public static async borrarCorreoPersona(tipoDocumentoPersona: Persona['tipoDocumentoPersona'], numeroDocumentoPersona: Persona['numeroDocumentoPersona']){
+  public static async borrarCorreoPersona(tipoDocumentoPersona: Persona['tipoDocumentoPersona'], numeroDocumentoPersona: Persona['numeroDocumentoPersona']) {
 
     return database.query(`
       DELETE
       FROM correoPersonas
-      WHERE correoPersonas.numeroDocumentoPersona = ${ numeroDocumentoPersona }
-      AND correoPersonas.tipoDocumentoPersona = '${ tipoDocumentoPersona }'`)
-      .then( result => {
+      WHERE correoPersonas.numeroDocumentoPersona = ${ numeroDocumentoPersona}
+      AND correoPersonas.tipoDocumentoPersona = '${ tipoDocumentoPersona}'`)
+      .then(result => {
 
-        if(result['affectedRows'] === 0){
+        if (result['affectedRows'] === 0) {
           return {
             ok: false,
             message: 'Correo Persona No Fue eliminado',
@@ -139,13 +147,13 @@ export class CorreoPersona {
         return {
           ok: true,
           message: 'Correo Persona Eliminado exitosamente',
-          
+
         };
       })
-      .catch( (error: MysqlError)=> {
+      .catch((error: MysqlError) => {
         return {
           ok: false,
-          err:{
+          err: {
             message: 'Query fallido',
           },
           error

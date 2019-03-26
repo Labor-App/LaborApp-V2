@@ -16,7 +16,10 @@ import GenerarPdf from '../funcionalidades/funcionalidad-pdf/generatePdf';
 
 //Definicion del Documento PDF
 import DocDefinition from '../funcionalidades/funcionalidad-pdf/docDefinition';
-import { Empresa, Persona, DemandaEmpresa, DemandaPersonaNatural } from '../models/index.models';
+import { Empresa, Persona, DemandaEmpresa, DemandaPersonaNatural, ConflictoCesantias, ConflictoPagoSalario, ConflictoPrimas, ConflictoVacaciones, ContratoLaboral } from '../models/index.models';
+import { ConflictoDespidoSJC } from '../models/conflictoDespidoSJC.model';
+import { CorreoPersona } from '../models/CorreoPersona.model';
+import MontosConflictos from '../funcionalidades/montosConflictos/montosConflictos';
 
 
 
@@ -31,43 +34,56 @@ class DemandaControllers {
     let tipo: string = req.params.tipo;
     let databaseResDemanda: any;
 
-    let query = (tipo: string, id: number, tabla: string) => {
-      let tipoPersona = 'PersonaNatural';
-      let identificacionTipoPersona = 'IdPersonaNatural'
+    let query = async (demanda: any) => {
 
-      if (tabla === 'demandaEmpresa') {
-        tipoPersona = 'Empresa'
-        identificacionTipoPersona = 'NItEmpresa'
+      let idDemanda;
+      let tipo;
+
+
+      let empresa;
+      let representante;
+
+
+      if (demanda.idDemandaEmpresa !== undefined) {
+        tipo = 'idDemandaEmpresa'
+        idDemanda = demanda.idDemandaEmpresa;
+        empresa = await Empresa.obtenerUnaEmpresa(demanda.NItEmpresa);
+        if (empresa.result[0].tipoDocumentoPersona != undefined) {
+          representante = await Persona.obtenerUnaPersona(empresa.result[0].numeroDocumentoPersona, empresa.result[0].tipoDocumentoPersona)
+        }
+
       }
 
-      return `SELECT * 
-      FROM conflictoDespidoSJC,
-        conflictoPagoSalario,
-        conflictoVacaciones,
-        conflictoCesantias,
-        conflictoPrimas,
-        ${tabla}
-      WHERE conflictoDespidoSJC.${ tipo} = ${id}
-      AND conflictoPagoSalario.${ tipo} = ${id}
-      AND conflictoVacaciones.${ tipo} = ${id}
-      AND conflictoCesantias.${ tipo} = ${id}
-      AND conflictoPrimas.${ tipo} = ${id}
+      if (demanda.idDemandaPersonaNatural !== undefined) {
+        tipo = 'idDemandaPersonaNatural'
+        idDemanda = demanda.idDemandaPersonaNatural;
+      }
 
-      AND conflictoDespidoSJC.${ tipo} = conflictoPagoSalario.${tipo}
-      AND conflictoDespidoSJC.${ tipo} = conflictoVacaciones.${tipo}
-      AND conflictoDespidoSJC.${ tipo} = conflictoCesantias.${tipo}
-      AND conflictoDespidoSJC.${ tipo} = conflictoPrimas.${tipo}
-      AND conflictoPagoSalario.${ tipo} = conflictoVacaciones.${tipo}
-      AND conflictoPagoSalario.${ tipo} = conflictoCesantias.${tipo}
-      AND conflictoPagoSalario.${ tipo} = conflictoPrimas.${tipo}
-      AND conflictoVacaciones.${ tipo} = conflictoCesantias.${tipo}
-      AND conflictoVacaciones.${ tipo} = conflictoPrimas.${tipo}
-      AND conflictoCesantias.${ tipo} = conflictoPrimas.${tipo}
-      AND ${tabla}.${tipo} = conflictoPrimas.${tipo}
-      AND ${tabla}.${tipo} = conflictoCesantias.${tipo}
-      AND ${tabla}.${tipo} = conflictoVacaciones.${tipo}
-      AND ${tabla}.${tipo} = conflictoPagoSalario.${tipo}
-      AND ${tabla}.${tipo} = conflictoDespidoSJC.${tipo}`
+      let persona = await Persona.obtenerUnaPersona(demanda.numeroDocumentoPersona, demanda.tipoDocumentoPersona)
+      let correo = await CorreoPersona.obtenerCorreoPersona(persona.result[0].numeroDocumentoPersona, persona.result[0].tipoDocumentoPersona)
+      let contrato = await ContratoLaboral.obtenerContratoLaboral(demanda.idContrato)
+      let conflicto1 = await ConflictoDespidoSJC.obtenerConflictoDespidoSJC(idDemanda, tipo)
+      let conflicto2 = await ConflictoCesantias.obtenerConflictoCesantias(idDemanda, tipo)
+      let conflicto3 = await ConflictoPagoSalario.obtenerConflictoPagoSalario(idDemanda, tipo)
+      let conflicto4 = await ConflictoPrimas.obtenerConflictoPrimas(idDemanda, tipo)
+      let conflicto5 = await ConflictoVacaciones.obtenerConflictoVacaciones(idDemanda, tipo)
+
+
+      return {
+        persona: persona.result[0],
+        correo: correo.result[0],
+        empresa: (empresa != undefined) ? empresa.result[0] : undefined,
+        representante: (representante != undefined) ? representante.result[0] : undefined,
+        contrato: contrato.result[0],
+        conflictoDespidoSJC: conflicto1.result[0],
+        conflictoCesantias: conflicto2.result[0],
+        conflictoPagoSalario: conflicto3.result[0],
+        conflictoPrimas: conflicto4.result[0],
+        conflictoVacaciones: conflicto5.result[0]
+
+
+      }
+
     }
 
     let pdf = async (datosDemanda: any) => {
@@ -89,106 +105,85 @@ class DemandaControllers {
 
           databaseResDemanda = databaseResDemanda.result[0];
 
-          let databaseResConflictos: any = await database.query(query('idDemandaEmpresa', idDemanda, 'demandaEmpresa'))
-          let databaseResEmpresa: any = await Empresa.obtenerUnaEmpresa(databaseResDemanda.NItEmpresa)
-          let databaseResPersona: any = await Persona.obtenerUnaPersona(databaseResDemanda.numeroDocumentoPersona, databaseResDemanda.tipoDocumentoPersona)
-          let databaseResRepresentanteLegal: any;
+          let respuesta = await query(databaseResDemanda)
 
-          if (databaseResEmpresa.result !== null) {
-            console.log(databaseResEmpresa.result[0].numeroDocumentoPersona, 'representante legal')
-            if (databaseResEmpresa.result[0].numeroDocumentoPersona !== null) {
-              databaseResRepresentanteLegal = await Persona.obtenerUnaPersona(databaseResEmpresa.result[0].numeroDocumentoPersona, databaseResEmpresa.result[0].tipoDocumentoPersona)
-            }
-          }
+          await pdf({
+            accionante: respuesta.persona.nombresPersona,
+            accionado: (respuesta.empresa != undefined) ? respuesta.empresa.nombreEmpresaRS : undefined,
 
+            cedulaAccionante: respuesta.persona.numeroDocumentoPersona,
+            cedulaAccionado: (respuesta.representante != undefined) ? respuesta.representante.numeroDocumentoPersona : 'No Aplica',
 
-          if ((databaseResEmpresa.result || databaseResPersona.result) != null) {
-
-            if(databaseResRepresentanteLegal === undefined){
-              databaseResRepresentanteLegal = 'no aplica'
-            }
-
-            await pdf({
-              accionante: databaseResPersona.result[0].nombresPersona,
-              accionado: databaseResEmpresa.result[0].nombreEmpresaRS,
-
-              cedulaAccionado: databaseResRepresentanteLegal,
-
-              
-              ciudadAccionante: databaseResPersona.result[0].codigoCiudad,
-              ciudadAccionado: databaseResEmpresa.result[0].codigoCiudad,
-              
-              
-              correoAccionante: '',
-              correoAccionado: databaseResEmpresa.result[0].emailEmpresa,
-
-              direccionDeNotificacionAccionante: databaseResPersona.result[0].direccionPersona,
-              direccionDeNotificacionAccionado: databaseResEmpresa.result[0].direccionEmpresa,
-              
-
-              lugarDeExpedicionAccionante: databaseResPersona.result[0].lugarExpedicionCedulaPersona,
-              lugarDeExpedicionAccionado: databaseResRepresentanteLegal,
-              
-              nit: databaseResEmpresa.result[0].NItEmpresa,
-              represetanteLegal: databaseResRepresentanteLegal,
-              
-              fechaDeIngresoALaEmpresa: undefined,
-              primaDeServicios: undefined,
-              indemnizacionPorNoPago: undefined,
-              valorDeLasPretenciones: undefined,
-
-              salarioPactado: undefined,
-              funcionesQueRealizaba: undefined,
-              conflictos: undefined,
-              incumplimientoDelEmpleador: undefined,
-              fechaDeLaPrimeraSolicitudAlEmpleador: undefined,
-              situacionActualFrenteALaRenunciaDelEmpleador: undefined,
-              causa: undefined,
-              salariosVencidos: undefined,
-              cesantias: undefined,
-              diasDeTrabajo: undefined,
-              interesesDeCesantias: undefined,
-
-            })
-
-          }
+            ciudadAccionante: respuesta.persona.codigoCiudad,
+            ciudadAccionado: (respuesta.empresa != undefined) ? respuesta.empresa.codigoCiudad : undefined,
 
 
+            correoAccionante: respuesta.correo.correoPersona,
+            correoAccionado: (respuesta.empresa != undefined) ? respuesta.empresa.emailEmpresa : undefined,
 
+            direccionDeNotificacionAccionante: respuesta.persona.direccionPersona,
+            direccionDeNotificacionAccionado: (respuesta.empresa != undefined) ? respuesta.empresa.direccionEmpresa : undefined,
+
+
+            lugarDeExpedicionAccionante: respuesta.persona.lugarExpedicionCedulaPersona,
+            lugarDeExpedicionAccionado: (respuesta.representante != undefined) ? respuesta.representante.lugarExpedicionCedulaPersona : undefined,
+
+            nit: (respuesta.empresa != undefined) ? respuesta.empresa.NItEmpresa : undefined,
+            represetanteLegal: (respuesta.representante != undefined) ? respuesta.representante.nombresPersona : 'No Aplica',
+
+            fechaDeIngresoALaEmpresa: respuesta.contrato.fechaInicioContrato,
+            primaDeServicios: undefined,
+            indemnizacionPorNoPago: undefined,
+            valorDeLasPretenciones: undefined,
+
+            salarioPactado: respuesta.contrato.ultimoSalario,
+            funcionesQueRealizaba: respuesta.contrato.descripcionFunciones,
+            conflictos: undefined,
+            incumplimientoDelEmpleador: undefined,
+            fechaDeLaPrimeraSolicitudAlEmpleador: undefined,
+            situacionActualFrenteALaRenunciaDelEmpleador: undefined,
+            causa: undefined,
+            salariosVencidos: MontosConflictos.MontoNoPagoSalario(respuesta.conflictoPagoSalario.fechaInicioNoPago, respuesta.conflictoPagoSalario.fechaFinalNoPagoSalario, respuesta.contrato.ultimoSalario),
+            cesantias: MontosConflictos.MontoCesantias((respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas !== null) ? respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas : new Date(), (respuesta.conflictoCesantias.fechaFinalNoPagoCesantias != null) ? respuesta.conflictoCesantias.fechaFinalNoPagoCesantias : new Date(), respuesta.contrato.ultimoSalario).cesantias,
+            diasDeTrabajo: MontosConflictos.MontoCesantias((respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas !== null) ? respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas : new Date(), (respuesta.conflictoCesantias.fechaFinalNoPagoCesantias != null) ? respuesta.conflictoCesantias.fechaFinalNoPagoCesantias : new Date(), respuesta.contrato.ultimoSalario).dias,
+            interesesDeCesantias: MontosConflictos.MontoCesantias((respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas !== null) ? respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas : new Date(), (respuesta.conflictoCesantias.fechaFinalNoPagoCesantias != null) ? respuesta.conflictoCesantias.fechaFinalNoPagoCesantias : new Date(), respuesta.contrato.ultimoSalario).interesesCesantias,
+
+          })
 
           return res.json({
-            databaseResConflictos
-
+            ok: true,
+            message: `creado`
           });
-
-        } else {
-          throw ('DemandaEmpresa no existe')
-        }
-
-      }
-      if (tipo === 'natural') {
-        databaseResDemanda = await DemandaPersonaNatural.obtenerDemandaPersonaNatural(idDemanda)
-        database.query(query + `idDemandaEmpresa = ${idDemanda}`)
-        if (databaseResDemanda.result.length !== 0) {
-          let databaseResPdf = await database.query(query('idDemandaPersonaNatural', idDemanda, 'demandaPersonaNatural'))
-
-          // pdf({
-          //   accionante: databaseResPdf.nombresPersona,
-          //   accionado: databaseResPdf.nombreEmpresaRS,
-          //   cedulaAccionante: databaseResPdf.numeroDocumentoPersona,
-          //   ce
-          // })
-
-          return res.json({ databaseResPdf });
-        } else {
-
-          throw ('DemandaPersonaNatural no existe')
         }
 
 
+
+
+      } else {
+
+        throw ('DemandaEmpresa no existe')
       }
+
+
+
+
+      // if (tipo === 'natural') {
+
+
+      //   return res.json({
+      //     ok: true,
+      //     message: `creado`
+      //   });
+      // } else {
+
+      //   throw ('DemandaPersonaNatural no existe')
+      // }
+
+
+
+
     } catch (e) {
-      console.log(e,'errooro')
+      console.log(e, 'errooro')
       return res.status(400).json({
         ok: false,
         err: {
@@ -198,22 +193,10 @@ class DemandaControllers {
     }
 
 
-    if (databaseResDemanda === undefined) {
-      return res.status(400).json({
-        ok: false,
-        err: {
-          message: `ocurrio un error al asignar la respuesta de la db o esta no esta viene undefined`
-        }
-      })
-    }
 
 
 
-    
-
-
-
-    return res.json({ databaseResDemanda });
+    return res.json({ ok: true });
     // try{
     //   //Optenemos los patametros para la condulta
 

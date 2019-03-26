@@ -54,13 +54,13 @@ MediaStreamError
   }
 
 
-  public static async obtenerConflictosContactaAbogado(id?: number) {
+  public static async obtenerConflictosContactaAbogado(id?: number, tipo?: string) {
 
     let query = `SELECT * FROM conflictosContactaAbogado`
 
 
     if (id != undefined) {
-      query = `SELECT * FROM conflictosContactaAbogado WHERE idConflictoContactaAbogado = $ {id}`
+      query = `SELECT * FROM conflictosContactaAbogado WHERE ${tipo} = ${id}`
     }
 
 

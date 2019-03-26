@@ -53,11 +53,11 @@ class ConflictoDespidoSJC {
             });
         });
     }
-    static obtenerConflictoDespidoSJC(id) {
+    static obtenerConflictoDespidoSJC(id, tipo) {
         return __awaiter(this, void 0, void 0, function* () {
             let query = `SELECT * FROM conflictoDespidoSJC`;
-            if (id != undefined) {
-                query = `SELECT * FROM conflictoDespidoSJC WHERE idConflictoDespidoSJC = $ {id}`;
+            if (id != undefined && tipo != undefined) {
+                query = `SELECT * FROM conflictoDespidoSJC WHERE ${tipo} = ${id}`;
             }
             return database_1.default.query(query)
                 .then((result) => {

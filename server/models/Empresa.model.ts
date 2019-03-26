@@ -133,7 +133,7 @@ console.log(persona)
       SELECT *
       FROM Empresa
       WHERE Empresa.NItEmpresa = ${ nit }`)
-      .then( (result: any[]) => {
+      .then( (result: Empresa[]) => {
 
         if(result.length === 0){
           return {
@@ -141,7 +141,7 @@ console.log(persona)
             err: {
               message: 'Query exitoso, Pero no hay coincidencias en las tablas Personas y Empresas',
             },
-            result: null
+            result
           };
         }
 
@@ -152,16 +152,7 @@ console.log(persona)
 
         };
       })
-      .catch( err => {
-        return {
-          ok: false,
-          message: 'Query fallido',
-          result: null,
-          err
-
-        };
-      })
-
+      
   }
 
 

@@ -257,23 +257,13 @@ class Persona {
                         err: {
                             message: 'No encontrado',
                         },
-                        result: null
+                        result
                     };
                 }
                 return {
                     ok: true,
                     message: 'Query exitoso',
                     result
-                };
-            })
-                .catch((error) => {
-                return {
-                    ok: false,
-                    err: {
-                        message: 'Query fallido',
-                    },
-                    error,
-                    result: null
                 };
             });
         });

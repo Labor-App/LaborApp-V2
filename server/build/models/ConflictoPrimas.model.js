@@ -54,11 +54,11 @@ class ConflictoPrimas {
             });
         });
     }
-    static obtenerConflictoPrimas(id) {
+    static obtenerConflictoPrimas(id, tipo) {
         return __awaiter(this, void 0, void 0, function* () {
             let query = `SELECT * From conflictoPrimas`;
-            if (id != undefined) {
-                query = `SELECT * From conflictoPrimas WHERE idConflictoPrima = ${id}`;
+            if (id != undefined && tipo != undefined) {
+                query = `SELECT * From conflictoPrimas WHERE ${tipo} = ${id}`;
             }
             return database_1.default.query(query)
                 .then((result) => {
@@ -75,15 +75,6 @@ class ConflictoPrimas {
                     ok: true,
                     message: 'Query exitoso',
                     result
-                };
-            })
-                .catch((error) => {
-                return {
-                    ok: false,
-                    err: {
-                        message: 'Ocurrio un error al guardar la conflictoPrimas'
-                    },
-                    error
                 };
             });
         });

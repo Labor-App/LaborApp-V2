@@ -54,11 +54,11 @@ class ConflictosContactaAbogado {
             });
         });
     }
-    static obtenerConflictosContactaAbogado(id) {
+    static obtenerConflictosContactaAbogado(id, tipo) {
         return __awaiter(this, void 0, void 0, function* () {
             let query = `SELECT * FROM conflictosContactaAbogado`;
             if (id != undefined) {
-                query = `SELECT * FROM conflictosContactaAbogado WHERE idConflictoContactaAbogado = $ {id}`;
+                query = `SELECT * FROM conflictosContactaAbogado WHERE ${tipo} = ${id}`;
             }
             return database_1.default.query(query)
                 .then((result) => {

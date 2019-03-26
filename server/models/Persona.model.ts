@@ -292,7 +292,7 @@ export class Persona {
       FROM Personas
       WHERE Personas.numeroDocumentoPersona = ${ identificacion}
       AND Personas.tipoDocumentoPersona = '${ tipoDocumentoPersona}'`)
-      .then((result: object[]) => {
+      .then((result: Persona[]) => {
 
 
         if (result.length === 0) {
@@ -301,7 +301,7 @@ export class Persona {
             err: {
               message: 'No encontrado',
             },
-            result: null
+            result
           }
         }
 
@@ -312,17 +312,7 @@ export class Persona {
 
         };
       })
-      .catch((error: MysqlError) => {
-        return {
-          ok: false,
-          err: {
-            message: 'Query fallido',
-          },
-          error,
-          result: null
-
-        };
-      })
+      
 
   }
 

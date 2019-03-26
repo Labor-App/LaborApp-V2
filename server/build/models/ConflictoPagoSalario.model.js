@@ -50,11 +50,11 @@ class ConflictoPagoSalario {
             });
         });
     }
-    static obtenerConflictoPagoSalario(id) {
+    static obtenerConflictoPagoSalario(id, tipo) {
         return __awaiter(this, void 0, void 0, function* () {
             let query = `SELECT * FROM conflictoPagoSalario`;
-            if (id != undefined) {
-                query = `SELECT * FROM conflictoPagoSalario WHERE idConflictoPagoSalario = ${id}`;
+            if (id != undefined && tipo != undefined) {
+                query = `SELECT * FROM conflictoPagoSalario WHERE ${tipo} = ${id}`;
             }
             return database_1.default.query(query)
                 .then((result) => {

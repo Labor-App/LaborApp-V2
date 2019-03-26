@@ -57,12 +57,12 @@ export class ConflictoPrimas {
       })
   }
 
-  public static async obtenerConflictoPrimas(id?: number) {
+  public static async obtenerConflictoPrimas(id?: number, tipo?: string) {
 
     let query = `SELECT * From conflictoPrimas`
 
-    if (id != undefined) {
-      query = `SELECT * From conflictoPrimas WHERE idConflictoPrima = ${id}`
+    if (id != undefined && tipo != undefined) {
+      query = `SELECT * From conflictoPrimas WHERE ${tipo} = ${id}`
     }
 
     return database.query(query)
@@ -88,17 +88,7 @@ export class ConflictoPrimas {
 
       })
 
-      .catch((error: MysqlError) => {
-
-        return {
-          ok: false,
-          err: {
-            message: 'Ocurrio un error al guardar la conflictoPrimas'
-          },
-          error
-        }
-
-      })
+  
 
   }
 

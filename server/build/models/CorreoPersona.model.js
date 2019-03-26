@@ -83,23 +83,27 @@ class CorreoPersona {
             });
         });
     }
-    static obtenerCorreoPersona() {
+    static obtenerCorreoPersona(id, tipo) {
         return __awaiter(this, void 0, void 0, function* () {
-            return database_1.default.query('SELECT * FROM correoPersonas')
-                .then(result => {
+            let query = `SELECT * FROM correoPersonas`;
+            if ((id && tipo) != undefined) {
+                query = `SELECT * FROM correoPersonas WHERE numeroDocumentoPersona = ${id} AND tipoDocumentoPersona = ${tipo}`;
+            }
+            return database_1.default.query(query)
+                .then((result) => {
+                if (result.length === 0) {
+                    return {
+                        ok: false,
+                        err: {
+                            message: `no hay registros con esos datos`
+                        },
+                        result
+                    };
+                }
                 return {
                     ok: true,
                     message: 'Query exitoso',
                     result
-                };
-            })
-                .catch((error) => {
-                return {
-                    ok: false,
-                    err: {
-                        message: 'Query fallido',
-                    },
-                    error
                 };
             });
         });
