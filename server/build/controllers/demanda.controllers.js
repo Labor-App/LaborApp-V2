@@ -95,9 +95,14 @@ class DemandaControllers {
                         if (respuesta.conflictoCesantias != undefined) {
                             conflictoCesantias = montosConflictos_1.default.MontoCesantias((respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas !== null) ? respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas : new Date(), (respuesta.conflictoCesantias.fechaFinalNoPagoCesantias != null) ? respuesta.conflictoCesantias.fechaFinalNoPagoCesantias : new Date(), respuesta.contrato.ultimoSalario);
                         }
+                        function toTitleCase(str) {
+                            return str.replace(/\w\S*/g, function (txt) {
+                                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                            });
+                        }
                         yield pdf({
-                            accionante: respuesta.persona.nombresPersona,
-                            accionado: (respuesta.empresa != undefined) ? respuesta.empresa.nombreEmpresaRS : undefined,
+                            accionante: toTitleCase(respuesta.persona.nombresPersona),
+                            accionado: (respuesta.empresa != undefined) ? toTitleCase(respuesta.empresa.nombreEmpresaRS) : undefined,
                             cedulaAccionante: respuesta.persona.numeroDocumentoPersona,
                             cedulaAccionado: (respuesta.representante != undefined) ? respuesta.representante.numeroDocumentoPersona : 'No Aplica',
                             ciudadAccionante: respuesta.persona.codigoCiudad,

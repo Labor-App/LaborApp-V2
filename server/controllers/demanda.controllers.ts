@@ -109,28 +109,37 @@ class DemandaControllers {
 
           let conflictoPagoSalario;
 
-          if((respuesta.conflictoPagoSalario !== undefined){
+          if ((respuesta.conflictoPagoSalario !== undefined){
 
             conflictoPagoSalario = MontosConflictos.MontoNoPagoSalario(
-              respuesta.conflictoPagoSalario.fechaInicioNoPago, 
-              respuesta.conflictoPagoSalario.fechaFinalNoPagoSalario, 
+              respuesta.conflictoPagoSalario.fechaInicioNoPago,
+              respuesta.conflictoPagoSalario.fechaFinalNoPagoSalario,
               respuesta.contrato.ultimoSalario
             )
           }
 
           let conflictoCesantias;
 
-          if(respuesta.conflictoCesantias != undefined){
+          if (respuesta.conflictoCesantias != undefined) {
             conflictoCesantias = MontosConflictos.MontoCesantias(
-              (respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas !== null) ? respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas : new Date(), 
-              (respuesta.conflictoCesantias.fechaFinalNoPagoCesantias != null) ? respuesta.conflictoCesantias.fechaFinalNoPagoCesantias : new Date(), 
+              (respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas !== null) ? respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas : new Date(),
+              (respuesta.conflictoCesantias.fechaFinalNoPagoCesantias != null) ? respuesta.conflictoCesantias.fechaFinalNoPagoCesantias : new Date(),
               respuesta.contrato.ultimoSalario
             )
           }
 
+          function toTitleCase(str: any) {
+            return str.replace(
+              /\w\S*/g,
+              function (txt: any) {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+              }
+            );
+          }
+
           await pdf({
-            accionante: respuesta.persona.nombresPersona,
-            accionado: (respuesta.empresa != undefined) ? respuesta.empresa.nombreEmpresaRS : undefined,
+            accionante: toTitleCase(respuesta.persona.nombresPersona),
+            accionado: (respuesta.empresa != undefined) ? toTitleCase(respuesta.empresa.nombreEmpresaRS) : undefined,
 
             cedulaAccionante: respuesta.persona.numeroDocumentoPersona,
             cedulaAccionado: (respuesta.representante != undefined) ? respuesta.representante.numeroDocumentoPersona : 'No Aplica',
@@ -165,7 +174,7 @@ class DemandaControllers {
             situacionActualFrenteALaRenunciaDelEmpleador: undefined,
             causa: undefined,
             salariosVencidos: conflictoPagoSalario,
-            cesantias: (conflictoCesantias != undefined) ? conflictoCesantias.cesantias : 'no Aplica' ,
+            cesantias: (conflictoCesantias != undefined) ? conflictoCesantias.cesantias : 'no Aplica',
             diasDeTrabajo: (conflictoCesantias != undefined) ? conflictoCesantias.dias : 'no Aplica',
             interesesDeCesantias: (conflictoCesantias != undefined) ? conflictoCesantias.interesesCesantias : 'no Aplica',
 
