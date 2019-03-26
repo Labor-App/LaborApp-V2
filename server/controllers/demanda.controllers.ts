@@ -107,7 +107,7 @@ class DemandaControllers {
 
           let respuesta = await query(databaseResDemanda)
 
-          if((respuesta.conflictoPagoSalario.fechaInicioNoPago && respuesta.conflictoPagoSalario.fechaInicioNoPago) != undefined){
+          if(respuesta.conflictoPagoSalario.fechaInicioNoPago != undefined){
 
             console.log('si')
 
