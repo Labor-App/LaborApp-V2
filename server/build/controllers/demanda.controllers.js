@@ -95,6 +95,10 @@ class DemandaControllers {
                         if (respuesta.conflictoCesantias != undefined) {
                             conflictoCesantias = montosConflictos_1.default.MontoCesantias((respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas !== null) ? respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas : new Date(), (respuesta.conflictoCesantias.fechaFinalNoPagoCesantias != null) ? respuesta.conflictoCesantias.fechaFinalNoPagoCesantias : new Date(), respuesta.contrato.ultimoSalario);
                         }
+                        let minimaCuantia;
+                        if (respuesta.conflictoDespidoSJC != undefined) {
+                            minimaCuantia = montosConflictos_1.default.calculaMinimaCuantia(respuesta.conflictoDespidoSJC.montoDinero_DSJC, 20).totalMontos;
+                        }
                         function toTitleCase(str) {
                             return str.replace(/\w\S*/g, function (txt) {
                                 return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -127,9 +131,9 @@ class DemandaControllers {
                             situacionActualFrenteALaRenunciaDelEmpleador: undefined,
                             causa: undefined,
                             salariosVencidos: conflictoPagoSalario,
-                            cesantias: (conflictoCesantias != undefined) ? conflictoCesantias.cesantias : 'no Aplica',
-                            diasDeTrabajo: (conflictoCesantias != undefined) ? conflictoCesantias.dias : 'no Aplica',
-                            interesesDeCesantias: (conflictoCesantias != undefined) ? conflictoCesantias.interesesCesantias : 'no Aplica',
+                            cesantias: (conflictoCesantias != undefined) ? conflictoCesantias.cesantias : 'No Aplica',
+                            diasDeTrabajo: (conflictoCesantias != undefined) ? conflictoCesantias.dias : 'No Aplica',
+                            interesesDeCesantias: (conflictoCesantias != undefined) ? conflictoCesantias.interesesCesantias : 'No Aplica',
                         });
                         return res.json({
                             ok: true,

@@ -276,7 +276,7 @@ class DocDefinition {
                             text: `\nLa estimo en cantidad a la fecha correspondiente a`
                         },
                         {
-                            text: ` ${variablesPdf.valorDeLasPretenciones}`, bold: true
+                            text: ` ${variablesPdf.cuantia}`, bold: true
                         },
                         {
                             text: `, la cual corresponde a una mínima cuantía, siendo este valor inferior a 20 salarios mínimos legales mensuales vigentes.`

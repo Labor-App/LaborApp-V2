@@ -109,7 +109,7 @@ class DemandaControllers {
 
           let conflictoPagoSalario;
 
-          if ((respuesta.conflictoPagoSalario !== undefined){
+          if ((respuesta.conflictoPagoSalario) !== undefined){
 
             conflictoPagoSalario = MontosConflictos.MontoNoPagoSalario(
               respuesta.conflictoPagoSalario.fechaInicioNoPago,
@@ -127,6 +127,16 @@ class DemandaControllers {
               respuesta.contrato.ultimoSalario
             )
           }
+          // let minimaCuantia
+          // if(respuesta.conflictoDespidoSJC != undefined){
+          //   minimaCuantia = MontosConflictos.calculaMinimaCuantia(
+          //     respuesta.conflictoDespidoSJC.montoDinero_DSJC,
+          //     20,
+              
+          //   ).totalMontos
+          // }
+
+
 
           function toTitleCase(str: any) {
             return str.replace(
@@ -174,9 +184,9 @@ class DemandaControllers {
             situacionActualFrenteALaRenunciaDelEmpleador: undefined,
             causa: undefined,
             salariosVencidos: conflictoPagoSalario,
-            cesantias: (conflictoCesantias != undefined) ? conflictoCesantias.cesantias : 'no Aplica',
-            diasDeTrabajo: (conflictoCesantias != undefined) ? conflictoCesantias.dias : 'no Aplica',
-            interesesDeCesantias: (conflictoCesantias != undefined) ? conflictoCesantias.interesesCesantias : 'no Aplica',
+            cesantias: (conflictoCesantias != undefined) ? conflictoCesantias.cesantias : 'No Aplica',
+            diasDeTrabajo: (conflictoCesantias != undefined) ? conflictoCesantias.dias : 'No Aplica',
+            interesesDeCesantias: (conflictoCesantias != undefined) ? conflictoCesantias.interesesCesantias : 'No Aplica',
 
           })
 
