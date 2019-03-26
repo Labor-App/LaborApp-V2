@@ -1,8 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 let dateDiff = require('date-diff');
-let colomHolidays = require('colombia-holidays');
-let dateFormat = require('date-format');
 class MontosConflictos {
     ////******Conflicto No 1 Despido sin justa causa **********/////
     static MontoDSJC(tipoContrato, salario, fechaInicioContrato, fechaDespido) {
