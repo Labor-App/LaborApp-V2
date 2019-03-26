@@ -107,6 +107,12 @@ class DemandaControllers {
 
           let respuesta = await query(databaseResDemanda)
 
+          if((respuesta.conflictoPagoSalario.fechaInicioNoPago && respuesta.conflictoPagoSalario.fechaInicioNoPago) != undefined){
+
+            console.log('si')
+
+          }
+
           await pdf({
             accionante: respuesta.persona.nombresPersona,
             accionado: (respuesta.empresa != undefined) ? respuesta.empresa.nombreEmpresaRS : undefined,

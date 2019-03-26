@@ -87,6 +87,9 @@ class DemandaControllers {
                     if (databaseResDemanda.result.length !== 0) {
                         databaseResDemanda = databaseResDemanda.result[0];
                         let respuesta = yield query(databaseResDemanda);
+                        if ((respuesta.conflictoPagoSalario.fechaInicioNoPago && respuesta.conflictoPagoSalario.fechaInicioNoPago) != undefined) {
+                            console.log('si');
+                        }
                         yield pdf({
                             accionante: respuesta.persona.nombresPersona,
                             accionado: (respuesta.empresa != undefined) ? respuesta.empresa.nombreEmpresaRS : undefined,
