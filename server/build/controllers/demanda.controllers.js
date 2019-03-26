@@ -87,8 +87,13 @@ class DemandaControllers {
                     if (databaseResDemanda.result.length !== 0) {
                         databaseResDemanda = databaseResDemanda.result[0];
                         let respuesta = yield query(databaseResDemanda);
-                        if ((respuesta.conflictoPagoSalario === undefined)) {
-                            console.log('si');
+                        let conflictoPagoSalario;
+                        if ((respuesta.conflictoPagoSalario !== undefined)) {
+                            conflictoPagoSalario = montosConflictos_1.default.MontoNoPagoSalario(respuesta.conflictoPagoSalario.fechaInicioNoPago, respuesta.conflictoPagoSalario.fechaFinalNoPagoSalario, respuesta.contrato.ultimoSalario);
+                        }
+                        let conflictoCesantias;
+                        if (respuesta.conflictoCesantias != undefined) {
+                            conflictoCesantias = montosConflictos_1.default.MontoCesantias((respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas !== null) ? respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas : new Date(), (respuesta.conflictoCesantias.fechaFinalNoPagoCesantias != null) ? respuesta.conflictoCesantias.fechaFinalNoPagoCesantias : new Date(), respuesta.contrato.ultimoSalario);
                         }
                         yield pdf({
                             accionante: respuesta.persona.nombresPersona,
@@ -116,10 +121,10 @@ class DemandaControllers {
                             fechaDeLaPrimeraSolicitudAlEmpleador: undefined,
                             situacionActualFrenteALaRenunciaDelEmpleador: undefined,
                             causa: undefined,
-                            salariosVencidos: montosConflictos_1.default.MontoNoPagoSalario(respuesta.conflictoPagoSalario.fechaInicioNoPago, respuesta.conflictoPagoSalario.fechaFinalNoPagoSalario, respuesta.contrato.ultimoSalario),
-                            cesantias: montosConflictos_1.default.MontoCesantias((respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas !== null) ? respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas : new Date(), (respuesta.conflictoCesantias.fechaFinalNoPagoCesantias != null) ? respuesta.conflictoCesantias.fechaFinalNoPagoCesantias : new Date(), respuesta.contrato.ultimoSalario).cesantias,
-                            diasDeTrabajo: montosConflictos_1.default.MontoCesantias((respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas !== null) ? respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas : new Date(), (respuesta.conflictoCesantias.fechaFinalNoPagoCesantias != null) ? respuesta.conflictoCesantias.fechaFinalNoPagoCesantias : new Date(), respuesta.contrato.ultimoSalario).dias,
-                            interesesDeCesantias: montosConflictos_1.default.MontoCesantias((respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas !== null) ? respuesta.conflictoCesantias.fechaUltimasCesantiasPagadas : new Date(), (respuesta.conflictoCesantias.fechaFinalNoPagoCesantias != null) ? respuesta.conflictoCesantias.fechaFinalNoPagoCesantias : new Date(), respuesta.contrato.ultimoSalario).interesesCesantias,
+                            salariosVencidos: conflictoPagoSalario,
+                            cesantias: (conflictoCesantias != undefined) ? conflictoCesantias.cesantias : 'no Aplica',
+                            diasDeTrabajo: (conflictoCesantias != undefined) ? conflictoCesantias.dias : 'no Aplica',
+                            interesesDeCesantias: (conflictoCesantias != undefined) ? conflictoCesantias.interesesCesantias : 'no Aplica',
                         });
                         return res.json({
                             ok: true,
