@@ -1,13 +1,13 @@
-// NPM modulos
-import express from 'express';
-import morgan from 'morgan';
 import cors from 'cors';
+import express from 'express';
+import indexRouter from './routes/index.router';
+import morgan from 'morgan';
 import { join } from 'path';
+// NPM modulos
 var fallback = require('express-history-api-fallback')
 
 
 //Rutas
-import indexRouter from './routes/index.router';
 
 
 class Server{
@@ -62,9 +62,9 @@ class Server{
 
   public publicFolder(){
 
-    const publicPath = join(__dirname, './front/LaborApp')
+    const publicPath = join(__dirname, './front/LaborApp2')
     this.app.use(express.static(publicPath));
-    this.app.use(fallback('./front/LaborApp/index.html', { root: __dirname }))
+    this.app.use(fallback('./front/LaborApp2/index.html', { root: __dirname }))
 
   }
 

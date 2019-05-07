@@ -17,7 +17,7 @@ import GenerarPdf from '../funcionalidades/funcionalidad-pdf/generatePdf';
 //Definicion del Documento PDF
 import DocDefinition from '../funcionalidades/funcionalidad-pdf/docDefinition';
 import { Empresa, Persona, DemandaEmpresa, DemandaPersonaNatural, ConflictoCesantias, ConflictoPagoSalario, ConflictoPrimas, ConflictoVacaciones, ContratoLaboral } from '../models/index.models';
-import { ConflictoDespidoSJC } from '../models/conflictoDespidoSJC.model';
+//import { ConflictoDespidoSJC } from '../models/conflictoDespidoSJC.model';
 import { CorreoPersona } from '../models/CorreoPersona.model';
 import MontosConflictos from '../funcionalidades/montosConflictos/montosConflictos';
 

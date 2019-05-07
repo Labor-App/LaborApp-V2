@@ -9,7 +9,7 @@ database.getConnection()
 
     database.releaseConnection(connection);
     console.log('DB is connected');
-
+    http://localhost:3000/clientes
   })
   .catch( (err:MysqlError) => {
 

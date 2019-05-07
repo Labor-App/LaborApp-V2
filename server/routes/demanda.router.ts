@@ -14,7 +14,7 @@ class DemandaRouter{
 
   public routes(){
 
-    this.router.get('/generar/:tipo/:id', demandaControllers.generarPdf );
+    this.router.get('/generar/:tipo/:id', demandaControllers.generarPdf ); // id de la demanda, tipo: natural o jurídico
 
     this.router.get('/enviar/:identificacion',Autenticacion.verificacionToken, demandaControllers.enviapdf );
 
